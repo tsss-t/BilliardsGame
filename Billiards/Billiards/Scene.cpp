@@ -1,26 +1,30 @@
 ﻿#include "Scene.h"
+#include "System.h"
 
 Scene::Scene()
 {
 	InitGameObjectList();
 }
+
 bool Scene::InitGameObjectList(void)
 {
+	timer = 0;
 	*updateList = NULL;
 	*drawList = NULL;
-
+	cameraManager = CameraManager::GetCameraManagerInstance();
 	return true;
 }
 // シーンの状態推移処理
 bool Scene::SceneUpdate(float stepTime)
 {
-	SGameObjectInfo * goInfo;
+	CameraManager::GetCameraManagerInstance()->CameraUpdate(stepTime);
+	GameObjectBase * goBase;
 	run = true;
 	for (int i = 0; i < PRIORITY_MAX; i++)
 	{
-		for (goInfo = updateList[i]; goInfo != NULL; goInfo = goInfo->updateNext)
+		for (goBase = updateList[i]; goBase != NULL; goBase = goBase->goInfo->updateNext)
 		{
-			if (!goInfo->go->Update(stepTime))
+			if (!goBase->Update(stepTime))
 			{
 				return false;
 			}
@@ -33,13 +37,13 @@ bool Scene::SceneUpdate(float stepTime)
 // シーン描画処理
 bool Scene::SceneDraw(void)
 {
-	SGameObjectInfo * goInfo;
+	GameObjectBase * goBase;
 	run = true;
 	for (int i = 0; i < PRIORITY_MAX; i++)
 	{
-		for (goInfo = drawList[i]; goInfo != NULL; goInfo = goInfo->drawNext)
+		for (goBase = drawList[i]; goBase != NULL; goBase = goBase->goInfo->drawNext)
 		{
-			if (!goInfo->go->Draw())
+			if (!goBase->Draw())
 			{
 				return false;
 			}
@@ -48,50 +52,46 @@ bool Scene::SceneDraw(void)
 	run = false;
 	return true;
 }
-// ゲームオブジェクトの状態推移処理
-bool Scene::GameObjectUpdate(float stepTime)
+
+//新しいゲームオブジェクトをシーンの中に追加
+bool Scene::AddToScene(GameObjectBase * goBase)
 {
-	return false;
-}
-bool Scene::AddToScene(GameObject * gameObject)
-{
-	gameObject->goInfo->addOrDelNext = addGameObjectInfoList;
-	addGameObjectInfoList = gameObject->goInfo;
+	goBase->goInfo->addOrDelNext = addGameObjectInfoList;
+	addGameObjectInfoList = goBase;
 	if (!run)
 	{
 		return RefreshList();
 	}
 	return true;
 }
-bool Scene::DeleteFromScene(GameObject * gameObject)
+
+//新しいゲームオブジェクトをシーンの中から削除
+bool Scene::DeleteFromScene(GameObjectBase * gameObject)
 {
 	gameObject->goInfo->addOrDelNext = delGameObjectList;
-	delGameObjectList = gameObject->goInfo;
+	delGameObjectList = gameObject;
 	if (!run)
 	{
 		return RefreshList();
 	}
 	return true;
 }
-bool Scene::AdjustGameObjectUpdatePriority(GameObject * gameObject, int priority)
+
+//指定したゲームオブジェクトの状態推移処理順位変更
+bool Scene::AdjustGameObjectUpdatePriority(GameObjectBase * goBase, int priority)
 {
-	SGameObjectInfo * goInfo;
-	SGameObjectInfo * nextGoInfo;
 	SGameObjectInfo * tempGoInfo;
 
-	goInfo = gameObject->goInfo;
-
-
 	// 先頭だった場合は先頭を外すゲームオブジェクトの次のゲームオブジェクトにする
-	if (updateList[goInfo->goBaseInfo->updatePriority] == goInfo)
+	if (updateList[goBase->goInfo->goBaseInfo->updatePriority] == goBase)
 	{
-		updateList[goInfo->goBaseInfo->updatePriority] = goInfo->updateNext;
+		updateList[goBase->goInfo->goBaseInfo->updatePriority] = goBase->goInfo->updateNext;
 	}
 	else
 	{
 		// 状態推移処理のゲームオブジェクトのリストの先頭ではなかったら
 		// 状態推移処理のゲームオブジェクトのリストから外すゲームオブジェクトを検索
-		tempGoInfo = updateList[goInfo->goBaseInfo->updatePriority];
+		tempGoInfo = updateList[goBase->goInfo->goBaseInfo->updatePriority]->goInfo;
 		while (true)
 		{
 			// リストの終端に来てしまった場合はループを抜ける
@@ -102,90 +102,104 @@ bool Scene::AdjustGameObjectUpdatePriority(GameObject * gameObject, int priority
 			}
 
 			// 削除対象のゲームオブジェクトを発見した場合はリストから外してループから抜ける
-			if (tempGoInfo->updateNext == goInfo)
+			if (tempGoInfo->updateNext == goBase)
 			{
-				tempGoInfo->updateNext = goInfo->updateNext;
+				tempGoInfo->updateNext = goBase->goInfo->updateNext;
 				break;
 			}
-			tempGoInfo = tempGoInfo->updateNext;
+			tempGoInfo = tempGoInfo->updateNext->goInfo;
 		}
 	}
 	// 状態推移処理のゲームオブジェクトのリストの先頭に追加する
-	goInfo->updateNext = updateList[priority];
-	updateList[priority] = goInfo->updateNext;
+	goBase->goInfo->updateNext = updateList[priority];
+	updateList[priority] = goBase->goInfo->updateNext;
+
+	goBase->goInfo->goBaseInfo->updatePriority = priority;
 
 	return true;
 }
-bool Scene::AdjustGameObjectDrawPriority(GameObject * gameObject, int priority)
+
+//指定したゲームオブジェクトの描画処理順位変更
+bool Scene::AdjustGameObjectDrawPriority(GameObjectBase * goBase, int priority)
 {
-	SGameObjectInfo * goInfo;
-	SGameObjectInfo * nextGoInfo;
 	SGameObjectInfo * tempGoInfo;
-
-	goInfo = gameObject->goInfo;
-
 	// 先頭だった場合は先頭を外すゲームオブジェクトの次のゲームオブジェクトにする
-	if (drawList[goInfo->goBaseInfo->drawPriority] == goInfo)
+	if (drawList[goBase->goInfo->goBaseInfo->drawPriority] == goBase)
 	{
-		drawList[goInfo->goBaseInfo->drawPriority] = goInfo->drawNext;
+		drawList[goBase->goInfo->goBaseInfo->drawPriority] = goBase->goInfo->drawNext;
 	}
 	else
 	{
 		// 状態推移処理のゲームオブジェクトのリストの先頭ではなかったら
 		// 状態推移処理のゲームオブジェクトのリストから外すゲームオブジェクトを検索
-		tempGoInfo = drawList[goInfo->goBaseInfo->drawPriority];
+		tempGoInfo = drawList[goBase->goInfo->goBaseInfo->drawPriority]->goInfo;
 		while (true)
 		{
 			// リストの終端に来てしまった場合はループを抜ける
 			if (tempGoInfo->drawNext == NULL)
 			{
-				//TODO:ERROR
+				//TODO:not find
 				return false;
 			}
 
 			// 削除対象のゲームオブジェクトを発見した場合はリストから外してループから抜ける
-			if (tempGoInfo->drawNext == goInfo)
+			if (tempGoInfo->drawNext == goBase)
 			{
-				tempGoInfo->drawNext = goInfo->drawNext;
+				tempGoInfo->drawNext = goBase->goInfo->drawNext;
 				break;
 			}
-			tempGoInfo = tempGoInfo->drawNext;
+			tempGoInfo = tempGoInfo->drawNext->goInfo;
 		}
 	}
 	// 状態推移処理のゲームオブジェクトのリストの先頭に追加する
-	goInfo->updateNext = drawList[priority];
-	drawList[priority] = goInfo->drawNext;
+	goBase->goInfo->updateNext = drawList[priority];
+	drawList[priority] = goBase->goInfo->drawNext;
+
+	goBase->goInfo->goBaseInfo->drawPriority = priority;
 
 	return true;
 }
+
+// ゲームオブジェクトの状態推移処理
+bool Scene::GameObjectUpdate(float stepTime)
+{
+	return false;
+}
+
 // ゲームオブジェクトの描画処理
 bool Scene::GameObjectDraw(void)
 {
 	return false;
 }
+
+//描画処理の順位と状態推移処理の順位を更新
 bool Scene::RefreshList(void)
 {
-	SGameObjectInfo * goInfo;
-	SGameObjectInfo * nextGoInfo;
-	SGameObjectInfo * tempGoInfo;
+	GameObjectBase * goBase;
+	GameObjectBase * nextGo;
+	GameObjectBase * tempGo;
 #pragma region <追加するゲームオブジェクトのリスト>に登録されているゲームオブジェクトをリストに追加する
 	if (addGameObjectInfoList != NULL)
 	{
-		for (goInfo = addGameObjectInfoList; goInfo != NULL; goInfo = nextGoInfo)
+		for (goBase = addGameObjectInfoList; goBase != NULL; goBase = nextGo)
 		{
 			// <追加するゲームオブジェクトのリスト>の次のゲームオブジェクトのアドレスを保持しておく
-			nextGoInfo = goInfo->addOrDelNext;
+			nextGo = goBase->goInfo->addOrDelNext;
 
 			// 状態推移処理のリストに追加する
-			goInfo->updateNext = updateList[goInfo->goBaseInfo->updatePriority];
-			updateList[goInfo->goBaseInfo->updatePriority] = goInfo;
+			goBase->goInfo->updateNext = updateList[goBase->goInfo->goBaseInfo->updatePriority];
+			updateList[goBase->goInfo->goBaseInfo->updatePriority] = goBase;
 
 			// 描画処理のリストに追加する
-			goInfo->updateNext = drawList[goInfo->goBaseInfo->drawPriority];
-			drawList[goInfo->goBaseInfo->drawPriority] = goInfo;
+			goBase->goInfo->drawNext = drawList[goBase->goInfo->goBaseInfo->drawPriority];
+			drawList[goBase->goInfo->goBaseInfo->drawPriority] = goBase;
 
 			// <追加するゲームオブジェクトのリスト>の次のゲームオブジェクトのアドレスを初期化する
-			goInfo->addOrDelNext = NULL;
+			goBase->goInfo->addOrDelNext = NULL;
+			if (goBase->IsRigidBody())
+			{
+				System::GetSystemInstance()->dynamicsWorld->addRigidBody(goBase->GetRigidBody());
+			}
 		}
 		addGameObjectInfoList = NULL;
 	}
@@ -193,65 +207,65 @@ bool Scene::RefreshList(void)
 #pragma region <削除するゲームオブジェクトのリスト>に登録されているゲームオブジェクトをリストから外す
 	if (delGameObjectList != NULL)
 	{
-		for (goInfo = delGameObjectList; goInfo != NULL; goInfo = nextGoInfo)
+		for (goBase = delGameObjectList; goBase != NULL; goBase = nextGo)
 		{
 			// <削除するゲームオブジェクトのリスト>の次のゲームオブジェクトのアドレスを保持しておく
-			nextGoInfo = goInfo->addOrDelNext;
+			nextGo = goBase-> goInfo->addOrDelNext;
 
 			// 外すゲームオブジェクトが状態推移処理のゲームオブジェクトのリストの先頭かをチェック
-			if (updateList[goInfo->goBaseInfo->updatePriority] == goInfo)
+			if (updateList[goBase->goInfo->goBaseInfo->updatePriority] ==goBase )
 			{
-				updateList[goInfo->goBaseInfo->updatePriority] = goInfo->updateNext;
+				updateList[goBase->goInfo->goBaseInfo->updatePriority] = goBase->goInfo->updateNext;
 			}
 			else
 			{
 				// 状態推移処理のゲームオブジェクトのリストの先頭ではなかったら
 				// 状態推移処理のゲームオブジェクトのリストから外すゲームオブジェクトを検索
-				tempGoInfo = updateList[goInfo->goBaseInfo->updatePriority];
+				tempGo = updateList[goBase->goInfo->goBaseInfo->updatePriority];
 
 				while (true)
 				{
 					// リストの終端に来てしまった場合はループを抜ける
-					if (tempGoInfo->updateNext == NULL)
+					if (tempGo->goInfo->updateNext == NULL)
 					{
 						break;
 					}
 					// 削除対象のゲームオブジェクトを発見した場合はリストから外してループから抜ける
-					if (tempGoInfo->updateNext == goInfo)
+					if (tempGo->goInfo->updateNext == goBase)
 					{
-						tempGoInfo->updateNext = goInfo->updateNext;
+						tempGo->goInfo->updateNext = goBase-> goInfo->updateNext;
 						break;
 					}
-					tempGoInfo = tempGoInfo->updateNext;
+					tempGo = tempGo->goInfo->updateNext;
 				}
 
 			}
 			// 外すゲームオブジェクトが描画処理のゲームオブジェクトのリストの先頭かをチェック
-			if (drawList[goInfo->goBaseInfo->drawPriority] == goInfo)
+			if (drawList[goBase->goInfo->goBaseInfo->drawPriority] == goBase)
 			{
 				// 先頭だった場合は先頭を外すゲームオブジェクトの次のゲームオブジェクトにする
-				drawList[goInfo->goBaseInfo->drawPriority] = goInfo->drawNext;
+				drawList[goBase->goInfo->goBaseInfo->drawPriority] = goBase-> goInfo->drawNext;
 			}
 			else
 			{
 				// 描画処理のゲームオブジェクトのリストの先頭ではなかったら
 				// 描画処理のゲームオブジェクトのリストから外すゲームオブジェクトを検索
-				tempGoInfo = drawList[goInfo->goBaseInfo->drawPriority];
+				tempGo = drawList[goBase->goInfo->goBaseInfo->drawPriority];
 
 				while (true)
 				{
 					// リストの終端に来てしまった場合はループを抜ける
-					if (tempGoInfo->drawNext == NULL)
+					if (tempGo->goInfo->drawNext == NULL)
 					{
 						break;
 					}
 					// 削除対象のゲームオブジェクトを発見した場合はリストから外してループから抜ける
-					if (tempGoInfo->drawNext == goInfo)
+					if (tempGo->goInfo->drawNext == goBase)
 					{
-						tempGoInfo->drawNext = goInfo->drawNext;
+						tempGo->goInfo->drawNext = goBase-> goInfo->drawNext;
 						break;
 					}
-					tempGoInfo = tempGoInfo->drawNext;
+					tempGo = tempGo->goInfo->drawNext;
 				}
 
 			}
@@ -261,6 +275,7 @@ bool Scene::RefreshList(void)
 #pragma endregion
 	return true;
 }
+
 Scene::~Scene()
 {
 }

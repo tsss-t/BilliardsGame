@@ -1,7 +1,7 @@
 ﻿#include "System.h"
 #include <iostream>
 
-System *System::system = NULL;
+System *System::_instance = NULL;
 SSystemInfo System::systemInfo{};
 //test:
 //int x;
@@ -12,28 +12,28 @@ System::System()
 }
 System *System::GetSystemInstance()
 {
-	if (system == NULL)
+	if (_instance == NULL)
 	{
-		system = new System();
+		_instance = new System();
 	}
-	return system;
+	return _instance;
 }
 bool System::SystemInit(void)
 {
 #pragma region システム設定
 	//ウインドウモードで起動するか確認する
-	if (MessageBox(NULL, "ウインドウモードで起動しますか？", "画面モード確認", MB_YESNO) == IDYES)
+	if (MessageBox(NULL, "using the window mode？", "Screen mode select", MB_YESNO) == IDYES)
 	{
 		// 「はい」が選択された場合はウインドウモードで起動
 		ChangeWindowMode(TRUE);
 	}
 
 	//低処理負荷モードで起動するか確認する
-	if (MessageBox(NULL, "低処理負荷モードで起動しますか？", "処理負荷モード確認", MB_YESNO) == IDYES)
-	{
+	//if (MessageBox(NULL, "Low？", "処理負荷モード確認", MB_YESNO) == IDYES)
+	//{
 		// 「はい」が選択された場合は低処理負荷モードフラグを立てる
 		//systemInfo.lowSpecMode = true;
-	}
+	//}
 
 	//ゲーム画面の解像度を設定
 	SetGraphMode(GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT, 32);
@@ -86,13 +86,49 @@ bool System::SystemInit(void)
 	//TODO:playerInfo初期化
 #pragma endregion
 
+#pragma region Camera初期化
+	SetDrawScreen(DX_SCREEN_BACK);
+	CameraManager::GetCameraManagerInstance();
+
+#pragma endregion
+
+#pragma region Bullet物理システム初期化
+
+	// ワールドの広さ
+	worldAabbMin = btVector3(-10000, -10000, -10000);
+	worldAabbMax = btVector3(10000, 10000, 10000);
+
+	// プロキシの最大数（衝突物体のようなもの）
+	maxProxies = 1024;
+
+	// broadphaseの作成
+	btAxisSweep3* broadphase = new btAxisSweep3(worldAabbMin, worldAabbMax, maxProxies);
+
+	// デフォルトの衝突設定とディスパッチャの作成
+	btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
+	btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
+
+	// 衝突解決ソルバ
+	btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
+	// 離散動的世界の作成
+	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
+
+	// 重力の設定
+	dynamicsWorld->setGravity(btVector3(0, -100, 0));
+
+#ifdef _DEBUG
+	dynamicsWorld->setDebugDrawer(&g_debugdraw);
+	dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+#endif  
+#pragma endregion
+
 #pragma region scence管理システムの初期化
- //シーン初期化
-	//handle = MV1LoadModel("dat/Biliards/biliards1.mv1"); // 画像のロード
+	//シーン初期化
+	SceneManager::InitSceneManager();
 #pragma endregion
 
 #pragma region 入力システムの初期化
-//TODO：入力システムの初期化
+	//TODO：入力システムの初期化
 #pragma endregion
 
 #pragma region 起動
@@ -119,28 +155,21 @@ bool System::SystemMain(void)
 	{
 		return false;
 	}
-	//test:
-    //handle = MV1LoadModel("dat/Biliards/biliards1.mv1"); // 画像のロード
-	sceneMain = SceneGameMain::GetSceneInstance();
 	if (!SystemLoop())
 	{
 		return false;
 	}
-	delete system;
+	delete _instance;
 	return true;
 }
 bool System::SystemLoop(void)
 {
 	int i;
 	LONGLONG nowTime;
-	SetDrawScreen(DX_SCREEN_BACK);
-
 	//初期化フレームの状態推移時間
 	systemInfo.stepTime = MAX_DELTA_TIME;
 	systemInfo.prevTime = GetNowHiPerformanceCount();
 	systemInfo.stepNum = 1;
-
-
 	while (!ProcessMessage())
 	{
 		for (i = 0; i < systemInfo.stepNum; i++)
@@ -154,6 +183,7 @@ bool System::SystemLoop(void)
 			//int p = 1;
 			// TODO:デバッグ関係の状態推移処理を行う
 			//System_DebugStep();
+
 #endif
 			// 状態推移処理を行う
 			if (!SystemUpdate(systemInfo.stepTime))
@@ -221,14 +251,16 @@ bool System::SystemLoop(void)
 		// 画面を初期化する
 		ClearDrawScreen();
 	}
-
 	// 正常終了
 	return true;
 }
 bool System::SystemUpdate(float stepTime)
 {
-	//// TODO:入力処理を行う
-	//ProcessInput();
+	// bulletシミュレーションを進める。
+	dynamicsWorld->stepSimulation(stepTime, 10);
+
+	//入力処理を行う
+	InputSystem::GetInputSystemInstance()->InputSystemUpdate(stepTime);
 
 	//// フェード処理の状態推移を行う
 	SystemFadeUpdate(stepTime);
@@ -241,7 +273,7 @@ bool System::SystemUpdate(float stepTime)
 	// 正常終了
 	//test:
 	//x++;
-	sceneMain->SceneUpdate(stepTime);
+	SceneManager::GetNowPlayScene()->SceneUpdate(stepTime);
 	return true;
 }
 bool System::SystemDraw(void)
@@ -261,13 +293,12 @@ bool System::SystemDraw(void)
 	//MV1SetRotationXYZ(handle, VGet(0, 0, 0));
 	//MV1DrawModel(handle);
 
-	sceneMain->SceneDraw();
-
+	SceneManager::GetNowPlayScene()->SceneDraw();
 	//Ｚバッファは使用しない設定にする
 	SetUseZBufferFlag(FALSE);
 
 	//フェード処理の描画を行う
-	//SystemFadeDraw();
+	SystemFadeDraw();
 
 	//フレームレートを画面右下に描画
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
@@ -276,9 +307,15 @@ bool System::SystemDraw(void)
 
 	//TODO: デバッグ関係の描画処理を行う
 	//System_DebugDraw();
-
+#ifdef _DEBUG
+	//ClsDrawScreen();
+	//dynamicsWorld->debugDrawWorld();
+#endif  
 	return false;
 }
+
+#pragma region Fade関連
+
 
 // フェード処理の状態推移処理
 void System::SystemFadeUpdate(float stepTime)
@@ -315,6 +352,34 @@ void System::SystemFadeDraw(void)
 	}
 }
 
+// 画面をフェードアウトさせる
+void System::System_FadeOut(void)
+{
+	systemInfo.fadeOut = true;
+	systemInfo.fade = true;
+}
+
+// 画面をフェードインする
+void System::System_FadeIn(void)
+{
+	systemInfo.fadeOut = false;
+	systemInfo.fade = true;
+}
+
+// ゲーム終了
+void System::System_Exit()
+{
+	this->systemInfo.exitGame = true;
+}
+
+// 画面のフェード処理中かどうかを取得する
+//     戻り値 : フェード処理中かどうか
+//              ( true : フェード処理中   false : フェード処理は行われていない )
+bool System::System_CheckFade(void)
+{
+	return systemInfo.fade;
+}
+#pragma endregion
 System::~System()
 {
 	int i;

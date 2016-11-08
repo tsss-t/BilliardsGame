@@ -89,13 +89,14 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\workspace\Billiards\DxLib_VC;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>Lib\DxLib_VC;Lib\Bullet\Src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\workspace\Billiards\DxLib_VC;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>Lib\Bullet\Dll;Lib\DxLib_VC;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ConvexDecomposition_vs2010_debug.lib;BulletWorldImporter_vs2010_debug.lib;BulletSoftBody_vs2010_debug.lib;BulletDynamics_vs2010_debug.lib;BulletCollision_vs2010_debug.lib;BulletFileLoader_vs2010_debug.lib;LinearMath_vs2010_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -122,15 +123,16 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\workspace\Billiards\DxLib_VC;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>Lib\DxLib_VC;Lib\Bullet\Src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\workspace\Billiards\DxLib_VC;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>Lib\DxLib_VC;Lib\Bullet\Dll;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ConvexDecomposition_vs2010_debug.lib;BulletWorldImporter_vs2010_debug.lib;BulletSoftBody_vs2010_debug.lib;BulletDynamics_vs2010_debug.lib;BulletCollision_vs2010_debug.lib;BulletFileLoader_vs2010_debug.lib;LinearMath_vs2010_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -154,23 +156,50 @@
   <ItemGroup>
     <ClCompile Include="Ball.cpp" />
     <ClCompile Include="BiliardsTable.cpp" />
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="CameraManager.cpp" />
+    <ClCompile Include="DxDebugDraw.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameObjectBase.cpp" />
+    <ClCompile Include="HelloWorld.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="Label.cpp" />
     <ClCompile Include="Mathematics.cpp" />
+    <ClCompile Include="PoolStick.cpp" />
+    <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneGameMain.cpp" />
+    <ClCompile Include="SceneGameStartMenu.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="Slider.cpp" />
+    <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="SpriteSheet.cpp" />
     <ClCompile Include="System.cpp" />
+    <ClCompile Include="UI.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ball.h" />
     <ClInclude Include="BiliardsTable.h" />
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="CameraManager.h" />
+    <ClInclude Include="DxDebugDraw.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObjectBase.h" />
+    <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="Label.h" />
     <ClInclude Include="Mathematics.h" />
+    <ClInclude Include="PoolStick.h" />
+    <ClInclude Include="Quaternion.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneGameMain.h" />
+    <ClInclude Include="SceneGameStartMenu.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Slider.h" />
+    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="SpriteSheet.h" />
     <ClInclude Include="System.h" />
+    <ClInclude Include="UI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

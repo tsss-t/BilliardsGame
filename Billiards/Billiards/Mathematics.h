@@ -1,142 +1,142 @@
-#ifndef MATHEMATICS_H
+﻿#ifndef MATHEMATICS_H
 #define MATHEMATICS_H
 
 #include "DxLib.h"
 
-// ָ���ι��줫�������˂���Q������I����ʹ�ä������( ����С������ )
+// 指定の範囲からランダムに値を決定する処理で使用する情報( 浮動小数点型 )
 typedef struct _SMaxMinF
 {
-	// ���
+	// 最大値
 	float MaxF;
 
-	// ��С��
+	// 最小値
 	float MinF;
 } SMaxMinF;
 
-// ָ���ι��줫�������˂���Q������I����ʹ�ä������( ������ )
+// 指定の範囲からランダムに値を決定する処理で使用する情報( 整数型 )
 typedef struct _SMaxMinI
 {
-	// ���
+	// 最大値
 	int MaxI;
 
-	// ��С��
+	// 最小値
 	int MinI;
 } SMaxMinI;
 
-// Catmull-Rom �a�g��ʹ�ä���ָ���Σ���� Pos1 �� Pos2 ���a�g�������ˤ�ȡ�ä���
+// Catmull-Rom 補間を使用して指定の４点の Pos1 ～ Pos2 を補間する座標を取得する
 extern void CatmullRom(
-	// Catmull-Rom �a�g��ʹ�ä������ˣ�( ������Ȥ���ʹ�ä���� )
+	// Catmull-Rom 補間で使用する座標０( 制御点として使用される )
 	VECTOR *Pos0,
 
-	// Catmull-Rom �a�g��ʹ�ä������ˣ�
+	// Catmull-Rom 補間で使用する座標１
 	VECTOR *Pos1,
 
-	// Catmull-Rom �a�g��ʹ�ä������ˣ�
+	// Catmull-Rom 補間で使用する座標２
 	VECTOR *Pos2,
 
-	// Catmull-Rom �a�g��ʹ�ä������ˣ�( ������Ȥ���ʹ�ä���� )
+	// Catmull-Rom 補間で使用する座標３( 制御点として使用される )
 	VECTOR *Pos3,
 
-	// ȡ�ä������ˤ�λ��
-	// ( 0.0f:p1������   0.0f��1.0f���g:p1��p2���g���a�g����   1.0f:p2������ )
+	// 取得する座標の位置
+	// ( 0.0f:p1の座標   0.0fと1.0fの間:p1とp2の間の補間座標   1.0f:p2の座標 )
 	float DestPosRate,
 
-	// Ӌ��Y�������ˤ���뤹������Υ��ɥ쥹
+	// 計算結果の座標を代入する変数のアドレス
 	VECTOR *DestPos
 );
 
-// �������Ф��g�� Catmull-Rom ��ʹ�ä����a�g�����������Ф�ȡ�ä���
+// 座標配列の間を Catmull-Rom を使用して補間した座標配列を取得する
 extern void GetCatmullRomPosList(
-	// �a�g���Ф��������Ф����^���ɥ쥹
+	// 補間を行う座標配列の先頭アドレス
 	VECTOR *InPos,
 
-	// InPos �����ˤ���
+	// InPos の座標の数
 	int PosNum,
 
-	// һ�����g���a�g���ˤ���
+	// 一座標間の補間座標の数
 	int DivNum,
 
-	// �Y�������ˤ��{�����������Ф����^���ɥ쥹
+	// 結果の座標を格納する座標配列の先頭アドレス
 	VECTOR *DestPos
 );
 
-// GetCatmullRomPosList �˶ɤ���InPos �����ˤ������ȡ�һ�����g���a�g���ˤ���������
-// �Y�����{�����������Ф˱�Ҫ��Ҫ������ȡ�ä���
-//     ���ꂎ : �Y�����{�����������Ф˱�Ҫ��Ҫ����
+// GetCatmullRomPosList に渡す「InPos の座標の数」と「一座標間の補間座標の数」から
+// 結果を格納する座標配列に必要な要素数を取得する
+//     戻り値 : 結果を格納する座標配列に必要な要素数
 extern int GetCatmullRomPosNum(
-	// InPos �����ˤ���
+	// InPos の座標の数
 	int PosNum,
 
-	// һ�����g���a�g���ˤ���
+	// 一座標間の補間座標の数
 	int DivNum
 );
 
-// ����С�����ͤΉ����΂���ָ���΂��˽��Ť���I�����Ф�
-//     ���ꂎ : �����΂���ָ���΂����_�������ɤ���
-//              ( true : ָ���΂����_����  false : ָ���΂����_���Ƥ��ʤ� )
+// 浮動小数点型の変数の値を指定の値に近づける処理を行う
+//     戻り値 : 変数の値が指定の値に達したかどうか
+//              ( true : 指定の値に達した  false : 指定の値に達していない )
 extern bool ParamChangeFloat(
-	// ��������Ή����Υ��ɥ쥹
+	// 操作対象の変数のアドレス
 	float *Param,
 
-	// Ŀ�ˤȤ��낎
+	// 目標とする値
 	float TargetParam,
 
-	// ���Ƥ�����r�g
+	// 推移させる時間
 	float StepTime,
 
-	// ���Ή仯�ٶ�
+	// 値の変化速度
 	float Speed
 );
 
-// ����С�����ͤΉ����˴��뤵��Ƥ���ǶȤ�ָ���νǶȤ˽��Ť���I�����Ф�
-// ( Ŀ�ˤȤ���ǶȤȉ����˴��뤵��Ƥ���ǶȤβ 2.0f * �� ���ڤǤ����Ҫ������ )
-//     ���ꂎ : �����νǶȤ�ָ���νǶȤ��_�������ɤ���
-//              ( true : ָ���νǶȤ��_����  false : ָ���νǶȤ��_���Ƥ��ʤ� )
+// 浮動小数点型の変数に代入されている角度を指定の角度に近づける処理を行う
+// ( 目標とする角度と変数に代入されている角度の差が 2.0f * π 以内である必要がある )
+//     戻り値 : 変数の角度が指定の角度に達したかどうか
+//              ( true : 指定の角度に達した  false : 指定の角度に達していない )
 extern bool ParamChangeAngle(
-	// ��������Ή����Υ��ɥ쥹
+	// 操作対象の変数のアドレス
 	float *Param,
 
-	// Ŀ�ˤȤ���Ƕ�
+	// 目標とする角度
 	float TargetParam,
 
-	// ���Ƥ�����r�g
+	// 推移させる時間
 	float StepTime,
 
-	// �ǶȤΉ仯�ٶ�
+	// 角度の変化速度
 	float Speed
 );
 
-// ָ���ι��줫�������ǛQ����������ȡ�ä���( ����С���ゎ )
-//     ���ꂎ : ������ǛQ��������
+// 指定の範囲からランダムで決定した値を取得する( 浮動小数点値 )
+//     戻り値 : ランダムで決定した値
 extern float GetRandomFloat(
-	// ���
+	// 最大値
 	float MaxF,
 
-	// ��С��
+	// 最小値
 	float MinF
 );
 
-// ָ���ι��줫�������ǛQ����������ȡ�ä���( ������ )
-//     ���ꂎ : ������ǛQ��������
+// 指定の範囲からランダムで決定した値を取得する( 整数値 )
+//     戻り値 : ランダムで決定した値
 extern int GetRandomInt(
-	// ���
+	// 最大値
 	int MaxI,
 
-	// ��С��
+	// 最小値
 	int MinI
 );
 
-// ָ���ι��줫�������ǛQ����������ȡ�ä���( ����С���ゎ )
-//     ���ꂎ : ������ǛQ��������
+// 指定の範囲からランダムで決定した値を取得する( 浮動小数点値 )
+//     戻り値 : ランダムで決定した値
 extern float GetRandomFloatS(
-	// ��󂎤���С���������ä�������Υ��ɥ쥹
+	// 最大値と最小値の情報が入った構造体のアドレス
 	SMaxMinF *MaxMinF
 );
 
-// ָ���ι��줫�������ǛQ����������ȡ�ä���( ������ )
-//     ���ꂎ : ������ǛQ��������
+// 指定の範囲からランダムで決定した値を取得する( 整数値 )
+//     戻り値 : ランダムで決定した値
 extern int GetRandomIntS(
-	// ��󂎤���С���������ä�������Υ��ɥ쥹
+	// 最大値と最小値の情報が入った構造体のアドレス
 	SMaxMinI *MaxMinI
 );
 

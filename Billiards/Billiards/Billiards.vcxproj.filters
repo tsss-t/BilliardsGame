@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
@@ -13,60 +9,175 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Framework">
+      <UniqueIdentifier>{61f82002-4184-478f-bf3a-204db15f3c4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Framework">
+      <UniqueIdentifier>{1fdca251-17e7-4a0c-9d14-3d8cfaf48f1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameClass">
+      <UniqueIdentifier>{852724ef-2020-4f65-91ae-d8565e1c80b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameClass">
+      <UniqueIdentifier>{a9e0ee00-280c-4c48-9a2b-bd74d1835df6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Framework\GameObject">
+      <UniqueIdentifier>{93f9097d-62fa-4bae-8554-dae290bc81ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Framework\GameObject\2D">
+      <UniqueIdentifier>{1cfe7efd-3db0-4861-b179-c0c063f2983a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Framework\GameObject\3D">
+      <UniqueIdentifier>{10130c36-a308-42b8-95b9-12fb4a416c4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Framework\GameObject">
+      <UniqueIdentifier>{6f604d96-3399-4354-866b-906fb388f456}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Framework\GameObject\2D">
+      <UniqueIdentifier>{4420e494-a828-4658-8e5a-305a65208629}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Framework\GameObject\3D">
+      <UniqueIdentifier>{bc558acc-cbf7-482a-926f-05276ddab579}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="WinMain.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="CameraManager.cpp">
+      <Filter>Source Files\Framework</Filter>
     </ClCompile>
-    <ClCompile Include="System.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="DxDebugDraw.cpp">
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="InputSystem.cpp">
+      <Filter>Source Files\Framework</Filter>
     </ClCompile>
     <ClCompile Include="Mathematics.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion.cpp">
+      <Filter>Source Files\Framework</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Framework</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="HelloWorld.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Ball.cpp">
+    <ClCompile Include="WinMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SceneGameMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Ball.cpp">
+      <Filter>Source Files\GameClass</Filter>
+    </ClCompile>
     <ClCompile Include="BiliardsTable.cpp">
+      <Filter>Source Files\GameClass</Filter>
+    </ClCompile>
+    <ClCompile Include="PoolStick.cpp">
+      <Filter>Source Files\GameClass</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneGameStartMenu.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="System.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source Files\Framework\GameObject\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Label.cpp">
+      <Filter>Source Files\Framework\GameObject\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Source Files\Framework\GameObject\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Slider.cpp">
+      <Filter>Source Files\Framework\GameObject\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>Source Files\Framework\GameObject\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteSheet.cpp">
+      <Filter>Source Files\Framework\GameObject\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files\Framework\GameObject\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectBase.cpp">
+      <Filter>Source Files\Framework\GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Ball.h">
+    <ClInclude Include="SceneGameMain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="DxDebugDraw.h">
+      <Filter>Header Files\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="InputSystem.h">
+      <Filter>Header Files\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraManager.h">
+      <Filter>Header Files\Framework</Filter>
     </ClInclude>
     <ClInclude Include="Mathematics.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Quaternion.h">
+      <Filter>Header Files\Framework</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Framework</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager.h">
+      <Filter>Header Files\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Ball.h">
+      <Filter>Header Files\GameClass</Filter>
+    </ClInclude>
+    <ClInclude Include="BiliardsTable.h">
+      <Filter>Header Files\GameClass</Filter>
+    </ClInclude>
+    <ClInclude Include="PoolStick.h">
+      <Filter>Header Files\GameClass</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneGameStartMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="System.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SceneGameMain.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Button.h">
+      <Filter>Header Files\Framework\GameObject\2D</Filter>
     </ClInclude>
-    <ClInclude Include="BiliardsTable.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Label.h">
+      <Filter>Header Files\Framework\GameObject\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>Header Files\Framework\GameObject\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Header Files\Framework\GameObject\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Slider.h">
+      <Filter>Header Files\Framework\GameObject\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteSheet.h">
+      <Filter>Header Files\Framework\GameObject\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files\Framework\GameObject\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectBase.h">
+      <Filter>Header Files\Framework\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

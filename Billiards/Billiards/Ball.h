@@ -1,4 +1,5 @@
-﻿#ifndef BALL_H
+﻿#pragma once
+#ifndef BALL_H
 #define BALL_H
 
 #include "GameObject.h"
@@ -6,6 +7,7 @@
 class Ball :public GameObject
 {
 public:
+	void InitBall();
 	Ball(int modelHandle);
 	Ball(float x, float y, float z, int modelHandel);
 	Ball(VECTOR position, int modelHandel);
@@ -13,11 +15,15 @@ public:
 	Ball(VECTOR position, VECTOR rotation, VECTOR scale, int modelHandel);
 	~Ball();
 
+	bool AddForce(VECTOR force, VECTOR forcePos);
+
 	bool Draw();
 
-	bool Update();
+	bool Update(float stepTime);
+
 
 private:
+	Ball();
 	bool Move();
 	bool Rote();
 };

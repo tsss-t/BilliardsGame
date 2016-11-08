@@ -1,9 +1,14 @@
-﻿#ifndef SYSTEM_H
+﻿#pragma once
+#ifndef SYSTEM_H
 #define SYSTEM_H
 
 #include "DxLib.h"
 #include "Mathematics.h"
 #include "SceneGameMain.h"
+#include "SceneManager.h"
+#include "InputSystem.h"
+#include "btBulletDynamicsCommon.h"
+#include "DxDebugDraw.h"
 
 #pragma region Define
 
@@ -153,24 +158,37 @@ class System
 {
 public:
 	static System *GetSystemInstance();
+	btDiscreteDynamicsWorld* dynamicsWorld;
 	bool SystemMain(void);
+	bool System_CheckFade(void);
+	void System_FadeOut(void);
+	void System_FadeIn(void);
+
+	// ゲーム終了
+	void System_Exit();
 	~System();
 private:
-	//int k;
 
-	//test:
-	SceneGameMain * sceneMain;
-
-	static System *system;
+	static System *_instance;
 	// システムの情報
 	static SSystemInfo systemInfo;
 	System();
+
+	// プロキシの最大数
+	int maxProxies;
+
+	// ワールドの広さ
+	btVector3 worldAabbMin;
+	btVector3 worldAabbMax;
+	DxDebugDraw g_debugdraw;
+
 	bool SystemInit(void);
 	bool SystemLoop(void);
 	bool SystemUpdate(float stepTime);
 	bool SystemDraw(void);
 	void SystemFadeUpdate(float stepTime);
 	void SystemFadeDraw(void);
+
 };
 
 #endif

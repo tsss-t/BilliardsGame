@@ -1,8 +1,7 @@
+﻿#pragma once
 #ifndef BILIARDSTABLE_H
 #define BILIARDSTABLE_H
-
 #include "GameObject.h"
-
 class BilliardsTable :public GameObject
 {
 public:

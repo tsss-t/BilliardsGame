@@ -1,28 +1,36 @@
-﻿#ifndef SCENEMANAGER_H
+﻿#pragma once
+#ifndef SCENEMANAGER_H
 #define SCENEMANAGER_H
-
 #include <string>
 #include "Scene.h"
+#include "SceneGameMain.h"
+#include "SceneGameStartMenu.h"
 
 using namespace std;
 
-typedef struct _SSceneData
+typedef enum _EGameScene
 {
-	string sceneName;
-	Scene scene;
-} SSceneData;
+	StartMenu = 0,
+	GameMain = 1,
+	GameOver = 2
+} EGameScene;
 
-class SceneManager
+
+static class SceneManager
 {
 public:
-	static Scene * nowPlayScene;
-	static SSceneData sceneList[];
-	static void LoadSceneLevel(int sceneID);
-	static void LoadSceneLevel(string sceneName);
+	//初期化
+	static void InitSceneManager();
 
+	//シーンを切り替え
+	static void LoadSceneLevel(EGameScene sence);
+
+	//現在進行中のシーンのオブジェクトポインターを貰う
+	static  Scene * GetNowPlayScene();
 
 	~SceneManager();
 private:
+	static Scene * nowPlayScene;
 	SceneManager();
 };
 
