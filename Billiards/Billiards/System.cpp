@@ -73,12 +73,12 @@ bool System::SystemInit(void)
 	char filePath[MAXPATH];
 	for (int i = 0; i < ECommonSE_Num; i++)
 	{
-		sprintf_s(filePath, "Data\\Sound\\SE\\Common\\%s", CommonSEFileName[i]);
-		systemInfo.commonSEHandle[i] = LoadSoundMem(filePath);
-		if (systemInfo.commonSEHandle[i] == -1)
-		{
-			return false;
-		}
+		//sprintf_s(filePath, "Data\\Sound\\SE\\Common\\%s", CommonSEFileName[i]);
+		//systemInfo.commonSEHandle[i] = LoadSoundMem(filePath);
+		//if (systemInfo.commonSEHandle[i] == -1)
+		//{
+		//	return false;
+		//}
 	}
 #pragma endregion
 

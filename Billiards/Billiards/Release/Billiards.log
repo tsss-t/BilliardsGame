@@ -1,15 +1,126 @@
-﻿  SceneGameMain.cpp
+﻿  Ball.cpp
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+  BiliardsTable.cpp
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+  Button.cpp
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+Button.cpp(45): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+Button.cpp(61): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+Button.cpp(97): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+Button.cpp(112): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  CameraManager.cpp
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+CameraManager.cpp(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+CameraManager.cpp(34): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+CameraManager.cpp(35): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+CameraManager.cpp(185): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+CameraManager.cpp(187): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+CameraManager.cpp(287): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  GameObject.cpp
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\SceneGameMain.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+d:\workspace\billiardsgame\billiards\billiards\SceneGameMain.h(7): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+d:\workspace\billiardsgame\billiards\billiards\SceneManager.h(35): warning C4091: 'static ': ignored on left of 'SceneManager' when no variable is declared
+  GameObjectBase.cpp
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\SceneGameMain.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+d:\workspace\billiardsgame\billiards\billiards\SceneGameMain.h(7): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+d:\workspace\billiardsgame\billiards\billiards\SceneManager.h(35): warning C4091: 'static ': ignored on left of 'SceneManager' when no variable is declared
+  Label.cpp
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+Label.cpp(51): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+Label.cpp(52): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  PoolStick.cpp
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+PoolStick.cpp(61): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Scene.cpp
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\SceneGameMain.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+d:\workspace\billiardsgame\billiards\billiards\SceneGameMain.h(7): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+d:\workspace\billiardsgame\billiards\billiards\SceneManager.h(35): warning C4091: 'static ': ignored on left of 'SceneManager' when no variable is declared
+  SceneGameMain.cpp
 d:\workspace\billiardsgame\billiards\billiards\SceneGameMain.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
 d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
 d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
 d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-d:\workspace\billiardsgame\billiards\billiards\SceneGameMain.h(5): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-d:\workspace\billiardsgame\billiards\billiards\SceneManager.h(33): warning C4091: 'static ': ignored on left of 'SceneManager' when no variable is declared
-SceneGameMain.cpp(10): warning C4305: 'argument': truncation from 'double' to 'float'
-SceneGameMain.cpp(13): warning C4305: 'initializing': truncation from 'double' to 'float'
+d:\workspace\billiardsgame\billiards\billiards\SceneGameMain.h(7): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+d:\workspace\billiardsgame\billiards\billiards\SceneManager.h(35): warning C4091: 'static ': ignored on left of 'SceneManager' when no variable is declared
+  SceneGameStartMenu.cpp
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\SceneGameMain.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+d:\workspace\billiardsgame\billiards\billiards\SceneGameMain.h(7): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+d:\workspace\billiardsgame\billiards\billiards\SceneManager.h(35): warning C4091: 'static ': ignored on left of 'SceneManager' when no variable is declared
+  SceneManager.cpp
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\SceneGameMain.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+d:\workspace\billiardsgame\billiards\billiards\SceneGameMain.h(7): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+d:\workspace\billiardsgame\billiards\billiards\SceneManager.h(35): warning C4091: 'static ': ignored on left of 'SceneManager' when no variable is declared
+  Slider.cpp
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+  Sprite.cpp
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+Sprite.cpp(100): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+Sprite.cpp(107): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+Sprite.cpp(116): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+Sprite.cpp(123): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  SpriteSheet.cpp
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+SpriteSheet.cpp(55): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+SpriteSheet.cpp(62): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  System.cpp
+d:\workspace\billiardsgame\billiards\billiards\SceneGameMain.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\SceneGameMain.h(7): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+d:\workspace\billiardsgame\billiards\billiards\SceneManager.h(35): warning C4091: 'static ': ignored on left of 'SceneManager' when no variable is declared
+System.cpp(17): warning C4316: 'System': object allocated on the heap may not be aligned 16
+System.cpp(73): warning C4101: 'filePath': unreferenced local variable
+  UI.cpp
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+UI.cpp(240): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+UI.cpp(241): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+UI.cpp(242): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  WinMain.cpp
+d:\workspace\billiardsgame\billiards\billiards\SceneGameMain.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\SceneGameMain.h(7): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+d:\workspace\billiardsgame\billiards\billiards\SceneManager.h(35): warning C4091: 'static ': ignored on left of 'SceneManager' when no variable is declared
   Generating code
-  0 of 690 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  176 of 397 functions (44.3%) were compiled, the rest were copied from previous compilation.
+    120 functions were new in current compilation
+    12 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Billiards.vcxproj -> D:\workspace\BilliardsGame\Billiards\Release\Billiards.exe
