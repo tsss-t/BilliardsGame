@@ -24,7 +24,7 @@ typedef enum _ECameraView
 
 typedef struct _STransformCamera
 {
-	VECTOR postion;
+	VECTOR position;
 	VECTOR rotation;
 }STransformCamera;
 
@@ -43,11 +43,17 @@ public:
 
 	//カメラの角度を設置
 	// Elur角度使用
+	bool SetCameraRotElur(VECTOR rotation);
+
+	//カメラの角度を設置
+	//　角度の値使用
 	bool SetCameraRot(VECTOR rotation);
 
 	//カメラの位置と角度を一緒に設定
 	// Elur角度使用
 	bool SetCameraPR(VECTOR position, VECTOR rotation);
+
+	bool SetCameraPRElur(VECTOR position, VECTOR rotation);
 
 	//カメラ追跡のターゲット（ゲームオブジェクトのみ）を設置
 	void SetCamaraTarget(GameObject * gameObject);

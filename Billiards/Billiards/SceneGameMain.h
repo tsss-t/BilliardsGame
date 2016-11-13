@@ -8,6 +8,7 @@
 #include "Slider.h"
 #include "Button.h"
 
+using namespace std;
 
 #define TableHight (28.1f)
 #define BallNum (15)
@@ -28,10 +29,19 @@ public:
 		MenuFadeIn,
 	} ESceneMainState;
 
+	typedef struct _STriggerBox
+	{
+		VECTOR position;
+
+		VECTOR  size;
+	}STriggerBox;
+
 	static SceneGameMain *GetSceneInstance();
 
 	~SceneGameMain();
 	bool SceneUpdate(float stepTime);
+	void CheckBallPosition();
+	void GoalIn(int ballNum);
 	bool SceneDraw(void);
 
 	static void ChangeCameraModeToFree();
@@ -45,6 +55,9 @@ public:
 private:
 	static SceneGameMain * _instance;
 	ESceneMainState sceneNowState;
+
+	//--------Trigger---------
+	STriggerBox * triggerList[6];
 
 	//--------2D UI---------
 	Sprite * spTableLeft;
@@ -65,13 +78,15 @@ private:
 	Sprite * spFixedMode;
 	Sprite * spFreeMode;
 
+	VECTOR2D nextBallIconPosition;
+	Sprite * spBallList[BallNum];
+
 	//--------3D Model-------
 	Ball * ballWhite;
-	Ball * ballList[15];
+	Ball * ballList[BallNum];
 
 	PoolStick * poolStick;
 	BilliardsTable * billiardTable;
-
 
 
 	float isPressed;

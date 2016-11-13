@@ -6,10 +6,10 @@ CameraManager * CameraManager::_instance = NULL;
 
 CameraManager::CameraManager()
 {
-	transform.postion = { 40,40,0 };
+	transform.position = { 0,0,0 };
 	transform.rotation = { 0,0,0 };
 	SetCameraNearFar(0.1f, 1000.0f);
-	SetCameraPositionAndAngle(transform.postion, 0, 0, 0);
+	SetCameraPositionAndAngle(transform.position, 0, 0, 0);
 	cameraMode = ECameraMode::FreeMode;
 	cameraView = ECameraView::Top;
 
@@ -22,17 +22,28 @@ CameraManager::CameraManager()
 //カメラの位置を設置
 bool CameraManager::SetCameraPos(VECTOR position)
 {
-	transform.postion = position;
+	transform.position = position;
+	SetCameraPositionAndAngle(transform.position, transform.rotation.x, transform.rotation.y, transform.rotation.z);
 	return true;
 }
 
 //カメラの角度を設置
 // Elur角度使用
-bool CameraManager::SetCameraRot(VECTOR rotation)
+bool CameraManager::SetCameraRotElur(VECTOR rotation)
 {
 	transform.rotation.x = (float)rotation.x*PI / 360;
 	transform.rotation.y = (float)rotation.y*PI / 360;
 	transform.rotation.z = (float)rotation.z*PI / 360;
+	SetCameraPositionAndAngle(transform.position, transform.rotation.x, transform.rotation.y, transform.rotation.z);
+	return true;
+}
+
+bool CameraManager::SetCameraRot(VECTOR rotation)
+{
+	transform.rotation.x = rotation.x;
+	transform.rotation.y = rotation.y;
+	transform.rotation.z = rotation.z;
+	SetCameraPositionAndAngle(transform.position, transform.rotation.x, transform.rotation.y, transform.rotation.z);
 	return true;
 }
 
@@ -42,6 +53,14 @@ bool CameraManager::SetCameraPR(VECTOR position, VECTOR rotation)
 {
 	SetCameraPos(position);
 	SetCameraRot(rotation);
+	return true;
+}
+
+//カメラの位置と角度を一緒に設定
+bool CameraManager::SetCameraPRElur(VECTOR position, VECTOR rotation)
+{
+	SetCameraPos(position);
+	SetCameraRotElur(rotation);
 	return true;
 }
 
@@ -88,7 +107,7 @@ void CameraManager::SetCamaraViewPR(ECameraView view, VECTOR position, VECTOR ro
 //カメラを目標に注目
 bool CameraManager::CameraLookAt(VECTOR targetPosition)
 {
-	SetCameraPositionAndTargetAndUpVec(transform.postion, targetPosition, VGet(0, 1, 0));
+	SetCameraPositionAndTargetAndUpVec(transform.position, targetPosition, VGet(0, 1, 0));
 	transform.rotation.x = GetCameraAngleVRotate();
 	transform.rotation.y = GetCameraAngleHRotate();
 	transform.rotation.z = GetCameraAngleTRotate();
@@ -124,11 +143,13 @@ bool CameraManager::CameraUpdate(float stepTime)
 		break;
 	}
 
-	SetCameraPositionAndAngle(transform.postion, transform.rotation.x, transform.rotation.y, transform.rotation.z);
+	SetCameraPositionAndAngle(transform.position, transform.rotation.x, transform.rotation.y, transform.rotation.z);
+
+
 #if _DEBUG
 	//>>>>>>>>>>>>>TestCode:現在カメラの位置と方位情報をスクリーンに出力
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "x:   %f      y:   %f      z:   %f      Rx:   %f      Ry:   %f      Rz:   %f",
-		transform.postion.x, transform.postion.y, transform.postion.z, transform.rotation.x, transform.rotation.y, transform.rotation.z
+		transform.position.x, transform.position.y, transform.position.z, transform.rotation.x, transform.rotation.y, transform.rotation.z
 	);
 	//<<<<<<<<<<<<<TestEnd.
 #endif // _DEBUG
@@ -163,7 +184,7 @@ bool CameraManager::CameraModeFree(float stepTime)
 	mouseWheel = InputSystem::GetInputSystemInstance()->GetMouseInputWheel();
 
 	//　トランスフォーマー取得
-	transform.postion = GetCameraPosition();
+	transform.position = GetCameraPosition();
 
 	transform.rotation.x = GetCameraAngleVRotate();
 	transform.rotation.y = GetCameraAngleHRotate();
@@ -191,10 +212,10 @@ bool CameraManager::CameraModeFree(float stepTime)
 	if (mouseButton & MOUSE_INPUT_MIDDLE) {
 		cameraRight = GetCameraRightVector();
 		cameraUp = GetCameraUpVector();
-		transform.postion = {
-			transform.postion.x - cameraRight.x*0.1f*mouseMoveDis.u + cameraUp.x*0.1f*mouseMoveDis.v,
-				transform.postion.y - cameraRight.y*0.1f*mouseMoveDis.u + cameraUp.y*0.1f*mouseMoveDis.v,
-				transform.postion.z - cameraRight.z*0.1f*mouseMoveDis.u + cameraUp.z*0.1f*mouseMoveDis.v };
+		transform.position = {
+			transform.position.x - cameraRight.x*0.1f*mouseMoveDis.u + cameraUp.x*0.1f*mouseMoveDis.v,
+				transform.position.y - cameraRight.y*0.1f*mouseMoveDis.u + cameraUp.y*0.1f*mouseMoveDis.v,
+				transform.position.z - cameraRight.z*0.1f*mouseMoveDis.u + cameraUp.z*0.1f*mouseMoveDis.v };
 	}
 
 	//ホイール操作したら、カメラの前後距離を調整することができる
@@ -203,17 +224,17 @@ bool CameraManager::CameraModeFree(float stepTime)
 		cameraFront = GetCameraFrontVector();
 		if (mouseWheel > 0) {         //ホイールが+方向に回転していたら
 
-			transform.postion = {
-				transform.postion.x + cameraFront.x,
-				transform.postion.y + cameraFront.y,
-				transform.postion.z + cameraFront.z };
+			transform.position = {
+				transform.position.x + cameraFront.x,
+				transform.position.y + cameraFront.y,
+				transform.position.z + cameraFront.z };
 
 		}
 		if (mouseWheel < 0) {          //ホイールが－方向に回転していたら
-			transform.postion = {
-			transform.postion.x - cameraFront.x,
-				transform.postion.y - cameraFront.y,
-				transform.postion.z - cameraFront.z };
+			transform.position = {
+			transform.position.x - cameraFront.x,
+				transform.position.y - cameraFront.y,
+				transform.position.z - cameraFront.z };
 		}
 	}
 
@@ -227,26 +248,26 @@ bool CameraManager::CameraModeFixed(float stepTime)
 	{
 	case Top:
 	{
-		transform.postion = topView->position;
+		transform.position = topView->position;
 		transform.rotation = topView->rotation;
 
 		break;
 	}
 	case Back:
 	{
-		transform.postion = backView->position;
+		transform.position = backView->position;
 		transform.rotation = backView->rotation;
 		break;
 	}
 	case Left:
 	{
-		transform.postion = leftView->position;
+		transform.position = leftView->position;
 		transform.rotation = leftView->rotation;
 		break;
 	}
 	case Right:
 	{
-		transform.postion = rightView->position;
+		transform.position = rightView->position;
 		transform.rotation = rightView->rotation;
 		break;
 	}
@@ -274,7 +295,7 @@ bool CameraManager::CameraModeFollow(float stepTime)
 //カメラの座標を貰う
 VECTOR CameraManager::GetCameraPosition()
 {
-	return transform.postion;
+	return transform.position;
 }
 
 //カメラの角度を貰う

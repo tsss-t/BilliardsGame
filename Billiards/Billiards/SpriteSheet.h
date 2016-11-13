@@ -17,6 +17,10 @@ public:
 	//画像のサイズ（分割後の）を貰う
 	VECTOR2DINT GetSpriteSize();
 
+	VECTOR2DINT GetUISize();
+
+	VECTOR2D GetPositionInWindow();
+
 	//中心描画するため、中心の位置を設置する
 	void SetCenterPoint(int x, int y);
 

@@ -4,7 +4,7 @@ UI::UI()
 {
 	this->transform = new _STransform2D();
 
-	this->transform->postion = { 0, 0 };
+	this->transform->position = { 0, 0 };
 	this->transform->angle = 0.0f;
 	this->transform->scale = { 1,1 };
 
@@ -97,19 +97,19 @@ bool UI::Update(float stepTime)
 				movingInfo->isMoving = false;
 				movingInfo->moveTimer = 0;
 			}
-			transform->postion.x += (movingInfo->pointTo.x - movingInfo->pointFrom.x)* stepTime / movingInfo->movingTime;
-			transform->postion.y += (movingInfo->pointTo.y - movingInfo->pointFrom.y)* stepTime / movingInfo->movingTime;
+			transform->position.x += (movingInfo->pointTo.x - movingInfo->pointFrom.x)* stepTime / movingInfo->movingTime;
+			transform->position.y += (movingInfo->pointTo.y - movingInfo->pointFrom.y)* stepTime / movingInfo->movingTime;
 			break;
 		}
 		case Loop: {
 			if (movingInfo->moveTimer > movingInfo->movingTime)
 			{
-				transform->postion.x = movingInfo->pointFrom.x;
-				transform->postion.y = movingInfo->pointFrom.y;
+				transform->position.x = movingInfo->pointFrom.x;
+				transform->position.y = movingInfo->pointFrom.y;
 				movingInfo->moveTimer = 0;
 			}
-			transform->postion.x += (movingInfo->pointTo.x - movingInfo->pointFrom.x)* stepTime / movingInfo->movingTime;
-			transform->postion.y += (movingInfo->pointTo.y - movingInfo->pointFrom.y)* stepTime / movingInfo->movingTime;
+			transform->position.x += (movingInfo->pointTo.x - movingInfo->pointFrom.x)* stepTime / movingInfo->movingTime;
+			transform->position.y += (movingInfo->pointTo.y - movingInfo->pointFrom.y)* stepTime / movingInfo->movingTime;
 			break;
 		}
 		case PingPong: {
@@ -119,24 +119,24 @@ bool UI::Update(float stepTime)
 				movingInfo->moveTimer = 0;
 				if (movingInfo->isMoveTo)
 				{
-					transform->postion.x = movingInfo->pointFrom.x;
-					transform->postion.y = movingInfo->pointFrom.y;
+					transform->position.x = movingInfo->pointFrom.x;
+					transform->position.y = movingInfo->pointFrom.y;
 				}
 				else
 				{
-					transform->postion.x = movingInfo->pointTo.x;
-					transform->postion.y = movingInfo->pointTo.y;
+					transform->position.x = movingInfo->pointTo.x;
+					transform->position.y = movingInfo->pointTo.y;
 				}
 			}
 			if (movingInfo->isMoveTo)
 			{
-				transform->postion.x += (movingInfo->pointTo.x - movingInfo->pointFrom.x)* stepTime / movingInfo->movingTime;
-				transform->postion.y += (movingInfo->pointTo.y - movingInfo->pointFrom.y)* stepTime / movingInfo->movingTime;
+				transform->position.x += (movingInfo->pointTo.x - movingInfo->pointFrom.x)* stepTime / movingInfo->movingTime;
+				transform->position.y += (movingInfo->pointTo.y - movingInfo->pointFrom.y)* stepTime / movingInfo->movingTime;
 			}
 			else
 			{
-				transform->postion.x -= (movingInfo->pointTo.x - movingInfo->pointFrom.x)* stepTime / movingInfo->movingTime;
-				transform->postion.y -= (movingInfo->pointTo.y - movingInfo->pointFrom.y)* stepTime / movingInfo->movingTime;
+				transform->position.x -= (movingInfo->pointTo.x - movingInfo->pointFrom.x)* stepTime / movingInfo->movingTime;
+				transform->position.y -= (movingInfo->pointTo.y - movingInfo->pointFrom.y)* stepTime / movingInfo->movingTime;
 			}
 			break;
 		}
@@ -159,6 +159,11 @@ bool UI::Draw()
 	return true;
 }
 
+bool UI::IsGUI()
+{
+	return true;
+}
+
 void UI::SetUpdatePriority(int updatePriority)
 {
 	GameObjectBase::SetUpdatePriority(updatePriority);
@@ -171,12 +176,12 @@ void UI::SetDrawPriority(int drawPriority)
 
 void UI::SetPosition(float x, float y)
 {
-	this->transform->postion = { x,y };
+	this->transform->position = { x,y };
 }
 
 void UI::SetPosition(VECTOR2D position)
 {
-	this->transform->postion = position;
+	this->transform->position = position;
 }
 
 
@@ -198,7 +203,7 @@ void UI::SetScale(VECTOR2D scale)
 
 VECTOR2D UI::GetPosition()
 {
-	return this->transform->postion;
+	return this->transform->position;
 }
 
 float UI::GetRotation()
@@ -206,9 +211,22 @@ float UI::GetRotation()
 	return this->transform->angle;
 }
 
+VECTOR2DINT UI::GetUISize()
+{
+	return VECTOR2DINT();
+}
+
 VECTOR2D UI::GetScale()
 {
 	return this->transform->scale;
+}
+
+VECTOR2D UI::GetPositionInWindow()
+{
+	VECTOR2D vector;
+	vector.x = transform->position.x;
+	vector.y = transform->position.y;
+	return vector;
 }
 
 void UI::SetTweenColor(float flickerSpace, TweenType type)

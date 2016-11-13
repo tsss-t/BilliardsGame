@@ -308,6 +308,7 @@ bool System::SystemDraw(void)
 	//TODO: デバッグ関係の描画処理を行う
 	//System_DebugDraw();
 #ifdef _DEBUG
+	//debug line mode
 	//ClsDrawScreen();
 	//dynamicsWorld->debugDrawWorld();
 #endif  

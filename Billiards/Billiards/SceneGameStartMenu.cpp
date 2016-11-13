@@ -10,19 +10,16 @@ SceneGameStartMenu::SceneGameStartMenu()
 	//背景図の設定
 	spriteBG = new Sprite("Data/Sprite/Background.jpg");
 	spriteBG->SetPosition(0, 0);
-	spriteBG->SetCenterPoint(0, 0);
 	spriteBG->SetScale(0.7f, 0.7f);
 
 	//左上ゲームタイトル画像の設定
 	spriteTitle = new Sprite("Data/Sprite/Title.png");
 	spriteTitle->SetPosition(70, 50);
-	spriteTitle->SetCenterPoint(0, 0);
 	spriteTitle->SetScale(2.0f, 2.0f);
 
 	//右下Logo画像の設定
 	spriteLogo = new Sprite("Data/Sprite/logokoYellow.png");
 	spriteLogo->SetPosition(1060, 620);
-	spriteLogo->SetCenterPoint(0, 0);
 	spriteLogo->SetScale(0.5f, 0.5f);
 
 	//ボタンの切り替え用画像の導入
@@ -31,7 +28,6 @@ SceneGameStartMenu::SceneGameStartMenu()
 
 	//StartGame　ボタンの設定
 	spStartGame = new  Sprite(buttonSpriteHandle);
-	spStartGame->SetCenterPoint(0, 0);
 	lbStartGame = new  Label();
 	lbStartGame->SetString("New Game");
 	lbStartGame->SetOffset(75, 22);
@@ -43,7 +39,6 @@ SceneGameStartMenu::SceneGameStartMenu()
 
 	//SettingGame ボタンの設定
 	spSettingGame = new  Sprite(buttonSpriteHandle);
-	spSettingGame->SetCenterPoint(0, 0);
 	lbSettingGame = new  Label();
 	lbSettingGame->SetString("Setting");
 	lbSettingGame->SetOffset(75, 22);
@@ -54,7 +49,6 @@ SceneGameStartMenu::SceneGameStartMenu()
 
 	//ExitGame ボタンの設定
 	spExitGame = new  Sprite(buttonSpriteHandle);
-	spExitGame->SetCenterPoint(0, 0);
 	lbExitGame = new  Label();
 	lbExitGame->SetString("Exit Game");
 	lbExitGame->SetOffset(75, 22);
@@ -117,11 +111,16 @@ bool SceneGameStartMenu::SceneUpdate(float stepTime)
 	}
 	case EStartSceneMenuState::MenuSelect:
 	{
-
+		btStartGame->SetEnable(true);
+		btSettingGame->SetEnable(true);
+		btExitGame->SetEnable(true);
 		break;
 	}
 	case EStartSceneMenuState::FadeOut:
 	{
+		btStartGame->SetEnable(false);
+		btSettingGame->SetEnable(false);
+		btExitGame->SetEnable(false);
 		timer += stepTime;
 		if (timer > FADE_OUT_TIME)
 		{

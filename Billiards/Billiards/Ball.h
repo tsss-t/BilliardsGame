@@ -13,7 +13,12 @@ public:
 	Ball(VECTOR position, int modelHandel);
 	Ball(VECTOR position, VECTOR rotation, int modelHandel);
 	Ball(VECTOR position, VECTOR rotation, VECTOR scale, int modelHandel);
+
 	~Ball();
+
+	void ResetPosition();
+
+	void DisableBall();
 
 	bool AddForce(VECTOR force, VECTOR forcePos);
 
@@ -24,8 +29,8 @@ public:
 
 private:
 	Ball();
-	bool Move();
-	bool Rote();
+	VECTOR firstPosition;
+
 };
 
 #endif // !BALL_H

@@ -6,9 +6,11 @@ void Sprite::InitSprite()
 	this->spriteHandle = 0;
 
 	offset = { 0.0f, 0.0f };
-
+	spriteDrawCenter = { 0,0 };
 	spriteCenter = { 0,0 };
 	spriteSize = { 0,0 };
+
+	enable = true;
 }
 
 Sprite::Sprite() :UI::UI()
@@ -53,7 +55,7 @@ Sprite::Sprite(char * fileName, int drawPriority)
 	spriteCenter.x = spriteSize.x / 2;
 	spriteCenter.y = spriteSize.y / 2;
 
-	SetPriority(PRIORITY_MAX/2, drawPriority);
+	SetPriority(PRIORITY_MAX / 2, drawPriority);
 }
 
 Sprite::Sprite(int spriteHandle, int updatePriority, int drawPriority)
@@ -94,33 +96,40 @@ bool Sprite::Update(float stepTime)
 
 bool Sprite::Draw()
 {
-	UI::Draw();
-	if (flickerInfo->isFlicker)
+	if (enable)
 	{
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, flickerInfo->alphaNow);
+		UI::Draw();
+		if (flickerInfo->isFlicker)
+		{
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, flickerInfo->alphaNow);
+		}
+		DrawRotaGraph3F(
+			transform->position.x + offset.x, transform->position.y + offset.y,
+			spriteDrawCenter.x, spriteDrawCenter.y,
+			transform->scale.x, transform->scale.y,
+			transform->angle, spriteHandle,
+			true);
 	}
-	DrawRotaGraph3F(
-		transform->postion.x+offset.x, transform->postion.y+offset.y,
-		spriteCenter.x, spriteCenter.y,
-		transform->scale.x, transform->scale.y,
-		transform->angle, spriteHandle,
-		true);
 	return true;
 }
 
 bool Sprite::Draw(float process)
 {
-	UI::Draw();
-	if (flickerInfo->isFlicker)
+	if (enable)
 	{
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, flickerInfo->alphaNow);
+
+		UI::Draw();
+		if (flickerInfo->isFlicker)
+		{
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, flickerInfo->alphaNow);
+		}
+		DrawRectGraph(
+			transform->position.x + offset.x, transform->position.y + offset.y,
+			0, 0,
+			spriteSize.x*process, spriteSize.y,
+			spriteHandle,
+			true, false);
 	}
-	DrawRectGraph(
-		transform->postion.x + offset.x, transform->postion.y + offset.y,
-		0,0,
-		spriteSize.x*process,spriteSize.y,
-		spriteHandle,
-		true,false);
 	return true;
 }
 
@@ -130,23 +139,34 @@ int Sprite::GetSpriteHandle()
 	return spriteHandle;
 }
 
-//中心描画するため、中心の位置を設置する
-void Sprite::SetCenterPoint(int x, int y)
+//中心点について描画するため、中心の位置を設置する
+void Sprite::SetDrawCenterPoint(int x, int y)
 {
-	this->spriteCenter.x = x;
-	this->spriteCenter.y = y;
+	this->spriteDrawCenter.x = x;
+	this->spriteDrawCenter.y = y;
 }
 
-//画像の中心座標（ローカル中心座標）を貰う
 VECTOR2DINT Sprite::GetSpriteSize()
 {
-	return{ spriteSize.x,spriteSize.y };
+	return{ (int)(spriteSize.x * transform->scale.x),(int)(spriteSize.y *transform->scale.y) };
+}
+
+VECTOR2D Sprite::GetPositionInWindow()
+{
+	return{ transform->position.x - spriteDrawCenter.x*transform->scale.x, transform->position.y - spriteDrawCenter.y*transform->scale.y };
 }
 
 //画像のサイズを貰う
+VECTOR2DINT Sprite::GetUISize()
+{
+	return{ (int)(spriteSize.x * transform->scale.x),(int)(spriteSize.y *transform->scale.y) };
+
+}
+
+
 VECTOR2DINT Sprite::GetSrpiteCenter()
 {
-	return{ spriteCenter.x, spriteCenter.y };
+	return{ spriteDrawCenter.x, spriteDrawCenter.y };
 }
 
 //画像ハンドルデータのみ変更、中心やサイズそのまま
@@ -189,6 +209,11 @@ void Sprite::SetOffset(float x, float y)
 {
 	this->offset.x = x;
 	this->offset.y = y;
+}
+
+void Sprite::SetEnable(bool enable)
+{
+	this->enable = enable;
 }
 
 

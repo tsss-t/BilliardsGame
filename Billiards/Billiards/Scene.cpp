@@ -160,6 +160,23 @@ bool Scene::AdjustGameObjectDrawPriority(GameObjectBase * goBase, int priority)
 	return true;
 }
 
+bool Scene::IsPointInUI(VECTOR2D pointPosition)
+{
+	for (int i = 0; i < this->UIPositionData.size(); i++)
+	{
+		if (pointPosition.x > this->UIPositionData[i]->positionData.x&&
+			pointPosition.x<this->UIPositionData[i]->positionData.x + this->UIPositionData[i]->sizeData.x&&
+			pointPosition.y>this->UIPositionData[i]->positionData.y&&
+			pointPosition.y < this->UIPositionData[i]->positionData.y + this->UIPositionData[i]->sizeData.y)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+
+
 // ゲームオブジェクトの状態推移処理
 bool Scene::GameObjectUpdate(float stepTime)
 {
@@ -200,6 +217,15 @@ bool Scene::RefreshList(void)
 			{
 				System::GetSystemInstance()->dynamicsWorld->addRigidBody(goBase->GetRigidBody());
 			}
+			if (goBase->IsGUI())
+			{
+				SUIData * tempData = new SUIData();
+				tempData->positionData = { goBase->GetPositionInWindow().x ,goBase->GetPositionInWindow().y };
+				tempData->sizeData = { goBase->GetUISize().x,goBase->GetUISize().y };
+
+				this->UIPositionData.push_back(tempData);
+
+			}
 		}
 		addGameObjectInfoList = NULL;
 	}
@@ -210,12 +236,16 @@ bool Scene::RefreshList(void)
 		for (goBase = delGameObjectList; goBase != NULL; goBase = nextGo)
 		{
 			// <削除するゲームオブジェクトのリスト>の次のゲームオブジェクトのアドレスを保持しておく
-			nextGo = goBase-> goInfo->addOrDelNext;
+			nextGo = goBase->goInfo->addOrDelNext;
 
 			// 外すゲームオブジェクトが状態推移処理のゲームオブジェクトのリストの先頭かをチェック
-			if (updateList[goBase->goInfo->goBaseInfo->updatePriority] ==goBase )
+			if (updateList[goBase->goInfo->goBaseInfo->updatePriority] == goBase)
 			{
 				updateList[goBase->goInfo->goBaseInfo->updatePriority] = goBase->goInfo->updateNext;
+				if (goBase->IsRigidBody())
+				{
+					System::GetSystemInstance()->dynamicsWorld->removeRigidBody(goBase->GetRigidBody());
+				}
 			}
 			else
 			{
@@ -233,7 +263,11 @@ bool Scene::RefreshList(void)
 					// 削除対象のゲームオブジェクトを発見した場合はリストから外してループから抜ける
 					if (tempGo->goInfo->updateNext == goBase)
 					{
-						tempGo->goInfo->updateNext = goBase-> goInfo->updateNext;
+						if (goBase->IsRigidBody())
+						{
+							System::GetSystemInstance()->dynamicsWorld->removeRigidBody(goBase->GetRigidBody());
+						}
+						tempGo->goInfo->updateNext = goBase->goInfo->updateNext;
 						break;
 					}
 					tempGo = tempGo->goInfo->updateNext;
@@ -244,7 +278,7 @@ bool Scene::RefreshList(void)
 			if (drawList[goBase->goInfo->goBaseInfo->drawPriority] == goBase)
 			{
 				// 先頭だった場合は先頭を外すゲームオブジェクトの次のゲームオブジェクトにする
-				drawList[goBase->goInfo->goBaseInfo->drawPriority] = goBase-> goInfo->drawNext;
+				drawList[goBase->goInfo->goBaseInfo->drawPriority] = goBase->goInfo->drawNext;
 			}
 			else
 			{
@@ -262,7 +296,7 @@ bool Scene::RefreshList(void)
 					// 削除対象のゲームオブジェクトを発見した場合はリストから外してループから抜ける
 					if (tempGo->goInfo->drawNext == goBase)
 					{
-						tempGo->goInfo->drawNext = goBase-> goInfo->drawNext;
+						tempGo->goInfo->drawNext = goBase->goInfo->drawNext;
 						break;
 					}
 					tempGo = tempGo->goInfo->drawNext;

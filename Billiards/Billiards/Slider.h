@@ -44,6 +44,10 @@ public:
 
 	void SetFrontSpriteOffset(float x, float y);
 
+	VECTOR2D GetPositionInWindow();
+
+	VECTOR2DINT GetUISize();
+
 	~Slider();
 
 private:
