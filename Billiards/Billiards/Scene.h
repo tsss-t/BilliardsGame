@@ -3,7 +3,9 @@
 #define SCENE_H
 #include "GameObjectBase.h"
 #include "CameraManager.h"
+#include <vector>
 
+using namespace std;
 
 #pragma region シーンの状態時間数定義
 //フェードインする前に待つ時間
@@ -25,6 +27,12 @@
 #define FADE_OUT_TIME			(1.0f)
 #pragma endregion
 
+typedef struct _SUIData 
+{
+	VECTOR2D positionData;
+
+	VECTOR2DINT sizeData;
+}SUIData;
 
 
 class Scene
@@ -50,6 +58,8 @@ public:
 
 	//指定したゲームオブジェクトの描画処理順位変更
 	virtual bool AdjustGameObjectDrawPriority(GameObjectBase * gameObject, int priority);
+
+	virtual bool IsPointInUI(VECTOR2D pointPosition);
 
 private:
 	// 状態推移処理のリストの各優先順位の先頭タスクへのポインタ
@@ -80,6 +90,8 @@ protected:
 
 	//描画処理の順位と状態推移処理の順位を更新
 	bool RefreshList(void);
+
+	vector <SUIData *> UIPositionData;
 
 	~Scene();
 };

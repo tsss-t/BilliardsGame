@@ -49,7 +49,7 @@ bool Label::Draw()
 	UI::Draw();
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, flickerInfo->alphaNow);
-	DrawStringToHandle(this->transform->postion.x + offset.x, this->transform->postion.y + offset.y, string, fontColor, fontHandle);
+	DrawStringToHandle(this->transform->position.x + offset.x, this->transform->position.y + offset.y, string, fontColor, fontHandle);
 	return true;
 }
 

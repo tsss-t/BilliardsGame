@@ -31,13 +31,19 @@ public:
 	int GetSpriteHandle();
 
 	//中心描画するため、中心の位置を設置する
-	void SetCenterPoint(int x, int y);
+	void SetDrawCenterPoint(int x, int y);
 
 	//画像の中心座標（ローカル中心座標）を貰う
 	VECTOR2DINT GetSrpiteCenter();
 
 	//画像のサイズを貰う
 	VECTOR2DINT GetSpriteSize();
+
+
+	VECTOR2D GetPositionInWindow();
+
+	//UIのサイズを貰う
+	VECTOR2DINT GetUISize();
 	
 	//画像ハンドルデータのみ変更、中心やサイズそのまま
 	void ChangeSpriteSimple(int handle);
@@ -53,10 +59,15 @@ public:
 
 	void SetOffset(float x,float y);
 
+	void SetEnable(bool enable);
 private:
+	bool enable;
+
 	VECTOR2DINT spriteSize;
 
 	VECTOR2DINT spriteCenter;
+
+	VECTOR2DINT spriteDrawCenter;
 
 	VECTOR2D offset;
 

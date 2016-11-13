@@ -8,18 +8,29 @@ BilliardsTable::BilliardsTable() :GameObject(MV1LoadModel("Data/Model/tableNorma
 	transform->postion = VGet(0, 0, 0);
 	btCompoundShape *tabelShape = new btCompoundShape();
 
+	//test用Box
+	//btBoxShape *testBox=new btBoxShape(btVector3(btScalar(4), btScalar(20), btScalar(4)));
+	//btTransform testTrans;
+	//testTrans.setIdentity();
+	//testTrans.setOrigin(btVector3(-55, 30, -28));
+	//tabelShape->addChildShape(testTrans, testBox);
+
+
+	//tableの面
 	btBoxShape *tabelPanelH = new btBoxShape(btVector3(btScalar(60), btScalar(2), btScalar(26)));
 	btBoxShape *tabelPanelVLeft = new btBoxShape(btVector3(btScalar(26), btScalar(2), btScalar(32)));
 	btBoxShape *tabelPanelVRight = new btBoxShape(btVector3(btScalar(26), btScalar(2), btScalar(32)));
 	btBoxShape *tabelPanelVMid = new btBoxShape(btVector3(btScalar(4), btScalar(2), btScalar(28)));
 
+	//tableの辺
 	btBoxShape *tabelSideRight = new btBoxShape(btVector3(btScalar(1.5f), btScalar(2), btScalar(26)));
 	btBoxShape *tabelSideLeft = new btBoxShape(btVector3(btScalar(1.5f), btScalar(2), btScalar(26)));
-	btBoxShape *tabelSideFrontLeft = new btBoxShape(btVector3(btScalar(26), btScalar(2), btScalar(1.5f)));
-	btBoxShape *tabelSideFrontRight = new btBoxShape(btVector3(btScalar(26), btScalar(2), btScalar(1.5f)));
-	btBoxShape *tabelSideBackLeft = new btBoxShape(btVector3(btScalar(26), btScalar(2), btScalar(1.5f)));
-	btBoxShape *tabelSideBackRight = new btBoxShape(btVector3(btScalar(26), btScalar(2), btScalar(1.5f)));
+	btBoxShape *tabelSideFrontLeft = new btBoxShape(btVector3(btScalar(25), btScalar(2), btScalar(1.5f)));
+	btBoxShape *tabelSideFrontRight = new btBoxShape(btVector3(btScalar(25), btScalar(2), btScalar(1.5f)));
+	btBoxShape *tabelSideBackLeft = new btBoxShape(btVector3(btScalar(25), btScalar(2), btScalar(1.5f)));
+	btBoxShape *tabelSideBackRight = new btBoxShape(btVector3(btScalar(25), btScalar(2), btScalar(1.5f)));
 
+	//tableの外辺
 	btBoxShape *tabelSideOutLeft = new btBoxShape(btVector3(btScalar(1.5f), btScalar(2), btScalar(34)));
 	btBoxShape *tabelSideOutRight = new btBoxShape(btVector3(btScalar(1.5f), btScalar(2), btScalar(34)));
 	btBoxShape *tabelSideOutFront = new btBoxShape(btVector3(btScalar(62), btScalar(2), btScalar(1.5f)));
@@ -62,6 +73,7 @@ BilliardsTable::BilliardsTable() :GameObject(MV1LoadModel("Data/Model/tableNorma
 	tabelShape->addChildShape(panelShiftVLeft, tabelPanelVLeft);
 	tabelShape->addChildShape(panelShiftVRight, tabelPanelVRight);
 	tabelShape->addChildShape(panelShiftVMid, tabelPanelVMid);
+
 	tabelShape->addChildShape(sideShiftRight, tabelSideRight);
 	tabelShape->addChildShape(sideShiftLeft, tabelSideLeft);
 	tabelShape->addChildShape(sideShiftFrontLeft, tabelSideFrontLeft);

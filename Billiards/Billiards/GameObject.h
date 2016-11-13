@@ -29,6 +29,8 @@ public:
 
 	~GameObject();
 
+	virtual bool IsGUI();
+
 	//物理システム
 	virtual bool IsRigidBody();
 
@@ -49,6 +51,9 @@ public:
 
 	virtual VECTOR GetScale();
 
+	//物体はスクリーン中の位置データを貰う
+	virtual VECTOR2D GetPositionInWindow();
+
 	//ゲームオブジェクトの状態推移処理順番を変更
 	virtual void SetUpdatePriority(int updatePriority);
 
@@ -61,6 +66,9 @@ public:
 	//状態推移処理
 	virtual bool Update(float stepTime);
 
+	virtual void SetEnable(bool enable);
+
+	virtual bool GetEnable();
 
 private:
 	//＊要注意＊　　構造方法用
@@ -69,6 +77,7 @@ private:
 	void GameObjectInit();
 
 protected:
+	bool enable;
 	int modelHandle;
 	bool isRigidBody = false;
 	bool isStatic = false;

@@ -11,20 +11,12 @@ enum TweenType
 	PingPong
 };
 
-typedef struct _SVECTOR2D
-{
-	float x;
-	float y;
-}VECTOR2D;
 
-typedef struct _SVECTOR2DINT
-{
-	int x;
-	int y;
-}VECTOR2DINT;
+
+
 typedef struct _STransform2D
 {
-	VECTOR2D postion;
+	VECTOR2D position;
 	float angle;
 	VECTOR2D scale;
 }STransform2D;
@@ -61,6 +53,8 @@ public:
 	virtual bool Update(float stepTime);
 	virtual bool Draw();
 
+	virtual bool IsGUI();
+
 	//ゲームオブジェクトの状態推移処理順番を変更
 	virtual void SetUpdatePriority(int updatePriority);
 
@@ -88,8 +82,14 @@ public:
 	//UIの方向データを貰う
 	virtual float GetRotation();
 
+	//UIのサイズデータを貰う
+	virtual VECTOR2DINT GetUISize();
+
 	//UIの拡張倍数データを貰う
 	virtual VECTOR2D GetScale();
+
+	//UIはスクリーン中の位置データを貰う
+	virtual VECTOR2D GetPositionInWindow();
 
 	//UIの明暗変化を設置
 	virtual void SetTweenColor(float flickerSpace, TweenType type = Once);

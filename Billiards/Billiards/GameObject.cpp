@@ -21,6 +21,7 @@ void GameObject::SetPriority(int updatePriority, int drawPriority)
 //　基本構造方法
 void GameObject::GameObjectInit()
 {
+	enable = true;
 	transform = (STransform3D *)calloc(1, sizeof(STransform3D));
 	transform->postion = VGet(0, 0, 0);
 	transform->rotation = VGet(0, 0, 0);
@@ -112,6 +113,11 @@ GameObject::~GameObject()
 	//}
 }
 
+bool GameObject::IsGUI()
+{
+	return false;
+}
+
 bool GameObject::IsRigidBody()
 {
 	return isRigidBody;
@@ -176,6 +182,11 @@ VECTOR GameObject::GetScale()
 	return transform->scale;
 }
 
+VECTOR2D GameObject::GetPositionInWindow()
+{
+	return VECTOR2D();
+}
+
 
 bool GameObject::SetRigidBody(btScalar mass, btCollisionShape * collision)
 {
@@ -195,7 +206,6 @@ bool GameObject::SetRigidBody(btScalar mass, btCollisionShape * collision)
 	btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass, motionState, collision, inertia);
 	// 剛体の作成
 	rigidBody = new btRigidBody(rigidBodyCI);
-
 	return true;
 }
 
@@ -209,32 +219,49 @@ void GameObject::SetDrawPriority(int drawPriority)
 	GameObjectBase::SetDrawPriority(drawPriority);
 }
 
+void GameObject::SetEnable(bool enable)
+{
+	this->enable = enable;
+}
+
+bool GameObject::GetEnable()
+{
+	return enable;
+}
 
 //ゲームオブジェクトの状態推移処理
 bool GameObject::Update(float stepTime)
 {
-	if (isRigidBody && !isStatic)
+	if (enable)
 	{
-		btTransform trans;
-		rigidBody->getMotionState()->getWorldTransform(trans);
-		this->transform->postion = btVGet(trans.getOrigin());
+		if (isRigidBody && !isStatic)
+		{
+			btTransform trans;
+			rigidBody->getMotionState()->getWorldTransform(trans);
+			this->transform->postion = btVGet(trans.getOrigin());
 
-		// 角度取得
-		btMatrix3x3 rot = trans.getBasis();
-		btVector3 euler;
-		rot.getEulerZYX(euler[2], euler[1], euler[0]);
-		this->transform->rotation = btRotVGet(euler);
+			// 角度取得
+			btMatrix3x3 rot = trans.getBasis();
+			btVector3 euler;
+			rot.getEulerZYX(euler[2], euler[1], euler[0]);
+			this->transform->rotation = btRotVGet(euler);
+		}
 	}
 	return true;
 }
 
+
+
 //ゲームオブジェクトの描画
 bool GameObject::Draw()
 {
-	MV1SetPosition(this->modelHandle, transform->postion);
-	MV1SetRotationXYZ(this->modelHandle, transform->rotation);
-	MV1SetScale(this->modelHandle, transform->scale);
-	MV1DrawModel(this->modelHandle);
+	if (enable)
+	{
+		MV1SetPosition(this->modelHandle, transform->postion);
+		MV1SetRotationXYZ(this->modelHandle, transform->rotation);
+		MV1SetScale(this->modelHandle, transform->scale);
+		MV1DrawModel(this->modelHandle);
+	}
 	return true;
 }
 

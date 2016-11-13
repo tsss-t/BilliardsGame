@@ -55,7 +55,7 @@ bool SpriteSheet::Draw()
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, flickerInfo->alphaNow);
 	}
 	DrawRotaGraph3F(
-		transform->postion.x, transform->postion.y,
+		transform->position.x, transform->position.y,
 		spriteCenter.x, spriteCenter.y,
 		transform->scale.x, transform->scale.y,
 		transform->angle, spriteSheet[animationIndex],
@@ -72,6 +72,16 @@ void SpriteSheet::SetCenterPoint(int x, int y)
 VECTOR2DINT SpriteSheet::GetSpriteSize()
 {
 	return{ spriteSize.x,spriteSize.y };
+}
+
+VECTOR2DINT SpriteSheet::GetUISize()
+{
+	return{ spriteSize.x,spriteSize.y };
+}
+
+VECTOR2D SpriteSheet::GetPositionInWindow()
+{
+	return{ this->transform->position.x, this->transform->position.y };
 }
 
 VECTOR2DINT SpriteSheet::GetSrpiteCenter()

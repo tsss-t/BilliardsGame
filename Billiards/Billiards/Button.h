@@ -57,6 +57,14 @@ public:
 	//ボタンのクリック事件を設置
 	void SetClickEvent(void(*callBack)());
 
+	//ボタンのクリックを起用するかどうか
+	void SetEnable(bool isEnable);
+
+	//ボタンのサイズを貰う
+	VECTOR2DINT GetUISize();
+
+	VECTOR2D GetPositionInWindow();
+
 	//Sprite/labelの切り替えの設定
 	void SetNormalSpriteHandle(int handle);
 	void SetHoverSpriteHandle(int handle);
@@ -87,6 +95,10 @@ private:
 
 	VECTOR2DINT buttonSize;
 	VECTOR2DINT buttonCenter;
+
+	bool isEnable;
+
+
 
 	void(*onClick)();
 

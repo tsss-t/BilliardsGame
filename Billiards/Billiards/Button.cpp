@@ -4,6 +4,8 @@
 
 void Button::InitButton()
 {
+	this->isEnable = false;
+
 	buttonType = LabelSpriteType;
 	this->buttonCenter = { 0,0 };
 	this->buttonSize = { 0,0 };
@@ -44,7 +46,7 @@ Button::Button(Sprite *sprite, float drawPriority)
 
 	SetPriority(PRIORITY_MAX / 2, drawPriority);
 }
-Button::Button(Sprite *sprite, float updatePriority , float drawPriority)
+Button::Button(Sprite *sprite, float updatePriority, float drawPriority)
 {
 	InitButton();
 	this->normalSpriteHandle = sprite->GetSpriteHandle();
@@ -96,7 +98,7 @@ Button::Button(Label *label, Sprite *sprite, float drawPriority)
 	this->buttonSize = sprite->GetSpriteSize();
 	SetPriority(PRIORITY_MAX / 2, drawPriority);
 }
-Button::Button(Label *label, Sprite *sprite,float updatePriority, float drawPriority)
+Button::Button(Label *label, Sprite *sprite, float updatePriority, float drawPriority)
 {
 	InitButton();
 
@@ -127,8 +129,8 @@ bool Button::Update(float stepTime)
 	{
 		buttonSprite->Update(stepTime);
 
-		transform->postion.x = buttonSprite->GetPosition().x;
-		transform->postion.y = buttonSprite->GetPosition().y;
+		transform->position.x = buttonSprite->GetPosition().x;
+		transform->position.y = buttonSprite->GetPosition().y;
 		transform->angle = buttonSprite->GetRotation();
 		transform->scale.x = buttonSprite->GetScale().x;
 		transform->scale.y = buttonSprite->GetScale().y;
@@ -158,8 +160,8 @@ bool Button::Update(float stepTime)
 	{
 		buttonLabel->Update(stepTime);
 
-		transform->postion.x = buttonLabel->GetPosition().x;
-		transform->postion.y = buttonLabel->GetPosition().y;
+		transform->position.x = buttonLabel->GetPosition().x;
+		transform->position.y = buttonLabel->GetPosition().y;
 		transform->angle = buttonLabel->GetRotation();
 		transform->scale.x = buttonLabel->GetScale().x;
 		transform->scale.y = buttonLabel->GetScale().y;
@@ -189,8 +191,8 @@ bool Button::Update(float stepTime)
 		buttonSprite->Update(stepTime);
 		buttonLabel->Update(stepTime);
 
-		transform->postion.x = buttonSprite->GetPosition().x;
-		transform->postion.y = buttonSprite->GetPosition().y;
+		transform->position.x = buttonSprite->GetPosition().x;
+		transform->position.y = buttonSprite->GetPosition().y;
 		transform->angle = buttonSprite->GetRotation();
 		transform->scale.x = buttonSprite->GetScale().x;
 		transform->scale.y = buttonSprite->GetScale().y;
@@ -475,12 +477,12 @@ void Button::SimpleMove(float moveTime, VECTOR2D pointFrom, VECTOR2D pointTo, Tw
 bool Button::IsSelected()
 {
 	FLOAT2 mousePosition = InputSystem::GetInputSystemInstance()->GetMouseNowPosition();
-	float left = transform->postion.x - buttonCenter.x;
-	float right = transform->postion.x - buttonCenter.x + buttonSize.x;
-	float top = transform->postion.y - buttonCenter.y;
-	float button = transform->postion.y - buttonCenter.y + buttonSize.y;
-	if ((mousePosition.u > transform->postion.x - buttonCenter.x *transform->scale.x && mousePosition.u < transform->postion.x + transform->scale.x* (buttonSize.x - buttonCenter.x)) &&
-		(mousePosition.v > transform->postion.y - buttonCenter.y *transform->scale.y && mousePosition.v < transform->postion.y + transform->scale.y* (buttonSize.y - buttonCenter.y)))
+	//float left = transform->position.x - buttonCenter.x;
+	//float right = transform->position.x - buttonCenter.x + buttonSize.x;
+	//float top = transform->position.y - buttonCenter.y;
+	//float button = transform->position.y - buttonCenter.y + buttonSize.y;
+	if ((mousePosition.u > transform->position.x - buttonCenter.x *transform->scale.x && mousePosition.u < transform->position.x + transform->scale.x* (buttonSize.x - buttonCenter.x)) &&
+		(mousePosition.v > transform->position.y - buttonCenter.y *transform->scale.y && mousePosition.v < transform->position.y + transform->scale.y* (buttonSize.y - buttonCenter.y)))
 	{
 		return true;
 	}
@@ -500,42 +502,74 @@ bool Button::IsClicked()
 //ボタンを押した後の処理
 void Button::OnClick()
 {
+	if (isEnable)
+	{
+		switch (buttonType)
+		{
+		case SpriteType:
+		{
+			if (hoverSpriteHandle != pressSpriteHandle)
+			{
+				ChangeSpriteSimple(pressSpriteHandle);
+			}
+			break;
+		}
+		case LabelType:
+		{
+			if (hoverColorHandle != pressColorHandle)
+			{
+				ChangeColorSimple(pressColorHandle);
+			}
+			break;
+		}
+		case LabelSpriteType:
+		{
+			if (hoverSpriteHandle != pressSpriteHandle)
+			{
+				ChangeSpriteSimple(pressSpriteHandle);
+			}
+			break;
+		}
+		default:
+		{
+			break;
+		}
+		}
+
+		if (onClick != nullptr)
+		{
+			onClick();
+		}
+	}
+}
+
+void Button::SetEnable(bool isEnable)
+{
+	this->isEnable = isEnable;
+}
+
+VECTOR2DINT Button::GetUISize()
+{
 	switch (buttonType)
 	{
 	case SpriteType:
-	{
-		if (hoverSpriteHandle != pressSpriteHandle)
-		{
-			ChangeSpriteSimple(pressSpriteHandle);
-		}
+		return buttonSprite->GetUISize();
 		break;
-	}
 	case LabelType:
-	{
-		if (hoverColorHandle != pressColorHandle)
-		{
-			ChangeColorSimple(pressColorHandle);
-		}
+		return buttonLabel->GetUISize();
 		break;
-	}
 	case LabelSpriteType:
-	{
-		if (hoverSpriteHandle != pressSpriteHandle)
-		{
-			ChangeSpriteSimple(pressSpriteHandle);
-		}
+		return buttonSprite->GetUISize();
 		break;
-	}
 	default:
-	{
 		break;
 	}
-	}
+	return VECTOR2DINT();
+}
 
-	if (onClick != nullptr)
-	{
-		onClick();
-	}
+VECTOR2D Button::GetPositionInWindow()
+{
+	return{ this->transform->position.x, this->transform->position.y };
 }
 
 //画像を変更する

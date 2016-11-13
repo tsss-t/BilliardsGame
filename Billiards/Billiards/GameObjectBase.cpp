@@ -78,9 +78,25 @@ bool GameObjectBase::IsRigidBody()
 	return false;
 }
 
+
+bool GameObjectBase::IsGUI()
+{
+	return false;
+}
+
+VECTOR2D GameObjectBase::GetPositionInWindow()
+{
+	return{ 0,0 };
+}
+
 btRigidBody * GameObjectBase::GetRigidBody()
 {
 	return nullptr;
+}
+
+VECTOR2DINT GameObjectBase::GetUISize()
+{
+	return VECTOR2DINT();
 }
 
 void GameObjectBase::SetPriority(int updatePriority, int drawPriority)
@@ -91,7 +107,7 @@ void GameObjectBase::SetPriority(int updatePriority, int drawPriority)
 	}
 	else if (updatePriority >= PRIORITY_MAX)
 	{
-		this->goInfo->goBaseInfo->updatePriority = PRIORITY_MAX-1;
+		this->goInfo->goBaseInfo->updatePriority = PRIORITY_MAX - 1;
 	}
 	else
 	{

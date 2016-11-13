@@ -8,7 +8,16 @@
 
 // タスクの実行優先順位の最大値 - 1
 #define PRIORITY_MAX		(16)
-
+typedef struct _SVECTOR2D
+{
+	float x;
+	float y;
+}VECTOR2D;
+typedef struct _SVECTOR2DINT
+{
+	int x;
+	int y;
+}VECTOR2DINT;
 typedef struct _SGameObjectBaseInfo {
 	int updatePriority;
 	int drawPriority;
@@ -39,10 +48,15 @@ public:
 	//ゲームオブジェクトはRigidBodyですか
 	virtual bool IsRigidBody();
 
+	virtual bool IsGUI();
+
+	virtual VECTOR2D GetPositionInWindow();
+
 	//ゲームオブジェクトのRigidBodyを貰う
 	//isRigidBody==false  ->  return null
 	virtual btRigidBody *GetRigidBody();
 
+	virtual VECTOR2DINT GetUISize();
 
 private:
 
