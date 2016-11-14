@@ -114,6 +114,9 @@
     <ClCompile Include="GameObjectBase.cpp">
       <Filter>Source Files\Framework\GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="SoundSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SceneGameMain.h">
@@ -178,6 +181,9 @@
     </ClInclude>
     <ClInclude Include="GameObjectBase.h">
       <Filter>Header Files\Framework\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundSystem.h">
+      <Filter>Header Files\Framework</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -172,6 +172,7 @@
     <ClCompile Include="SceneGameStartMenu.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Slider.cpp" />
+    <ClCompile Include="SoundSystem.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteSheet.cpp" />
     <ClCompile Include="System.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="SceneGameStartMenu.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Slider.h" />
+    <ClInclude Include="SoundSystem.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteSheet.h" />
     <ClInclude Include="System.h" />

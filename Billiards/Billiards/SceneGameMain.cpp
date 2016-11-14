@@ -33,11 +33,11 @@ SceneGameMain::SceneGameMain()
 	triggerList[1]->position = { -53,28,-28.5f };
 	triggerList[1]->size = { 6,2,5 };
 	triggerList[2] = new STriggerBox();
-	triggerList[2]->position = { 61.5f,28,28.5f };
-	triggerList[2]->size = { 5,2,5 };
+	triggerList[2]->position = { 61.0f,28,28.5f };
+	triggerList[2]->size = { 6,2,5 };
 	triggerList[3] = new STriggerBox();
-	triggerList[3]->position = { 61.5f,28,-28.5f };
-	triggerList[3]->size = { 5,2,5 };
+	triggerList[3]->position = { 61.0f,28,-28.5f };
+	triggerList[3]->size = { 6,2,5 };
 	triggerList[4] = new STriggerBox();
 	triggerList[4]->position = { 3.75,28,28.5f };
 	triggerList[4]->size = { 3.5f,2,5 };
@@ -200,6 +200,8 @@ bool SceneGameMain::SceneUpdate(float stepTime)
 		timer += stepTime;
 		if (timer > FADE_IN_WAIT_TIME)
 		{
+			SoundSystem::GetSoundSystemInstance()->PlayBGM(EBGM::EBGM_GameMain);
+
 			timer = 0;
 			sceneNowState = ESceneMainState::FadeIn;
 		}
