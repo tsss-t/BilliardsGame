@@ -27,6 +27,10 @@ bool System::SystemInit(void)
 		// 「はい」が選択された場合はウインドウモードで起動
 		ChangeWindowMode(TRUE);
 	}
+	else
+	{
+		ChangeWindowMode(FALSE);
+	}
 
 	//低処理負荷モードで起動するか確認する
 	//if (MessageBox(NULL, "Low？", "処理負荷モード確認", MB_YESNO) == IDYES)
@@ -80,6 +84,11 @@ bool System::SystemInit(void)
 		//	return false;
 		//}
 	}
+	// サウンド処理の初期化
+	SoundSystem::GetSoundSystemInstance();
+
+	// ３Ｄサウンドの１メートル当たりの値をセット
+	Set3DSoundOneMetre(100.0f);
 #pragma endregion
 
 #pragma region playerInfo初期化

@@ -100,6 +100,7 @@ bool SceneGameStartMenu::SceneUpdate(float stepTime)
 		timer += stepTime;
 		if (timer > FADE_IN_TIME)
 		{
+			SoundSystem::GetSoundSystemInstance()->PlayBGM(EBGM::EBGM_Title);
 			sceneNowState = EStartSceneMenuState::MenuSelect;
 			timer = 0;
 		}
@@ -135,7 +136,7 @@ bool SceneGameStartMenu::SceneUpdate(float stepTime)
 	}
 	case EStartSceneMenuState::End:
 	{
-
+		SoundSystem::GetSoundSystemInstance()->StopBGM();
 		switch (nextScene)
 		{
 		case SceneGameStartMenu::GameMain:
