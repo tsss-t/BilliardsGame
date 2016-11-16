@@ -5,10 +5,9 @@
 #include "Ball.h"
 #include "PoolStick.h"
 #include "BiliardsTable.h";
-#include "Slider.h"
-#include "Button.h"
-
-using namespace std;
+#include "UISlider.h"
+#include "UIButton.h"
+#include "UIPanel.h"
 
 #define TableHight (28.1f)
 #define BallNum (15)
@@ -44,6 +43,9 @@ public:
 	void GoalIn(int ballNum);
 	bool SceneDraw(void);
 
+	void DisableViewPanel();
+	void ShowViewPanel();
+
 	static void ChangeCameraModeToFree();
 	static void ChangeCameraModeToFollow();
 	static void ChangeCameraModeToFixed();
@@ -60,26 +62,54 @@ private:
 	STriggerBox * triggerList[6];
 
 	//--------2D UI---------
-	Sprite * spTableLeft;
-	Slider * sldForce;
-	Sprite * spLog;
+	int fontHandle;
 
-	int handleMenu;
-	int handleMenuHightLight;
-	Sprite * spMenu;
-	Label * lbMenu;
-	Button * btMenu;
+	UISprite * spTableLeft;
+	UISlider * sldForce;
+	UISprite * spLog;
 
-	Button * btFollowMode;
-	Button * btFixedMode;
-	Button * btFreeMode;
+	int buttonBackgroundHandle;
+	int buttonBackgroundLightHandle;
+	UISprite * spMenu;
+	UILabel * lbMenu;
+	UIButton * btMenu;
 
-	Sprite * spFollowMode;
-	Sprite * spFixedMode;
-	Sprite * spFreeMode;
+	//View Mode
+	UIPanel * plViewMode;
 
+	UILabel * lbViewMode;
+
+	UISprite * spFollowMode;
+	UISprite * spFixedMode;
+	UISprite * spFreeMode;
+
+	UILabel * lbFollowMode;
+	UILabel * lbFixedMode;
+	UILabel * lbFreeMode;
+
+	UIButton * btFollowMode;
+	UIButton * btFixedMode;
+	UIButton * btFreeMode;
+
+	//View
+	UIPanel * plView;
+
+	UIButton * btTopView;
+	UIButton * btLeftView;
+	UIButton * btRightView;
+	UIButton * btBackView;
+	UISprite * spTopView;
+	UISprite * spLeftView;
+	UISprite * spRightView;
+	UISprite * spBackView;
+	UILabel * lbTopView;
+	UILabel * lbLeftView;
+	UILabel * lbRightView;
+	UILabel * lbBackView;
+
+	VECTOR2D initBallIconPosition;
 	VECTOR2D nextBallIconPosition;
-	Sprite * spBallList[BallNum];
+	UISprite * spBallList[BallNum];
 
 	//--------3D Model-------
 	Ball * ballWhite;

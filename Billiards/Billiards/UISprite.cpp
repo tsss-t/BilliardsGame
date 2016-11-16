@@ -1,7 +1,7 @@
-﻿#include "Sprite.h"
+﻿#include "UISprite.h"
 
 #pragma region 初期化
-void Sprite::InitSprite()
+void UISprite::InitSprite()
 {
 	this->spriteHandle = 0;
 
@@ -13,12 +13,12 @@ void Sprite::InitSprite()
 	enable = true;
 }
 
-Sprite::Sprite() :UI::UI()
+UISprite::UISprite() :UI::UI()
 {
 	InitSprite();
 }
 
-Sprite::Sprite(int spriteHandle)
+UISprite::UISprite(int spriteHandle)
 {
 	InitSprite();
 	this->spriteHandle = spriteHandle;
@@ -27,7 +27,7 @@ Sprite::Sprite(int spriteHandle)
 	spriteCenter.y = spriteSize.y / 2;
 }
 
-Sprite::Sprite(char* fileName)
+UISprite::UISprite(char* fileName)
 {
 	InitSprite();
 	this->spriteHandle = LoadGraph(fileName);
@@ -36,7 +36,7 @@ Sprite::Sprite(char* fileName)
 	spriteCenter.y = spriteSize.y / 2;
 }
 
-Sprite::Sprite(int spriteHandle, int drawPriority)
+UISprite::UISprite(int spriteHandle, int drawPriority)
 {
 	InitSprite();
 	this->spriteHandle = spriteHandle;
@@ -47,7 +47,7 @@ Sprite::Sprite(int spriteHandle, int drawPriority)
 	SetPriority(PRIORITY_MAX / 2, drawPriority);
 }
 
-Sprite::Sprite(char * fileName, int drawPriority)
+UISprite::UISprite(char * fileName, int drawPriority)
 {
 	InitSprite();
 	this->spriteHandle = LoadGraph(fileName);
@@ -58,7 +58,7 @@ Sprite::Sprite(char * fileName, int drawPriority)
 	SetPriority(PRIORITY_MAX / 2, drawPriority);
 }
 
-Sprite::Sprite(int spriteHandle, int updatePriority, int drawPriority)
+UISprite::UISprite(int spriteHandle, int updatePriority, int drawPriority)
 {
 	InitSprite();
 	this->spriteHandle = spriteHandle;
@@ -70,7 +70,7 @@ Sprite::Sprite(int spriteHandle, int updatePriority, int drawPriority)
 
 }
 
-Sprite::Sprite(char * fileName, int updatePriority, int drawPriority)
+UISprite::UISprite(char * fileName, int updatePriority, int drawPriority)
 {
 	InitSprite();
 	this->spriteHandle = LoadGraph(fileName);
@@ -82,19 +82,19 @@ Sprite::Sprite(char * fileName, int updatePriority, int drawPriority)
 
 }
 
-Sprite::~Sprite()
+UISprite::~UISprite()
 {
 
 }
 #pragma endregion
 
-bool Sprite::Update(float stepTime)
+bool UISprite::Update(float stepTime)
 {
 	UI::Update(stepTime);
 	return true;
 }
 
-bool Sprite::Draw()
+bool UISprite::Draw()
 {
 	if (enable)
 	{
@@ -113,11 +113,10 @@ bool Sprite::Draw()
 	return true;
 }
 
-bool Sprite::Draw(float process)
+bool UISprite::Draw(float process)
 {
 	if (enable)
 	{
-
 		UI::Draw();
 		if (flickerInfo->isFlicker)
 		{
@@ -134,43 +133,43 @@ bool Sprite::Draw(float process)
 }
 
 //画像ハンドルデータを貰う
-int Sprite::GetSpriteHandle()
+int UISprite::GetSpriteHandle()
 {
 	return spriteHandle;
 }
 
 //中心点について描画するため、中心の位置を設置する
-void Sprite::SetDrawCenterPoint(int x, int y)
+void UISprite::SetDrawCenterPoint(int x, int y)
 {
 	this->spriteDrawCenter.x = x;
 	this->spriteDrawCenter.y = y;
 }
 
-VECTOR2DINT Sprite::GetSpriteSize()
+VECTOR2DINT UISprite::GetSpriteSize()
 {
 	return{ (int)(spriteSize.x * transform->scale.x),(int)(spriteSize.y *transform->scale.y) };
 }
 
-VECTOR2D Sprite::GetPositionInWindow()
+VECTOR2D UISprite::GetPositionInWindow()
 {
 	return{ transform->position.x - spriteDrawCenter.x*transform->scale.x, transform->position.y - spriteDrawCenter.y*transform->scale.y };
 }
 
 //画像のサイズを貰う
-VECTOR2DINT Sprite::GetUISize()
+VECTOR2DINT UISprite::GetUISize()
 {
 	return{ (int)(spriteSize.x * transform->scale.x),(int)(spriteSize.y *transform->scale.y) };
 
 }
 
 
-VECTOR2DINT Sprite::GetSrpiteCenter()
+VECTOR2DINT UISprite::GetSrpiteCenter()
 {
 	return{ spriteDrawCenter.x, spriteDrawCenter.y };
 }
 
 //画像ハンドルデータのみ変更、中心やサイズそのまま
-void Sprite::ChangeSpriteSimple(int handle)
+void UISprite::ChangeSpriteSimple(int handle)
 {
 	if (this->spriteHandle != handle)
 	{
@@ -179,13 +178,13 @@ void Sprite::ChangeSpriteSimple(int handle)
 }
 
 //画像ハンドルデータのみ変更、中心やサイズそのまま
-void Sprite::ChangeSpriteSimple(char * fileName)
+void UISprite::ChangeSpriteSimple(char * fileName)
 {
 	this->spriteHandle = LoadGraph(fileName);
 }
 
 //画像ハンドルデータ変更及び中心やサイズ再算出
-void Sprite::ChangeSpriteReload(int handle)
+void UISprite::ChangeSpriteReload(int handle)
 {
 	if (this->spriteHandle != handle)
 	{
@@ -197,7 +196,7 @@ void Sprite::ChangeSpriteReload(int handle)
 }
 
 //画像ハンドルデータ変更及び中心やサイズ再算出
-void Sprite::ChangeSpriteReload(char * fileName)
+void UISprite::ChangeSpriteReload(char * fileName)
 {
 	this->spriteHandle = LoadGraph(fileName);
 	GetGraphSize(spriteHandle, &spriteSize.x, &spriteSize.y);
@@ -205,16 +204,13 @@ void Sprite::ChangeSpriteReload(char * fileName)
 	spriteCenter.y = spriteSize.y / 2;
 }
 
-void Sprite::SetOffset(float x, float y)
+void UISprite::SetOffset(float x, float y)
 {
 	this->offset.x = x;
 	this->offset.y = y;
 }
 
-void Sprite::SetEnable(bool enable)
-{
-	this->enable = enable;
-}
+
 
 
 

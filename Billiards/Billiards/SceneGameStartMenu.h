@@ -3,9 +3,9 @@
 #define SCENEGAMESTARTMENU_H
 
 #include "Scene.h"
-#include "Sprite.h"
-#include "Label.h"
-#include "Button.h"
+#include "UISprite.h"
+#include "UILabel.h"
+#include "UIButton.h"
 
 
 
@@ -44,23 +44,23 @@ private:
 
 	static _EGameStartMenuNext nextScene;
 
-	Sprite * spriteBG;
-	Sprite * spriteLogo;
-	Sprite * spriteTitle;
+	UISprite * spriteBG;
+	UISprite * spriteLogo;
+	UISprite * spriteTitle;
 
 	int buttonSpriteHandle;
 	int buttonSpriteHighLightHanel;
-	Button * btStartGame;
-	Sprite * spStartGame;
-	Label * lbStartGame;
+	UIButton * btStartGame;
+	UISprite * spStartGame;
+	UILabel * lbStartGame;
 	
-	Button * btSettingGame;
-	Sprite * spSettingGame;
-	Label * lbSettingGame;
+	UIButton * btSettingGame;
+	UISprite * spSettingGame;
+	UILabel * lbSettingGame;
 
-	Button * btExitGame;
-	Sprite * spExitGame;
-	Label * lbExitGame;
+	UIButton * btExitGame;
+	UISprite * spExitGame;
+	UILabel * lbExitGame;
 
 	SceneGameStartMenu();
 };

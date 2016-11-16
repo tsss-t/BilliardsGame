@@ -1,13 +1,17 @@
 ﻿#include "UI.h"
 
+
+
 UI::UI()
 {
+	this->enable = true;
 	this->transform = new _STransform2D();
 
 	this->transform->position = { 0, 0 };
 	this->transform->angle = 0.0f;
 	this->transform->scale = { 1,1 };
 
+	this->SetPriority(PRIORITY_MAX / 2, PRIORITY_MAX / 2);
 
 	flickerInfo = new FlickerInfo();
 	flickerInfo->isFlicker = false;
@@ -291,4 +295,14 @@ void UI::SimpleMove(float movingTime, VECTOR2D pointFrom, VECTOR2D pointTo, Twee
 		movingInfo->movingTime = 0;
 		movingInfo->moveType = Once;
 	}
+}
+
+void UI::SetEnable(bool enable)
+{
+	this->enable = enable;
+}
+
+bool UI::IsEnabled()
+{
+	return enable;
 }

@@ -1,10 +1,10 @@
-﻿#include "Button.h"
+﻿#include "UIButton.h"
 #include "InputSystem.h"
 
 
-void Button::InitButton()
+void UIButton::InitButton()
 {
-	this->isEnable = false;
+	this->isEventEnable = false;
 
 	buttonType = LabelSpriteType;
 	this->buttonCenter = { 0,0 };
@@ -16,7 +16,7 @@ void Button::InitButton()
 	this->disabledColorHandle = GetColor(128, 128, 128);
 }
 
-Button::Button(Sprite *sprite)
+UIButton::UIButton(UISprite *sprite)
 {
 	InitButton();
 	this->normalSpriteHandle = sprite->GetSpriteHandle();
@@ -30,7 +30,7 @@ Button::Button(Sprite *sprite)
 
 	this->buttonType = SpriteType;
 }
-Button::Button(Sprite *sprite, float drawPriority)
+UIButton::UIButton(UISprite *sprite, float drawPriority)
 {
 	InitButton();
 	this->normalSpriteHandle = sprite->GetSpriteHandle();
@@ -46,7 +46,7 @@ Button::Button(Sprite *sprite, float drawPriority)
 
 	SetPriority(PRIORITY_MAX / 2, drawPriority);
 }
-Button::Button(Sprite *sprite, float updatePriority, float drawPriority)
+UIButton::UIButton(UISprite *sprite, float updatePriority, float drawPriority)
 {
 	InitButton();
 	this->normalSpriteHandle = sprite->GetSpriteHandle();
@@ -62,14 +62,22 @@ Button::Button(Sprite *sprite, float updatePriority, float drawPriority)
 
 	SetPriority(updatePriority, drawPriority);
 }
-Button::Button(Label *label)
+UIButton::UIButton(UILabel *label)
 {
 	InitButton();
 	this->buttonLabel = label;
 	this->buttonType = LabelType;
 
 }
-Button::Button(Label *label, Sprite *sprite)
+UIButton::UIButton(UILabel *label, float drawPriority)
+{
+	InitButton();
+	this->buttonLabel = label;
+	this->buttonType = LabelType;
+
+	SetPriority(PRIORITY_MAX / 2, drawPriority);
+}
+UIButton::UIButton(UILabel *label, UISprite *sprite)
 {
 	InitButton();
 
@@ -83,7 +91,7 @@ Button::Button(Label *label, Sprite *sprite)
 	this->buttonCenter = sprite->GetSrpiteCenter();
 	this->buttonSize = sprite->GetSpriteSize();
 }
-Button::Button(Label *label, Sprite *sprite, float drawPriority)
+UIButton::UIButton(UILabel *label, UISprite *sprite, float drawPriority)
 {
 	InitButton();
 
@@ -98,7 +106,7 @@ Button::Button(Label *label, Sprite *sprite, float drawPriority)
 	this->buttonSize = sprite->GetSpriteSize();
 	SetPriority(PRIORITY_MAX / 2, drawPriority);
 }
-Button::Button(Label *label, Sprite *sprite, float updatePriority, float drawPriority)
+UIButton::UIButton(UILabel *label, UISprite *sprite, float updatePriority, float drawPriority)
 {
 	InitButton();
 
@@ -114,154 +122,156 @@ Button::Button(Label *label, Sprite *sprite, float updatePriority, float drawPri
 	SetPriority(updatePriority, drawPriority);
 }
 
-Button::~Button()
+UIButton::~UIButton()
 {
 	delete buttonSprite;
 	delete buttonLabel;
 }
 
-bool Button::Update(float stepTime)
+bool UIButton::Update(float stepTime)
 {
-
-	switch (buttonType)
+	if (enable)
 	{
-	case SpriteType:
-	{
-		buttonSprite->Update(stepTime);
-
-		transform->position.x = buttonSprite->GetPosition().x;
-		transform->position.y = buttonSprite->GetPosition().y;
-		transform->angle = buttonSprite->GetRotation();
-		transform->scale.x = buttonSprite->GetScale().x;
-		transform->scale.y = buttonSprite->GetScale().y;
-
-		if (IsSelected())
+		switch (buttonType)
 		{
-			if (normalSpriteHandle != hoverSpriteHandle)
-			{
-				ChangeSpriteSimple(hoverSpriteHandle);
-			}
-			if (IsClicked())
-			{
-				OnClick();
-			}
-		}
-		else
+		case SpriteType:
 		{
-			if (normalSpriteHandle != hoverSpriteHandle)
-			{
-				ChangeSpriteSimple(normalSpriteHandle);
-			}
-		}
+			buttonSprite->Update(stepTime);
 
-		break;
+			transform->position.x = buttonSprite->GetPosition().x;
+			transform->position.y = buttonSprite->GetPosition().y;
+			transform->angle = buttonSprite->GetRotation();
+			transform->scale.x = buttonSprite->GetScale().x;
+			transform->scale.y = buttonSprite->GetScale().y;
+
+			if (IsSelected())
+			{
+				if (normalSpriteHandle != hoverSpriteHandle)
+				{
+					ChangeSpriteSimple(hoverSpriteHandle);
+				}
+				if (IsClicked())
+				{
+					OnClick();
+				}
+			}
+			else
+			{
+				if (normalSpriteHandle != hoverSpriteHandle)
+				{
+					ChangeSpriteSimple(normalSpriteHandle);
+				}
+			}
+
+			break;
+		}
+		case LabelType:
+		{
+			buttonLabel->Update(stepTime);
+
+			transform->position.x = buttonLabel->GetPosition().x;
+			transform->position.y = buttonLabel->GetPosition().y;
+			transform->angle = buttonLabel->GetRotation();
+			transform->scale.x = buttonLabel->GetScale().x;
+			transform->scale.y = buttonLabel->GetScale().y;
+
+			if (IsSelected())
+			{
+				if (normalColorHandle != hoverColorHandle)
+				{
+					ChangeColorSimple(hoverColorHandle);
+				}
+				if (IsClicked())
+				{
+					OnClick();
+				}
+			}
+			else
+			{
+				if (normalColorHandle != hoverColorHandle)
+				{
+					ChangeColorSimple(normalColorHandle);
+				}
+			}
+			break;
+		}
+		case LabelSpriteType:
+		{
+			buttonSprite->Update(stepTime);
+			buttonLabel->Update(stepTime);
+
+			transform->position.x = buttonSprite->GetPosition().x;
+			transform->position.y = buttonSprite->GetPosition().y;
+			transform->angle = buttonSprite->GetRotation();
+			transform->scale.x = buttonSprite->GetScale().x;
+			transform->scale.y = buttonSprite->GetScale().y;
+			if (IsSelected())
+			{
+				if (normalSpriteHandle != hoverSpriteHandle)
+				{
+					ChangeSpriteSimple(hoverSpriteHandle);
+				}
+				if (normalColorHandle != hoverColorHandle)
+				{
+					ChangeColorSimple(hoverColorHandle);
+				}
+				if (IsClicked())
+				{
+					OnClick();
+				}
+			}
+			else
+			{
+				if (normalSpriteHandle != hoverSpriteHandle)
+				{
+					ChangeSpriteSimple(normalSpriteHandle);
+				}
+				if (normalColorHandle != hoverColorHandle)
+				{
+					ChangeColorSimple(normalColorHandle);
+				}
+			}
+			break;
+		}
+		default:
+			break;
+		}
 	}
-	case LabelType:
-	{
-		buttonLabel->Update(stepTime);
-
-		transform->position.x = buttonLabel->GetPosition().x;
-		transform->position.y = buttonLabel->GetPosition().y;
-		transform->angle = buttonLabel->GetRotation();
-		transform->scale.x = buttonLabel->GetScale().x;
-		transform->scale.y = buttonLabel->GetScale().y;
-
-		if (IsSelected())
-		{
-			if (normalColorHandle != hoverColorHandle)
-			{
-				ChangeColorSimple(hoverColorHandle);
-			}
-			if (IsClicked())
-			{
-				OnClick();
-			}
-		}
-		else
-		{
-			if (normalColorHandle != hoverColorHandle)
-			{
-				ChangeColorSimple(normalColorHandle);
-			}
-		}
-		break;
-	}
-	case LabelSpriteType:
-	{
-		buttonSprite->Update(stepTime);
-		buttonLabel->Update(stepTime);
-
-		transform->position.x = buttonSprite->GetPosition().x;
-		transform->position.y = buttonSprite->GetPosition().y;
-		transform->angle = buttonSprite->GetRotation();
-		transform->scale.x = buttonSprite->GetScale().x;
-		transform->scale.y = buttonSprite->GetScale().y;
-		if (IsSelected())
-		{
-			if (normalSpriteHandle != hoverSpriteHandle)
-			{
-				ChangeSpriteSimple(hoverSpriteHandle);
-			}
-			if (normalColorHandle != hoverColorHandle)
-			{
-				ChangeColorSimple(hoverColorHandle);
-			}
-			if (IsClicked())
-			{
-				OnClick();
-			}
-		}
-		else
-		{
-			if (normalSpriteHandle != hoverSpriteHandle)
-			{
-				ChangeSpriteSimple(normalSpriteHandle);
-			}
-			if (normalColorHandle != hoverColorHandle)
-			{
-				ChangeColorSimple(normalColorHandle);
-			}
-		}
-		break;
-	}
-	default:
-		break;
-	}
-
 	return true;
 }
 
-bool Button::Draw()
+bool UIButton::Draw()
 {
-	switch (buttonType)
+	if (enable)
 	{
-	case SpriteType:
-	{
-		buttonSprite->Draw();
+		switch (buttonType)
+		{
+		case SpriteType:
+		{
+			buttonSprite->Draw();
 
-		break;
+			break;
+		}
+		case LabelType:
+		{
+			buttonLabel->Draw();
+			break;
+		}
+		case LabelSpriteType:
+		{
+			buttonSprite->Draw();
+			buttonLabel->Draw();
+			break;
+		}
+		default:
+			break;
+		}
 	}
-	case LabelType:
-	{
-		buttonLabel->Draw();
-		break;
-	}
-	case LabelSpriteType:
-	{
-		buttonSprite->Draw();
-		buttonLabel->Draw();
-		break;
-	}
-	default:
-		break;
-	}
-
-
 	return true;
 }
 
 //ボタンの位置を設置
-void Button::SetPosition(float x, float y)
+void UIButton::SetPosition(float x, float y)
 {
 	UI::SetPosition(x, y);
 	switch (buttonType)
@@ -288,7 +298,7 @@ void Button::SetPosition(float x, float y)
 }
 
 //ボタンの位置を設置
-void Button::SetPosition(VECTOR2D vector2d)
+void UIButton::SetPosition(VECTOR2D vector2d)
 {
 	UI::SetPosition(vector2d);
 	switch (buttonType)
@@ -315,7 +325,7 @@ void Button::SetPosition(VECTOR2D vector2d)
 }
 
 //ボタンの方向を設置
-void Button::SetRotation(float angle)
+void UIButton::SetRotation(float angle)
 {
 	UI::SetRotation(angle);
 	switch (buttonType)
@@ -342,7 +352,7 @@ void Button::SetRotation(float angle)
 }
 
 //ボタンの拡張倍数を設置
-void Button::SetScale(float x, float y)
+void UIButton::SetScale(float x, float y)
 {
 	UI::SetScale(x, y);
 	switch (buttonType)
@@ -369,7 +379,7 @@ void Button::SetScale(float x, float y)
 }
 
 //ボタンの拡張倍数を設置
-void Button::SetScale(VECTOR2D scale)
+void UIButton::SetScale(VECTOR2D scale)
 {
 	UI::SetScale(scale);
 	switch (buttonType)
@@ -396,7 +406,7 @@ void Button::SetScale(VECTOR2D scale)
 }
 
 //ボタンの明暗変化を設置
-void Button::SetTweenColor(float flickerSpace, TweenType type)
+void UIButton::SetTweenColor(float flickerSpace, TweenType type)
 {
 	switch (buttonType)
 	{
@@ -422,7 +432,7 @@ void Button::SetTweenColor(float flickerSpace, TweenType type)
 }
 
 //ボタンの明暗変化を設置
-void Button::SetTweenColor(float flickerSpace, int alphaFrom, int alphaTo, TweenType type)
+void UIButton::SetTweenColor(float flickerSpace, int alphaFrom, int alphaTo, TweenType type)
 {
 	switch (buttonType)
 	{
@@ -448,7 +458,7 @@ void Button::SetTweenColor(float flickerSpace, int alphaFrom, int alphaTo, Tween
 }
 
 //ボタンの移動動作を設置
-void Button::SimpleMove(float moveTime, VECTOR2D pointFrom, VECTOR2D pointTo, TweenType type)
+void UIButton::SimpleMove(float moveTime, VECTOR2D pointFrom, VECTOR2D pointTo, TweenType type)
 {
 	switch (buttonType)
 	{
@@ -474,23 +484,32 @@ void Button::SimpleMove(float moveTime, VECTOR2D pointFrom, VECTOR2D pointTo, Tw
 }
 
 //ボタンの選択状態（hover）を設置
-bool Button::IsSelected()
+bool UIButton::IsSelected()
 {
 	FLOAT2 mousePosition = InputSystem::GetInputSystemInstance()->GetMouseNowPosition();
 	//float left = transform->position.x - buttonCenter.x;
 	//float right = transform->position.x - buttonCenter.x + buttonSize.x;
 	//float top = transform->position.y - buttonCenter.y;
 	//float button = transform->position.y - buttonCenter.y + buttonSize.y;
-	if ((mousePosition.u > transform->position.x - buttonCenter.x *transform->scale.x && mousePosition.u < transform->position.x + transform->scale.x* (buttonSize.x - buttonCenter.x)) &&
-		(mousePosition.v > transform->position.y - buttonCenter.y *transform->scale.y && mousePosition.v < transform->position.y + transform->scale.y* (buttonSize.y - buttonCenter.y)))
+
+	if (mousePosition.u > transform->position.x&&
+		mousePosition.u<transform->position.x + buttonSprite->GetUISize().x&&
+		mousePosition.v>transform->position.y&&
+		mousePosition.v < transform->position.y + buttonSprite->GetUISize().y)
 	{
 		return true;
 	}
+
+	//if ((mousePosition.u > transform->position.x - buttonCenter.x *transform->scale.x && mousePosition.u < transform->position.x + transform->scale.x* (buttonSize.x - buttonCenter.x)) &&
+	//	(mousePosition.v > transform->position.y - buttonCenter.y *transform->scale.y && mousePosition.v < transform->position.y + transform->scale.y* (buttonSize.y - buttonCenter.y)))
+	//{
+	//	return true;
+	//}
 	return false;
 }
 
 //マウスの左ボタンを押したら
-bool Button::IsClicked()
+bool UIButton::IsClicked()
 {
 	if (InputSystem::GetInputSystemInstance()->GetMouseInputButton() == MOUSE_INPUT_LEFT)
 	{
@@ -500,9 +519,9 @@ bool Button::IsClicked()
 }
 
 //ボタンを押した後の処理
-void Button::OnClick()
+void UIButton::OnClick()
 {
-	if (isEnable)
+	if (isEventEnable)
 	{
 		switch (buttonType)
 		{
@@ -543,12 +562,12 @@ void Button::OnClick()
 	}
 }
 
-void Button::SetEnable(bool isEnable)
+void UIButton::SetEventEnable(bool isEnable)
 {
-	this->isEnable = isEnable;
+	this->isEventEnable = isEnable;
 }
 
-VECTOR2DINT Button::GetUISize()
+VECTOR2DINT UIButton::GetUISize()
 {
 	switch (buttonType)
 	{
@@ -567,67 +586,67 @@ VECTOR2DINT Button::GetUISize()
 	return VECTOR2DINT();
 }
 
-VECTOR2D Button::GetPositionInWindow()
+VECTOR2D UIButton::GetPositionInWindow()
 {
 	return{ this->transform->position.x, this->transform->position.y };
 }
 
 //画像を変更する
-void Button::ChangeSpriteSimple(int spriteHandle)
+void UIButton::ChangeSpriteSimple(int spriteHandle)
 {
 	this->buttonSprite->ChangeSpriteSimple(spriteHandle);
 }
 
 //ラベルの色を変更する
-void Button::ChangeColorSimple(int color)
+void UIButton::ChangeColorSimple(int color)
 {
 	this->buttonLabel->ChangeLabelColor(color);
 }
 
 //ボタンのクリック事件を設置
-void Button::SetClickEvent(void(*callBack)())
+void UIButton::SetClickEvent(void(*callBack)())
 {
 	this->onClick = callBack;
 }
 
-void Button::SetNormalSpriteHandle(int handle)
+void UIButton::SetNormalSpriteHandle(int handle)
 {
 	this->normalSpriteHandle = handle;
 }
 
 //Sprite/labelの切り替えの設定
 //---------↓---------
-void Button::SetHoverSpriteHandle(int handle)
+void UIButton::SetHoverSpriteHandle(int handle)
 {
 	this->hoverSpriteHandle = handle;
 }
 
-void Button::SetPressSpriteHandle(int handle)
+void UIButton::SetPressSpriteHandle(int handle)
 {
 	this->pressSpriteHandle = handle;
 }
 
-void Button::SetDisabledSpriteHandle(int handle)
+void UIButton::SetDisabledSpriteHandle(int handle)
 {
 	this->disabledSpriteHandle = handle;
 }
 
-void Button::SetNormalLabelColor(int color)
+void UIButton::SetNormalLabelColor(int color)
 {
 	this->normalColorHandle = color;
 }
 
-void Button::SetHoverLabelColor(int color)
+void UIButton::SetHoverLabelColor(int color)
 {
 	this->hoverColorHandle = color;
 }
 
-void Button::SetPressColor(int color)
+void UIButton::SetPressColor(int color)
 {
 	this->pressColorHandle = color;
 }
 
-void Button::SetDisabledColor(int color)
+void UIButton::SetDisabledColor(int color)
 {
 	this->disabledColorHandle = color;
 }

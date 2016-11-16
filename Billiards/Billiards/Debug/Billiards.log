@@ -1,8 +1,8 @@
-﻿  SceneGameMain.cpp
-d:\workspace\billiardsgame\billiards\billiards\scenegamemain.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+﻿  SceneManager.cpp
 d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\linearmath\btidebugdraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
 d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\linearmath\btidebugdraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
 d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\linearmath\btidebugdraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
+d:\workspace\billiardsgame\billiards\billiards\scenegamemain.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
 d:\workspace\billiardsgame\billiards\billiards\scenegamemain.h(7): warning C4067: unexpected tokens following preprocessor directive - expected a newline
 d:\workspace\billiardsgame\billiards\billiards\scenemanager.h(35): warning C4091: 'static ': ignored on left of 'SceneManager' when no variable is declared
   Billiards.vcxproj -> D:\workspace\BilliardsGame\Billiards\Debug\Billiards.exe

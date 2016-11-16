@@ -4,22 +4,22 @@
 
 #include "UI.h"
 
-class Sprite:public UI
+class UISprite:public UI
 {
 public:
 
 	int spriteHandle;
 
-	Sprite();
-	Sprite(int spriteHandle);
-	Sprite(char * fileName);
+	UISprite();
+	UISprite(int spriteHandle);
+	UISprite(char * fileName);
 
-	Sprite(int spriteHandle,int drawPriority);
-	Sprite(char * fileName,int drawPriority);
-	Sprite(int spriteHandle,int updatePriority, int drawPriority);
-	Sprite(char * fileName, int updatePriority, int drawPriority);
+	UISprite(int spriteHandle,int drawPriority);
+	UISprite(char * fileName,int drawPriority);
+	UISprite(int spriteHandle,int updatePriority, int drawPriority);
+	UISprite(char * fileName, int updatePriority, int drawPriority);
 
-	~Sprite();
+	~UISprite();
 
 	bool Update(float stepTime);
 
@@ -59,9 +59,7 @@ public:
 
 	void SetOffset(float x,float y);
 
-	void SetEnable(bool enable);
 private:
-	bool enable;
 
 	VECTOR2DINT spriteSize;
 

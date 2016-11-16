@@ -16,7 +16,7 @@ SceneGameMain::SceneGameMain()
 
 	cameraManager->SetCamaraViewPR(Top, VGet(1.87f, 102.0f, 24.0f), VGet(1.352f, -3.1415f, 0.0f));
 	cameraManager->SetCamaraViewPR(Back, VGet(3.52f, 84.448f, -50.417f), VGet(0.933f, -0.000003f, 0.0f));
-	cameraManager->SetCamaraViewPR(Left, VGet(76.185f, 57.65f, -1.52f), VGet(0.66f, -4.7f, 0.0f));
+	cameraManager->SetCamaraViewPR(Left, VGet(76.185f, 57.65f, -1.52f), VGet(0.66f, -1.56f, 0.0f));
 	cameraManager->SetCamaraViewPR(Right, VGet(-67.72f, 59.32f, 0.177f), VGet(0.706f, 1.579f, 0.0f));
 
 	isPressed = false;
@@ -25,7 +25,10 @@ SceneGameMain::SceneGameMain()
 	forceAdd = true;
 	forceRatio = 100;
 	hitPosition = VGet(0, 0, 0);
-	//--------Trigger--------
+#pragma region Trigger
+
+
+	//*******************************Trigger*******************************
 	triggerList[0] = new STriggerBox();
 	triggerList[0]->position = { -53,28,28.5f };
 	triggerList[0]->size = { 6,2,5 };
@@ -45,7 +48,13 @@ SceneGameMain::SceneGameMain()
 	triggerList[5]->position = { 3.75,28,-28.5f };
 	triggerList[5]->size = { 0.35f,2,5 };
 
-	//--------3D Model-------
+#pragma endregion
+
+
+#pragma region 3D Model
+
+
+	//*******************************3D Model*******************************
 	ballWhite = new Ball(VGet(20.0f, 29.1f, 0.0f), VGet(90.0f, 0.0f, 0.0f), VGet(0.0395f, 0.0395f, 0.0395f), MV1LoadModel("Data/Model/BallWhite.mv1"));
 	poolStick = new PoolStick(VGet(0.0f, 27.6f, 0.0f), VGet(0.0f, (float)PI, 0.0f));
 	billiardTable = new BilliardsTable();
@@ -56,6 +65,7 @@ SceneGameMain::SceneGameMain()
 	float offsetX, offsetZ;
 	char s[30];
 
+	//Ball Object
 	for (int i = 1; i <= 5; i++)
 	{
 		for (int j = 1; j <= i; j++)
@@ -71,70 +81,151 @@ SceneGameMain::SceneGameMain()
 			AddToScene(ballList[index]);
 		}
 	}
+#pragma endregion
 
-	//--------2D UI---------
-	spTableLeft = new Sprite("Data/Sprite/Table.png", 12);
-	spTableLeft->SetPosition(1020, 570);
-	spTableLeft->SetScale(0.5f, 0.5f);
 
-	spLog = new Sprite("Data/Sprite/List.png", 11);
-	spLog->SetPosition(450, 620);
-	nextBallIconPosition = { 460,640 };
+#pragma region  2D UI
 
-	sldForce = new Slider("Data/Sprite/ProgressBar.png", "Data/Sprite/ProgressFram.png", 12);
+
+	//*******************************2D UI*******************************
+	fontHandle = CreateFontToHandle("ＭＳ ゴシック", 20, 9, DX_FONTTYPE_NORMAL);
+
+	spLog = new UISprite("Data/Sprite/List.png", 11);
+	spLog->SetPosition(420, 580);
+	spLog->SetScale(1.1f, 1.4f);
+	nextBallIconPosition = { 430,590 };
+	initBallIconPosition = { 430,590 };
+
+	sldForce = new UISlider("Data/Sprite/ProgressBar.png", "Data/Sprite/ProgressFram.png", 12);
 	sldForce->SetPosition(1020, 13);
 	sldForce->SetFrontSpriteOffset(13, 25);
 
-	handleMenu = LoadGraph("Data/Sprite/button3.png");
-	handleMenuHightLight = LoadGraph("Data/Sprite/button4.png");
-	//StartGame　ボタンの設定
-	spMenu = new  Sprite(handleMenu);
-	lbMenu = new  Label("Menu", NULL, 20, 9, DX_FONTTYPE_NORMAL);
+	buttonBackgroundHandle = LoadGraph("Data/Sprite/button3.png");
+	buttonBackgroundLightHandle = LoadGraph("Data/Sprite/button4.png");
+	//--------------------Menu　ボタンの設定--------------------
+	spMenu = new  UISprite(buttonBackgroundHandle);
+	lbMenu = new  UILabel("Menu", fontHandle);
 	lbMenu->SetOffset(40, 13.5f);
-	btMenu = new Button(lbMenu, spMenu, 12);
+	btMenu = new UIButton(lbMenu, spMenu, 12);
 	btMenu->SetPosition(10, 670);
-	btMenu->SetHoverSpriteHandle(handleMenuHightLight);
+	btMenu->SetHoverSpriteHandle(buttonBackgroundLightHandle);
 	//btMenu->SetClickEvent(GameStart);
 
-	spFollowMode = new Sprite("Data/Sprite/ViewFollow.png");
-	spFollowMode->SetScale(0.2f, 0.2f);
-	spFixedMode = new Sprite("Data/Sprite/ViewFixed.png");
-	spFixedMode->SetScale(0.2f, 0.2f);
-	spFreeMode = new Sprite("Data/Sprite/ViewFree.png");
-	spFreeMode->SetScale(0.2f, 0.2f);
+	//--------------------View Mode Panel--------------------
+	plViewMode = new UIPanel(1020, 500, 11);
 
-	btFollowMode = new Button(spFollowMode, 13);
-	btFixedMode = new Button(spFixedMode, 13);
-	btFreeMode = new Button(spFreeMode, 13);
-	btFollowMode->SetPosition(1020, 570);
-	btFixedMode->SetPosition(1020, 620);
-	btFreeMode->SetPosition(1020, 670);
+	//背景図の初期化
+	spTableLeft = new UISprite("Data/Sprite/Table.png", 1);
+	spTableLeft->SetPosition(0, 0);
+	spTableLeft->SetScale(0.5f, 0.8f);
+
+	//ラベルの初期化
+	lbViewMode = new UILabel("View Mode:", NULL, 16, 9, DX_FONTTYPE_NORMAL);
+	lbViewMode->SetPosition(32, 8);
+	lbFollowMode = new UILabel("Follow Mode(TODO)", fontHandle);
+	lbFollowMode->SetOffset(17, 13.5);
+	lbFixedMode = new UILabel("Fixed Mode", fontHandle);
+	lbFixedMode->SetOffset(40, 13.5);
+	lbFreeMode = new UILabel("Free Mode", fontHandle);
+	lbFreeMode->SetOffset(45, 13.5);
+
+	//ボタン画像の初期化
+	spFollowMode = new UISprite(buttonBackgroundHandle);
+	spFixedMode = new UISprite(buttonBackgroundHandle);
+	spFreeMode = new UISprite(buttonBackgroundHandle);
+
+	//ボタンの初期化
+	btFollowMode = new UIButton(lbFollowMode, spFollowMode, 13);
+	btFixedMode = new UIButton(lbFixedMode, spFixedMode, 13);
+	btFreeMode = new UIButton(lbFreeMode, spFreeMode, 13);
+
+	//位置とサイズ設定
+	btFollowMode->SetPosition(37, 45);
+	btFollowMode->SetScale(1.5f, 1);
+	btFixedMode->SetPosition(37, 95);
+	btFixedMode->SetScale(1.5f, 1);
+	btFreeMode->SetPosition(37, 145);
+	btFreeMode->SetScale(1.5f, 1);
+
+	//クリック事件設定
 	btFollowMode->SetClickEvent(ChangeCameraModeToFollow);
 	btFixedMode->SetClickEvent(ChangeCameraModeToFixed);
 	btFreeMode->SetClickEvent(ChangeCameraModeToFree);
 
+	//Hover反応設定
+	btFollowMode->SetHoverSpriteHandle(buttonBackgroundLightHandle);
+	btFixedMode->SetHoverSpriteHandle(buttonBackgroundLightHandle);
+	btFreeMode->SetHoverSpriteHandle(buttonBackgroundLightHandle);
+
+	//Panelに置く
+	plViewMode->AddUI(lbViewMode);
+	plViewMode->AddUI(spTableLeft);
+	plViewMode->AddUI(btFollowMode);
+	plViewMode->AddUI(btFixedMode);
+	plViewMode->AddUI(btFreeMode);
+
+	//--------------------View Panel--------------------
+	plView = new UIPanel(0, 0, 11);
+	plView->SetEnable(false);
+
+	lbTopView = new UILabel("TopView", fontHandle);
+	lbTopView->SetOffset(18, 13.5);
+	lbLeftView = new UILabel("LeftView", fontHandle);
+	lbLeftView->SetOffset(14, 13.5);
+	lbRightView = new UILabel("RightView", fontHandle);
+	lbRightView->SetOffset(11, 13.5);
+	lbBackView = new UILabel("BackView", fontHandle);
+	lbBackView->SetOffset(14, 13.5);
+
+	spTopView = new UISprite(buttonBackgroundHandle);
+	spLeftView = new UISprite(buttonBackgroundHandle);
+	spRightView = new UISprite(buttonBackgroundHandle);
+	spBackView = new UISprite(buttonBackgroundHandle);
+
+	btTopView = new UIButton(lbTopView, spTopView, 11);
+	btLeftView = new UIButton(lbLeftView, spLeftView, 11);
+	btRightView = new UIButton(lbRightView, spRightView, 11);
+	btBackView = new UIButton(lbBackView, spBackView, 11);
+
+	btTopView->SetHoverSpriteHandle(buttonBackgroundLightHandle);
+	btLeftView->SetHoverSpriteHandle(buttonBackgroundLightHandle);
+	btRightView->SetHoverSpriteHandle(buttonBackgroundLightHandle);
+	btBackView->SetHoverSpriteHandle(buttonBackgroundLightHandle);
+
+	btTopView->SetPosition(0, 0);
+	btLeftView->SetPosition(0, 50);
+	btRightView->SetPosition(0, 100);
+	btBackView->SetPosition(0, 150);
+
+	btTopView->SetClickEvent(ChangeCameraViewToTop);
+	btLeftView->SetClickEvent(ChangeCameraViewToLeft);
+	btRightView->SetClickEvent(ChangeCameraViewToRight);
+	btBackView->SetClickEvent(ChangeCameraViewToBack);
+
+	plView->AddUI(btTopView);
+	plView->AddUI(btLeftView);
+	plView->AddUI(btRightView);
+	plView->AddUI(btBackView);
+
+	//--------------------Ball Sprite--------------------
 	for (int i = 0; i < BallNum; i++)
 	{
 		sprintf(s, "Data/Sprite/ball%d.png", i + 1);
-		spBallList[i] = new Sprite(s, 12);
+		spBallList[i] = new UISprite(s, 12);
 		spBallList[i]->SetScale(0.3f, 0.3f);
 	}
+#pragma endregion
 
-
-
-	AddToScene(btFollowMode);
-	AddToScene(btFixedMode);
-	AddToScene(btFreeMode);
-
+	AddToScene(plViewMode);
 
 	AddToScene(spLog);
 	AddToScene(sldForce);
-	AddToScene(spTableLeft);
 	AddToScene(btMenu);
 
 	AddToScene(billiardTable);
 	AddToScene(ballWhite);
 	AddToScene(poolStick);
+
 }
 
 SceneGameMain::~SceneGameMain()
@@ -169,8 +260,8 @@ SceneGameMain * SceneGameMain::GetSceneInstance()
 //シーン全体の状態推移処理を行う
 bool SceneGameMain::SceneUpdate(float stepTime)
 {
-	DrawFormatString(0, 32, GetColor(255, 255, 255), "pressTime   %f",
-		pressTime);
+	//DrawFormatString(0, 32, GetColor(255, 255, 255), "pressTime   %f",
+	//	pressTime);
 
 	FLOAT2 mousePosition = InputSystem::GetInputSystemInstance()->GetMouseNowPosition();
 
@@ -213,10 +304,14 @@ bool SceneGameMain::SceneUpdate(float stepTime)
 		if (timer > FADE_IN_TIME)
 		{
 			sceneNowState = ESceneMainState::GamePlaying;
-			btFollowMode->SetEnable(true);
-			btFixedMode->SetEnable(true);
-			btFreeMode->SetEnable(true);
-			btMenu->SetEnable(true);
+			btFollowMode->SetEventEnable(true);
+			btFixedMode->SetEventEnable(true);
+			btFreeMode->SetEventEnable(true);
+			btMenu->SetEventEnable(true);
+			btTopView->SetEventEnable(true);
+			btLeftView->SetEventEnable(true);
+			btRightView->SetEventEnable(true);
+			btBackView->SetEventEnable(true);
 			timer = 0;
 		}
 		else
@@ -352,7 +447,7 @@ void SceneGameMain::CheckBallPosition()
 			{
 				for (int j = 0; j < 6; j++)
 				{
-					//穴に入った
+					//穴に入った 
 					if (ballPosition.x > triggerList[j]->position.x - triggerList[j]->size.x / 2 &&
 						ballPosition.x < triggerList[j]->position.x + triggerList[j]->size.x / 2 &&
 						ballPosition.z > triggerList[j]->position.z - triggerList[j]->size.z / 2 &&
@@ -383,8 +478,14 @@ void SceneGameMain::CheckBallPosition()
 
 void SceneGameMain::GoalIn(int ballNum)
 {
+	if (nextBallIconPosition.x + spBallList[ballNum]->GetUISize().x > spLog->GetPosition().x + spLog->GetUISize().x)
+	{
+		nextBallIconPosition.x = initBallIconPosition.x;
+		nextBallIconPosition.y += spBallList[ballNum]->GetUISize().y;
+	}
 	spBallList[ballNum]->SetPosition(nextBallIconPosition);
 	spBallList[ballNum]->SetEnable(true);
+
 	nextBallIconPosition.x += spBallList[ballNum]->GetUISize().x;
 	AddToScene(spBallList[ballNum]);
 }
@@ -396,8 +497,8 @@ bool SceneGameMain::SceneDraw(void)
 #ifdef _DEBUG
 
 	// 交差した座標を描画
-	DrawFormatString(0, 16, GetColor(255, 255, 255), "Hit Pos   %f  %f  %f",
-		hitPosition.x, hitPosition.y, hitPosition.z);
+	//DrawFormatString(0, 16, GetColor(255, 255, 255), "Hit Pos   %f  %f  %f",
+	//	hitPosition.x, hitPosition.y, hitPosition.z);
 
 
 #endif // _DEBUG
@@ -408,18 +509,59 @@ bool SceneGameMain::SceneDraw(void)
 	return  true;
 }
 
+void SceneGameMain::DisableViewPanel()
+{
+	if (plView->IsEnabled())
+	{
+		this->plView->SetEnable(false);
+		this->DeleteFromScene(plView);
+	}
+}
+
+void SceneGameMain::ShowViewPanel()
+{
+	if (!plView->IsEnabled())
+	{
+		this->plView->SetEnable(true);
+		this->AddToScene(plView);
+	}
+}
+
 void SceneGameMain::ChangeCameraModeToFree()
 {
-	CameraManager::GetCameraManagerInstance()->ChangeCameraMode(FreeMode);
+	SceneGameMain::GetSceneInstance()->DisableViewPanel();
+	CameraManager::GetCameraManagerInstance()->ChangeCameraMode(ECameraMode::FreeMode);
 }
 
 void SceneGameMain::ChangeCameraModeToFollow()
 {
-	CameraManager::GetCameraManagerInstance()->ChangeCameraMode(FollowMode);
+
+	CameraManager::GetCameraManagerInstance()->ChangeCameraMode(ECameraMode::FollowMode);
 }
 
 void SceneGameMain::ChangeCameraModeToFixed()
 {
-	CameraManager::GetCameraManagerInstance()->ChangeCameraMode(FixedMode);
+	SceneGameMain::GetSceneInstance()->ShowViewPanel();
+	CameraManager::GetCameraManagerInstance()->ChangeCameraMode(ECameraMode::FixedMode);
+}
+
+void SceneGameMain::ChangeCameraViewToTop()
+{
+	CameraManager::GetCameraManagerInstance()->ChangeCameraView(ECameraView::Top);
+}
+
+void SceneGameMain::ChangeCameraViewToBack()
+{
+	CameraManager::GetCameraManagerInstance()->ChangeCameraView(ECameraView::Back);
+}
+
+void SceneGameMain::ChangeCameraViewToLeft()
+{
+	CameraManager::GetCameraManagerInstance()->ChangeCameraView(ECameraView::Left);
+}
+
+void SceneGameMain::ChangeCameraViewToRight()
+{
+	CameraManager::GetCameraManagerInstance()->ChangeCameraView(ECameraView::Right);
 }
 

@@ -2,8 +2,8 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
-#include "Label.h"
-#include "Sprite.h"
+#include "UILabel.h"
+#include "UISprite.h"
 
 typedef enum _EButtonType
 {
@@ -12,20 +12,21 @@ typedef enum _EButtonType
 	LabelSpriteType
 } EButtonType;
 
-class Button :public UI
+class UIButton :public UI
 {
 public:
 
 	void InitButton();
 
-	Button(Sprite *sprite);
-	Button(Sprite * sprite, float drawPriority);
-	Button(Sprite * sprite, float updatePriority, float drawPriority);
-	Button(Label *label);
-	Button(Label *label, Sprite *sprite);
-	Button(Label * label, Sprite * sprite, float drawPriority);
-	Button(Label * label, Sprite * sprite, float updatePriority, float drawPriority);
-	~Button();
+	UIButton(UISprite *sprite);
+	UIButton(UISprite * sprite, float drawPriority);
+	UIButton(UISprite * sprite, float updatePriority, float drawPriority);
+	UIButton(UILabel *label);
+	UIButton(UILabel * label, float drawPriority);
+	UIButton(UILabel *label, UISprite *sprite);
+	UIButton(UILabel * label, UISprite * sprite, float drawPriority);
+	UIButton(UILabel * label, UISprite * sprite, float updatePriority, float drawPriority);
+	~UIButton();
 
 	bool Update(float stepTime);
 	bool Draw();
@@ -58,7 +59,7 @@ public:
 	void SetClickEvent(void(*callBack)());
 
 	//ボタンのクリックを起用するかどうか
-	void SetEnable(bool isEnable);
+	void SetEventEnable(bool isEnable);
 
 	//ボタンのサイズを貰う
 	VECTOR2DINT GetUISize();
@@ -90,15 +91,13 @@ private:
 
 
 	_EButtonType buttonType;
-	Sprite * buttonSprite;
-	Label * buttonLabel;
+	UISprite * buttonSprite;
+	UILabel * buttonLabel;
 
 	VECTOR2DINT buttonSize;
 	VECTOR2DINT buttonCenter;
 
-	bool isEnable;
-
-
+	bool isEventEnable;
 
 	void(*onClick)();
 

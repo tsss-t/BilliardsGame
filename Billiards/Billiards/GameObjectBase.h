@@ -4,7 +4,10 @@
 
 #include "btBulletDynamicsCommon.h"
 #include <math.h>
+#include <vector>
 #include "DxLib.h"
+
+using namespace std;
 
 // タスクの実行優先順位の最大値 - 1
 #define PRIORITY_MAX		(16)
@@ -57,6 +60,8 @@ public:
 	virtual btRigidBody *GetRigidBody();
 
 	virtual VECTOR2DINT GetUISize();
+
+	virtual vector< GameObjectBase* > getObjectList();
 
 private:
 

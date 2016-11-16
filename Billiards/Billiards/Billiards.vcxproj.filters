@@ -90,22 +90,7 @@
     <ClCompile Include="System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>Source Files\Framework\GameObject\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Label.cpp">
-      <Filter>Source Files\Framework\GameObject\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Sprite.cpp">
-      <Filter>Source Files\Framework\GameObject\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Slider.cpp">
-      <Filter>Source Files\Framework\GameObject\2D</Filter>
-    </ClCompile>
     <ClCompile Include="UI.cpp">
-      <Filter>Source Files\Framework\GameObject\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteSheet.cpp">
       <Filter>Source Files\Framework\GameObject\2D</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
@@ -114,8 +99,26 @@
     <ClCompile Include="GameObjectBase.cpp">
       <Filter>Source Files\Framework\GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="UIPanel.cpp">
+      <Filter>Source Files\Framework\GameObject\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="UISpriteSheet.cpp">
+      <Filter>Source Files\Framework\GameObject\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="UISprite.cpp">
+      <Filter>Source Files\Framework\GameObject\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="UISlider.cpp">
+      <Filter>Source Files\Framework\GameObject\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="UILabel.cpp">
+      <Filter>Source Files\Framework\GameObject\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="UIButton.cpp">
+      <Filter>Source Files\Framework\GameObject\2D</Filter>
+    </ClCompile>
     <ClCompile Include="SoundSystem.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Framework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -158,22 +161,7 @@
     <ClInclude Include="System.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Button.h">
-      <Filter>Header Files\Framework\GameObject\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Label.h">
-      <Filter>Header Files\Framework\GameObject\2D</Filter>
-    </ClInclude>
     <ClInclude Include="UI.h">
-      <Filter>Header Files\Framework\GameObject\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Sprite.h">
-      <Filter>Header Files\Framework\GameObject\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Slider.h">
-      <Filter>Header Files\Framework\GameObject\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteSheet.h">
       <Filter>Header Files\Framework\GameObject\2D</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
@@ -184,6 +172,24 @@
     </ClInclude>
     <ClInclude Include="SoundSystem.h">
       <Filter>Header Files\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="UIButton.h">
+      <Filter>Header Files\Framework\GameObject\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="UILabel.h">
+      <Filter>Header Files\Framework\GameObject\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="UISlider.h">
+      <Filter>Header Files\Framework\GameObject\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="UISprite.h">
+      <Filter>Header Files\Framework\GameObject\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="UISpriteSheet.h">
+      <Filter>Header Files\Framework\GameObject\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="UIPanel.h">
+      <Filter>Header Files\Framework\GameObject\2D</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

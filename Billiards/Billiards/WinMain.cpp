@@ -1,7 +1,7 @@
 ﻿#include "System.h"
 #include <Windows.h>
-#include "Label.h"
-#include "Sprite.h"
+#include "UILabel.h"
+#include "UISprite.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {

@@ -8,17 +8,17 @@ SceneGameStartMenu::SceneGameStartMenu()
 	sceneNowState = EStartSceneMenuState::FadeInWait;
 
 	//背景図の設定
-	spriteBG = new Sprite("Data/Sprite/Background.jpg");
+	spriteBG = new UISprite("Data/Sprite/Background.jpg");
 	spriteBG->SetPosition(0, 0);
 	spriteBG->SetScale(0.7f, 0.7f);
 
 	//左上ゲームタイトル画像の設定
-	spriteTitle = new Sprite("Data/Sprite/Title.png");
+	spriteTitle = new UISprite("Data/Sprite/Title.png");
 	spriteTitle->SetPosition(70, 50);
 	spriteTitle->SetScale(2.0f, 2.0f);
 
 	//右下Logo画像の設定
-	spriteLogo = new Sprite("Data/Sprite/logokoYellow.png");
+	spriteLogo = new UISprite("Data/Sprite/logokoYellow.png");
 	spriteLogo->SetPosition(1060, 620);
 	spriteLogo->SetScale(0.5f, 0.5f);
 
@@ -27,32 +27,32 @@ SceneGameStartMenu::SceneGameStartMenu()
 	buttonSpriteHighLightHanel = LoadGraph("Data/Sprite/button1.png");
 
 	//StartGame　ボタンの設定
-	spStartGame = new  Sprite(buttonSpriteHandle);
-	lbStartGame = new  Label();
+	spStartGame = new  UISprite(buttonSpriteHandle);
+	lbStartGame = new  UILabel();
 	lbStartGame->SetString("New Game");
 	lbStartGame->SetOffset(75, 22);
-	btStartGame = new Button(lbStartGame, spStartGame);
+	btStartGame = new UIButton(lbStartGame, spStartGame);
 	btStartGame->SetScale({ 2.0f,1.5f });
 	btStartGame->SetPosition(200, 400);
 	btStartGame->SetHoverSpriteHandle(buttonSpriteHighLightHanel);
 	btStartGame->SetClickEvent(GameStart);
 
 	//SettingGame ボタンの設定
-	spSettingGame = new  Sprite(buttonSpriteHandle);
-	lbSettingGame = new  Label();
+	spSettingGame = new  UISprite(buttonSpriteHandle);
+	lbSettingGame = new  UILabel();
 	lbSettingGame->SetString("Setting");
 	lbSettingGame->SetOffset(75, 22);
-	btSettingGame = new Button(lbSettingGame, spSettingGame);
+	btSettingGame = new UIButton(lbSettingGame, spSettingGame);
 	btSettingGame->SetScale({ 2.0f,1.5f });
 	btSettingGame->SetPosition(200, 480);
 	btSettingGame->SetHoverSpriteHandle(buttonSpriteHighLightHanel);
 
 	//ExitGame ボタンの設定
-	spExitGame = new  Sprite(buttonSpriteHandle);
-	lbExitGame = new  Label();
+	spExitGame = new  UISprite(buttonSpriteHandle);
+	lbExitGame = new  UILabel();
 	lbExitGame->SetString("Exit Game");
 	lbExitGame->SetOffset(75, 22);
-	btExitGame = new Button(lbExitGame, spExitGame);
+	btExitGame = new UIButton(lbExitGame, spExitGame);
 	btExitGame->SetScale({ 2.0f,1.5f });
 	btExitGame->SetPosition(200, 560);
 	btExitGame->SetHoverSpriteHandle(buttonSpriteHighLightHanel);
@@ -112,16 +112,16 @@ bool SceneGameStartMenu::SceneUpdate(float stepTime)
 	}
 	case EStartSceneMenuState::MenuSelect:
 	{
-		btStartGame->SetEnable(true);
-		btSettingGame->SetEnable(true);
-		btExitGame->SetEnable(true);
+		btStartGame->SetEventEnable(true);
+		btSettingGame->SetEventEnable(true);
+		btExitGame->SetEventEnable(true);
 		break;
 	}
 	case EStartSceneMenuState::FadeOut:
 	{
-		btStartGame->SetEnable(false);
-		btSettingGame->SetEnable(false);
-		btExitGame->SetEnable(false);
+		btStartGame->SetEventEnable(false);
+		btSettingGame->SetEventEnable(false);
+		btExitGame->SetEventEnable(false);
 		timer += stepTime;
 		if (timer > FADE_OUT_TIME)
 		{

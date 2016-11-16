@@ -5,14 +5,14 @@
 #include "UI.h"
 
 
-class Label:public UI
+class UILabel:public UI
 {
 public:
 	//ラベルの初期化
-	Label();
-	Label(char * string, int handle);
-	Label(char * string, char * FontName, int Size, int Thinck, int FontType);
-	~Label();
+	UILabel();
+	UILabel(char * string, int handle);
+	UILabel(char * string, char * FontName, int Size, int Thinck, int FontType);
+	~UILabel();
 
 	bool Draw();
 	bool Update(float stepTime);

@@ -1,7 +1,7 @@
-﻿#include "Label.h"
+﻿#include "UILabel.h"
 
 
-void Label::InitLabel()
+void UILabel::InitLabel()
 {
 	offset = { 0.0f, 0.0f };
 	this->string = "";
@@ -12,18 +12,19 @@ void Label::InitLabel()
 	this->fontColor = GetColor(255, 255, 255);
 }
 
-Label::Label()
+UILabel::UILabel()
 {
 	InitLabel();
 	fontHandle = CreateFontToHandle(fontName, fontSize, fontThick, fontType);
 
 }
-Label::Label(char * string, int handle)
+UILabel::UILabel(char * string, int handle)
 {
 	InitLabel();
+	this->string = string;
 	this->fontHandle = handle;
 }
-Label::Label(char * string, char * fontName, int size, int thinck, int fontType)
+UILabel::UILabel(char * string, char * fontName, int size, int thinck, int fontType)
 {
 	InitLabel();
 	if (fontName == NULL)
@@ -38,35 +39,41 @@ Label::Label(char * string, char * fontName, int size, int thinck, int fontType)
 	fontHandle = CreateFontToHandle(this->fontName, fontSize, fontThick, this->fontType);
 }
 
-bool Label::Update(float stepTime)
+bool UILabel::Update(float stepTime)
 {
-	UI::Update(stepTime);
+	if (enable)
+	{
+		UI::Update(stepTime);
+	}
 	return true;
 }
 
-bool Label::Draw()
+bool UILabel::Draw()
 {
-	UI::Draw();
+	if (enable)
+	{
+		UI::Draw();
 
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, flickerInfo->alphaNow);
-	DrawStringToHandle(this->transform->position.x + offset.x, this->transform->position.y + offset.y, string, fontColor, fontHandle);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, flickerInfo->alphaNow);
+		DrawStringToHandle(this->transform->position.x + offset.x, this->transform->position.y + offset.y, string, fontColor, fontHandle);
+	}
 	return true;
 }
 
 //色を動的変化
-void Label::SetTweenColor(float flickerSpace, TweenType type = Once)
+void UILabel::SetTweenColor(float flickerSpace, TweenType type = Once)
 {
 	UI::SetTweenColor(flickerSpace, type);
 }
 
 //色を動的変化
-void Label::SetTweenColor(float flickerSpace, int alphaFrom, int alphaTo, TweenType type = Once)
+void UILabel::SetTweenColor(float flickerSpace, int alphaFrom, int alphaTo, TweenType type = Once)
 {
 	UI::SetTweenColor(flickerSpace, alphaFrom, alphaTo, type);
 }
 
 //フォントを変更
-bool Label::ChangeFontSize(int size)
+bool UILabel::ChangeFontSize(int size)
 {
 	DeleteFontToHandle(fontHandle);
 	fontSize = size;
@@ -75,32 +82,32 @@ bool Label::ChangeFontSize(int size)
 }
 
 //ラベルの表示を変更
-void Label::SetString(char * string)
+void UILabel::SetString(char * string)
 {
 	this->string = string;
 }
 
 //ラベル表示する文字列を貰う
-char * Label::GetString()
+char * UILabel::GetString()
 {
 	return string;
 }
 
 //ラベルの位置補正値を設置する
-void Label::SetOffset(float x, float y)
+void UILabel::SetOffset(float x, float y)
 {
 	this->offset.x = x;
 	this->offset.y = y;
 }
 
 //ラベルの色を変更
-void Label::ChangeLabelColor(int color)
+void UILabel::ChangeLabelColor(int color)
 {
 	this->fontColor = color;
 }
 
 
-Label::~Label()
+UILabel::~UILabel()
 {
 	DeleteFontToHandle(fontHandle);
 }
