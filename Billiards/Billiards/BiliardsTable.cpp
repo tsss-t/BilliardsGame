@@ -88,7 +88,7 @@ BilliardsTable::BilliardsTable() :GameObject(MV1LoadModel("Data/Model/tableNorma
 	//btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0, 1, 0), 1);
 	SetRigidBody(0, tabelShape);
 	rigidBody->setRestitution(btScalar(1.0f));
-	rigidBody->setFriction(0.4f);
+	rigidBody->setFriction(2.4f);
 	MV1SetupCollInfo(modelHandle, -1, 8, 8, 8);
 }
 

@@ -5,12 +5,12 @@
 void Ball::InitBall()
 {
 	btCollisionShape* collision = new btSphereShape(btScalar(transform->scale.x*30));
-	SetRigidBody(0.5f, collision);
+	SetRigidBody(0.4f, collision);
 	rigidBody->setRestitution(btScalar(0.6f));
 	rigidBody->setFriction(0.4f);
 	rigidBody->setDamping(0.3f, 0.9f);
 	firstPosition = { 0,0,0 };
-	//rigidBody->setAngularFactor(0.5f);
+	//rigidBody->setAngularFactor(1.5f);
 }
 
 Ball::Ball(int modelHandle) :GameObject(modelHandle)
