@@ -1,8 +1,10 @@
-﻿  SceneManager.cpp
+﻿  System.cpp
+d:\workspace\billiardsgame\billiards\billiards\scenegamemain.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
 d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\linearmath\btidebugdraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
 d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\linearmath\btidebugdraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
 d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\linearmath\btidebugdraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-d:\workspace\billiardsgame\billiards\billiards\scenegamemain.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
 d:\workspace\billiardsgame\billiards\billiards\scenegamemain.h(7): warning C4067: unexpected tokens following preprocessor directive - expected a newline
 d:\workspace\billiardsgame\billiards\billiards\scenemanager.h(35): warning C4091: 'static ': ignored on left of 'SceneManager' when no variable is declared
+d:\workspace\billiardsgame\billiards\billiards\system.cpp(17): warning C4316: 'System': object allocated on the heap may not be aligned 16
+d:\workspace\billiardsgame\billiards\billiards\system.cpp(77): warning C4101: 'filePath': unreferenced local variable
   Billiards.vcxproj -> D:\workspace\BilliardsGame\Billiards\Debug\Billiards.exe

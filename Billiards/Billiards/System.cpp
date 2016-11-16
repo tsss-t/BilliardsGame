@@ -22,7 +22,7 @@ bool System::SystemInit(void)
 {
 #pragma region システム設定
 	//ウインドウモードで起動するか確認する
-	if (MessageBox(NULL, "using the window mode？", "Screen mode select", MB_YESNO) == IDYES)
+	if (MessageBox(NULL, "ウインドウモードで起動するか？", "スクリーンモード確認", MB_YESNO) == IDYES)
 	{
 		// 「はい」が選択された場合はウインドウモードで起動
 		ChangeWindowMode(TRUE);
@@ -33,11 +33,11 @@ bool System::SystemInit(void)
 	}
 
 	//低処理負荷モードで起動するか確認する
-	//if (MessageBox(NULL, "Low？", "処理負荷モード確認", MB_YESNO) == IDYES)
-	//{
-		// 「はい」が選択された場合は低処理負荷モードフラグを立てる
-		//systemInfo.lowSpecMode = true;
-	//}
+	if (MessageBox(NULL, "低処理負荷モードで起動しますか？", "処理負荷モード確認", MB_YESNO) == IDYES)
+	{
+		//「はい」が選択された場合は低処理負荷モードフラグを立てる
+		systemInfo.lowSpecMode = true;
+	}
 
 	//ゲーム画面の解像度を設定
 	SetGraphMode(GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT, 32);
@@ -266,7 +266,17 @@ bool System::SystemLoop(void)
 bool System::SystemUpdate(float stepTime)
 {
 	// bulletシミュレーションを進める。
-	dynamicsWorld->stepSimulation(stepTime, 10);
+	if (systemInfo.lowSpecMode)
+	{
+		dynamicsWorld->stepSimulation(stepTime, 1);
+	}
+	else
+	{
+		for (int i = 0; i < 10; i++) {
+			dynamicsWorld->stepSimulation(stepTime / 10, 1);
+		}
+	}
+
 
 	//入力処理を行う
 	InputSystem::GetInputSystemInstance()->InputSystemUpdate(stepTime);
