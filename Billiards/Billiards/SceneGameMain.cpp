@@ -395,7 +395,7 @@ bool SceneGameMain::SceneUpdate(float stepTime)
 					isPressed = false;
 					VECTOR dis = poolStick->GetDistance();
 					ballWhite->GetRigidBody()->activate();
-					ballWhite->GetRigidBody()->applyCentralImpulse(btVector3(force*dis.x, 0, force*dis.z));
+					ballWhite->GetRigidBody()->applyCentralImpulse(btVector3(force*dis.x, -0.5f, force*dis.z));
 				}
 			}
 		}

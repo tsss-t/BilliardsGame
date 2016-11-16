@@ -1,12 +1,4 @@
-﻿  Ball.cpp
-d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-  BiliardsTable.cpp
-d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-  System.cpp
+﻿  System.cpp
 d:\workspace\billiardsgame\billiards\billiards\SceneGameMain.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
 d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
 d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\LinearMath/btIDebugDraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
@@ -16,8 +8,8 @@ d:\workspace\billiardsgame\billiards\billiards\SceneManager.h(35): warning C4091
 System.cpp(17): warning C4316: 'System': object allocated on the heap may not be aligned 16
 System.cpp(77): warning C4101: 'filePath': unreferenced local variable
   Generating code
-  7 of 716 functions ( 1.0%) were compiled, the rest were copied from previous compilation.
+  4 of 716 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    2 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Billiards.vcxproj -> D:\workspace\BilliardsGame\Billiards\Release\Billiards.exe

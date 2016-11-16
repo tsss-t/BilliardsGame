@@ -20,7 +20,7 @@ BilliardsTable::BilliardsTable() :GameObject(MV1LoadModel("Data/Model/tableNorma
 	btBoxShape *tabelPanelH = new btBoxShape(btVector3(btScalar(60), btScalar(2), btScalar(26)));
 	btBoxShape *tabelPanelVLeft = new btBoxShape(btVector3(btScalar(26), btScalar(2), btScalar(32)));
 	btBoxShape *tabelPanelVRight = new btBoxShape(btVector3(btScalar(26), btScalar(2), btScalar(32)));
-	btBoxShape *tabelPanelVMid = new btBoxShape(btVector3(btScalar(4), btScalar(2), btScalar(28)));
+	btBoxShape *tabelPanelVMid = new btBoxShape(btVector3(btScalar(56), btScalar(2), btScalar(28)));
 
 	//tableの辺
 	btBoxShape *tabelSideRight = new btBoxShape(btVector3(btScalar(1.5f), btScalar(2), btScalar(26)));
