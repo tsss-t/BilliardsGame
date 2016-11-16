@@ -123,7 +123,7 @@ bool System::SystemInit(void)
 	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
 
 	// 重力の設定
-	dynamicsWorld->setGravity(btVector3(0, -100, 0));
+	dynamicsWorld->setGravity(btVector3(0, -200, 0));
 
 #ifdef _DEBUG
 	dynamicsWorld->setDebugDrawer(&g_debugdraw);
