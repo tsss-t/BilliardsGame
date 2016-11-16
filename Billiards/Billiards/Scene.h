@@ -3,9 +3,6 @@
 #define SCENE_H
 #include "GameObjectBase.h"
 #include "CameraManager.h"
-#include <vector>
-
-using namespace std;
 
 #pragma region シーンの状態時間数定義
 //フェードインする前に待つ時間
@@ -29,6 +26,9 @@ using namespace std;
 
 typedef struct _SUIData 
 {
+public: 
+	GameObjectBase * uiPointer;
+
 	VECTOR2D positionData;
 
 	VECTOR2DINT sizeData;
@@ -84,18 +84,12 @@ protected:
 
 	bool InitGameObjectList(void);
 
-	bool GameObjectUpdate(float stepTime);
-
-	bool GameObjectDraw(void);
-
 	//描画処理の順位と状態推移処理の順位を更新
 	bool RefreshList(void);
 
-	vector <SUIData *> UIPositionData;
+	vector <SUIData> UIPositionData;
 
 	~Scene();
 };
-
-
 
 #endif

@@ -148,9 +148,9 @@ bool CameraManager::CameraUpdate(float stepTime)
 
 #if _DEBUG
 	//>>>>>>>>>>>>>TestCode:現在カメラの位置と方位情報をスクリーンに出力
-	DrawFormatString(0, 0, GetColor(255, 255, 255), "x:   %f      y:   %f      z:   %f      Rx:   %f      Ry:   %f      Rz:   %f",
-		transform.position.x, transform.position.y, transform.position.z, transform.rotation.x, transform.rotation.y, transform.rotation.z
-	);
+	//DrawFormatString(0, 0, GetColor(255, 255, 255), "x:   %f      y:   %f      z:   %f      Rx:   %f      Ry:   %f      Rz:   %f",
+	//	transform.position.x, transform.position.y, transform.position.z, transform.rotation.x, transform.rotation.y, transform.rotation.z
+	//);
 	//<<<<<<<<<<<<<TestEnd.
 #endif // _DEBUG
 	return result;

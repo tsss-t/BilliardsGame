@@ -2,18 +2,18 @@
 #ifndef SLIDER_H
 #define SLIDER_H
 
-#include "Sprite.h"
+#include "UISprite.h"
 
-class Slider :public UI
+class UISlider :public UI
 {
 public:
 
-	Slider(int frontHandle, int backHandle);
-	Slider(int frontHandle, int backHandle, int drawPriority);
-	Slider(int frontHandle, int backHandle, int drawPriority, int updatePriority);
-	Slider(char * frontSpriteName, char * backSpriteName);
-	Slider(char * frontSpriteName, char * backSpriteName, int drawPriority);
-	Slider(char * frontSpriteName, char * backSpriteName, int drawPriority, int updatePriority);
+	UISlider(int frontHandle, int backHandle);
+	UISlider(int frontHandle, int backHandle, int drawPriority);
+	UISlider(int frontHandle, int backHandle, int drawPriority, int updatePriority);
+	UISlider(char * frontSpriteName, char * backSpriteName);
+	UISlider(char * frontSpriteName, char * backSpriteName, int drawPriority);
+	UISlider(char * frontSpriteName, char * backSpriteName, int drawPriority, int updatePriority);
 
 	bool Update(float stepTime);
 	bool Draw();
@@ -48,11 +48,11 @@ public:
 
 	VECTOR2DINT GetUISize();
 
-	~Slider();
+	~UISlider();
 
 private:
-	Sprite * spBack;
-	Sprite * spFront;
+	UISprite * spBack;
+	UISprite * spFront;
 
 	float process;
 

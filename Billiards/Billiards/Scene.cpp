@@ -164,28 +164,14 @@ bool Scene::IsPointInUI(VECTOR2D pointPosition)
 {
 	for (int i = 0; i < this->UIPositionData.size(); i++)
 	{
-		if (pointPosition.x > this->UIPositionData[i]->positionData.x&&
-			pointPosition.x<this->UIPositionData[i]->positionData.x + this->UIPositionData[i]->sizeData.x&&
-			pointPosition.y>this->UIPositionData[i]->positionData.y&&
-			pointPosition.y < this->UIPositionData[i]->positionData.y + this->UIPositionData[i]->sizeData.y)
+		if (pointPosition.x > this->UIPositionData[i].positionData.x&&
+			pointPosition.x<this->UIPositionData[i].positionData.x + this->UIPositionData[i].sizeData.x&&
+			pointPosition.y>this->UIPositionData[i].positionData.y&&
+			pointPosition.y < this->UIPositionData[i].positionData.y + this->UIPositionData[i].sizeData.y)
 		{
 			return true;
 		}
 	}
-	return false;
-}
-
-
-
-// ゲームオブジェクトの状態推移処理
-bool Scene::GameObjectUpdate(float stepTime)
-{
-	return false;
-}
-
-// ゲームオブジェクトの描画処理
-bool Scene::GameObjectDraw(void)
-{
 	return false;
 }
 
@@ -195,7 +181,7 @@ bool Scene::RefreshList(void)
 	GameObjectBase * goBase;
 	GameObjectBase * nextGo;
 	GameObjectBase * tempGo;
-#pragma region <追加するゲームオブジェクトのリスト>に登録されているゲームオブジェクトをリストに追加する
+#pragma region <追加するゲームオブジェクトのリスト>に登録されているゲームオブジェクトをシーンに追加する
 	if (addGameObjectInfoList != NULL)
 	{
 		for (goBase = addGameObjectInfoList; goBase != NULL; goBase = nextGo)
@@ -217,20 +203,35 @@ bool Scene::RefreshList(void)
 			{
 				System::GetSystemInstance()->dynamicsWorld->addRigidBody(goBase->GetRigidBody());
 			}
+			//UIを追加する場合、UIの大きさとシーンの画面中でUIが存在する位置情報を保存する
 			if (goBase->IsGUI())
 			{
-				SUIData * tempData = new SUIData();
-				tempData->positionData = { goBase->GetPositionInWindow().x ,goBase->GetPositionInWindow().y };
-				tempData->sizeData = { goBase->GetUISize().x,goBase->GetUISize().y };
-
+				SUIData tempData;
+				tempData.uiPointer = goBase;
+				tempData.positionData = { goBase->GetPositionInWindow().x ,goBase->GetPositionInWindow().y };
+				tempData.sizeData = { goBase->GetUISize().x,goBase->GetUISize().y };
 				this->UIPositionData.push_back(tempData);
+				//このUIは、多数のUIから組み立てる場合、このUIの各組み立て部分の情報をすべて保存する
+				if (goBase->getObjectList().size() != 0)
+				{
+					vector<GameObjectBase*> uiList = goBase->getObjectList();
+					for (int i = 0; i < uiList.size(); i++)
+					{
+						SUIData tempData;
+						tempData.uiPointer = uiList[i];
+						tempData.positionData = { uiList[i]->GetPositionInWindow().x ,uiList[i]->GetPositionInWindow().y };
+						tempData.sizeData = { uiList[i]->GetUISize().x,uiList[i]->GetUISize().y };
+						this->UIPositionData.push_back(tempData);
+					}
+				}
+
 
 			}
 		}
 		addGameObjectInfoList = NULL;
 	}
 #pragma endregion 
-#pragma region <削除するゲームオブジェクトのリスト>に登録されているゲームオブジェクトをリストから外す
+#pragma region <削除するゲームオブジェクトのリスト>に登録されているゲームオブジェクトをシーンから外す
 	if (delGameObjectList != NULL)
 	{
 		for (goBase = delGameObjectList; goBase != NULL; goBase = nextGo)
@@ -242,9 +243,44 @@ bool Scene::RefreshList(void)
 			if (updateList[goBase->goInfo->goBaseInfo->updatePriority] == goBase)
 			{
 				updateList[goBase->goInfo->goBaseInfo->updatePriority] = goBase->goInfo->updateNext;
+				//3D オブジェクトの場合、オブジェクトを物理システムから削除
 				if (goBase->IsRigidBody())
 				{
 					System::GetSystemInstance()->dynamicsWorld->removeRigidBody(goBase->GetRigidBody());
+				}
+				//2D UIの場合、オブジェクトがスクリーン中の位置情報を削除
+				if (goBase->IsGUI())
+				{
+					for (vector <SUIData>::iterator iter = UIPositionData.begin(); iter != UIPositionData.end();)
+					{
+						if (iter->uiPointer == goBase)
+						{
+							iter = UIPositionData.erase(iter);
+						}
+						else
+						{
+							iter++;
+						}
+					}
+					//2D UIが多数のUIから構成した場合、UIリストを貰い、すべて削除する
+					if (goBase->getObjectList().size() != 0)
+					{
+						vector<GameObjectBase*> uiList = goBase->getObjectList();
+						for (int i = 0; i < uiList.size(); i++)
+						{
+							for (vector <SUIData>::iterator iter = UIPositionData.begin(); iter != UIPositionData.end();)
+							{
+								if (iter->uiPointer == uiList[i])
+								{
+									iter = UIPositionData.erase(iter);
+								}
+								else
+								{
+									iter++;
+								}
+							}
+						}
+					}
 				}
 			}
 			else
@@ -266,6 +302,20 @@ bool Scene::RefreshList(void)
 						if (goBase->IsRigidBody())
 						{
 							System::GetSystemInstance()->dynamicsWorld->removeRigidBody(goBase->GetRigidBody());
+						}
+						if (goBase->IsGUI())
+						{
+							for (vector <SUIData>::iterator iter = UIPositionData.begin(); iter != UIPositionData.end();)
+							{
+								if (iter->uiPointer == goBase)
+								{
+									iter = UIPositionData.erase(iter);
+								}
+								else
+								{
+									iter++;
+								}
+							}
 						}
 						tempGo->goInfo->updateNext = goBase->goInfo->updateNext;
 						break;

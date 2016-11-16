@@ -4,11 +4,11 @@
 
 #include "UI.h"
 
-class SpriteSheet :public UI
+class UISpriteSheet :public UI
 {
 public:
-	SpriteSheet(char * fileName, int allNum, int XNum, int YNum, int XSize, int YSize);
-	~SpriteSheet();
+	UISpriteSheet(char * fileName, int allNum, int XNum, int YNum, int XSize, int YSize);
+	~UISpriteSheet();
 
 	bool Draw();
 

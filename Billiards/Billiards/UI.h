@@ -100,12 +100,18 @@ public:
 	//UIの移動動作を設置
 	virtual void SimpleMove(float moveTime, VECTOR2D pointFrom, VECTOR2D pointTo, TweenType type);
 
+	//UIの動作を設置（draw&update）
+	void SetEnable(bool enable);
+	bool IsEnabled();
 	UI();
 	~UI();
 
 private:
 
 protected:
+
+	bool enable;
+
 	_STransform2D * transform;
 
 	//明暗変化関連

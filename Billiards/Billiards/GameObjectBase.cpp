@@ -99,6 +99,11 @@ VECTOR2DINT GameObjectBase::GetUISize()
 	return VECTOR2DINT();
 }
 
+vector<GameObjectBase*> GameObjectBase::getObjectList()
+{
+	return vector<GameObjectBase*>();
+}
+
 void GameObjectBase::SetPriority(int updatePriority, int drawPriority)
 {
 	if (updatePriority < 0)
