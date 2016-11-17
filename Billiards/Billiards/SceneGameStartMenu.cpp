@@ -18,9 +18,9 @@ SceneGameStartMenu::SceneGameStartMenu()
 	spriteTitle->SetScale(2.0f, 2.0f);
 
 	//右下Logo画像の設定
-	spriteLogo = new UISprite("Data/Sprite/logokoYellow.png");
-	spriteLogo->SetPosition(1060, 620);
-	spriteLogo->SetScale(0.5f, 0.5f);
+	spriteLogo = new UISprite("Data/Sprite/logo.png");
+	spriteLogo->SetPosition(1100, 620);
+	spriteLogo->SetScale(1.f, 1.f);
 
 	//ボタンの切り替え用画像の導入
 	buttonSpriteHandle = LoadGraph("Data/Sprite/button2.png");
