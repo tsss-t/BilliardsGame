@@ -1,11 +1,47 @@
 ﻿#include "SceneGameMain.h"
 #include "System.h"
 
-
 SceneGameMain *SceneGameMain::_instance = NULL;
 
 SceneGameMain::SceneGameMain()
 {
+#pragma region Bullet物理システム初期化
+
+	// ワールドの広さ
+	worldAabbMin = btVector3(-10000, -10000, -10000);
+	worldAabbMax = btVector3(10000, 10000, 10000);
+
+	// プロキシの最大数（衝突物体のようなもの）
+	maxProxies = 1024;
+
+	// broadphaseの作成
+	btAxisSweep3* broadphase = new btAxisSweep3(worldAabbMin, worldAabbMax, maxProxies);
+
+	// デフォルトの衝突設定とディスパッチャの作成
+	btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
+	btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
+
+	// 衝突解決ソルバ
+	btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
+
+	gContactAddedCallback = myContactAddedCallback;
+
+	// 離散動的世界の作成
+	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
+
+	// 重力の設定
+	dynamicsWorld->setGravity(btVector3(0, -200, 0));
+
+#ifdef _DEBUG
+	dynamicsWorld->setDebugDrawer(&g_debugdraw);
+	dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+	//dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawAabb);
+	//dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawConstraints);
+	//dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawConstraintLimits);
+
+
+#endif  
+#pragma endregion
 	//入口と環境設定
 	sceneNowState = ESceneMainState::FadeInWait;
 	SetGlobalAmbientLight(GetColorF(1.0f, 1.0f, 1.0f, 1.0f));
@@ -25,6 +61,7 @@ SceneGameMain::SceneGameMain()
 	forceAdd = true;
 	forceRatio = 100;
 	hitPosition = VGet(0, 0, 0);
+
 #pragma region Trigger
 
 
@@ -56,6 +93,7 @@ SceneGameMain::SceneGameMain()
 
 	//*******************************3D Model*******************************
 	ballWhite = new Ball(VGet(20.0f, 29.1f, 0.0f), VGet(90.0f, 0.0f, 0.0f), VGet(0.0395f, 0.0395f, 0.0395f), MV1LoadModel("Data/Model/BallWhite.mv1"));
+	ballWhite->num = 0;
 	poolStick = new PoolStick(VGet(0.0f, 27.6f, 0.0f), VGet(0.0f, (float)PI, 0.0f));
 	billiardTable = new BilliardsTable();
 	float originX = -20.0f;
@@ -78,6 +116,7 @@ SceneGameMain::SceneGameMain()
 			sprintf(s, "Data/Model/Ball%d.mv1", index + 1);
 			ballList[index] =
 				new Ball(VGet(offsetX, originY, offsetZ), VGet(0, 0, 0), VGet(0.04f, 0.04f, 0.04f), MV1LoadModel(s));
+			ballList[index]->num = index+1;
 			AddToScene(ballList[index]);
 		}
 	}
@@ -90,14 +129,14 @@ SceneGameMain::SceneGameMain()
 	//*******************************2D UI*******************************
 	fontHandle = CreateFontToHandle("ＭＳ ゴシック", 20, 9, DX_FONTTYPE_NORMAL);
 
-	spLog = new UISprite("Data/Sprite/List.png", 11);
+	spLog = new UISprite("Data/Sprite/List.png", 8);
 	spLog->SetPosition(420, 580);
 	spLog->SetScale(1.1f, 1.4f);
 	nextBallIconPosition = { 430,590 };
 	initBallIconPosition = { 430,590 };
 
-	sldForce = new UISlider("Data/Sprite/ProgressBar.png", "Data/Sprite/ProgressFram.png", 12);
-	sldForce->SetPosition(1020, 13);
+	sldForce = new UISlider("Data/Sprite/ProgressBar.png", "Data/Sprite/ProgressFram.png", 9);
+	sldForce->SetPosition(1020, 10);
 	sldForce->SetFrontSpriteOffset(13, 25);
 
 	buttonBackgroundHandle = LoadGraph("Data/Sprite/button3.png");
@@ -106,13 +145,13 @@ SceneGameMain::SceneGameMain()
 	spMenu = new  UISprite(buttonBackgroundHandle);
 	lbMenu = new  UILabel("Menu", fontHandle);
 	lbMenu->SetOffset(40, 13.5f);
-	btMenu = new UIButton(lbMenu, spMenu, 12);
+	btMenu = new UIButton(lbMenu, spMenu, 9);
 	btMenu->SetPosition(10, 670);
 	btMenu->SetHoverSpriteHandle(buttonBackgroundLightHandle);
 	//btMenu->SetClickEvent(GameStart);
 
 	//--------------------View Mode Panel--------------------
-	plViewMode = new UIPanel(1020, 500, 11);
+	plViewMode = new UIPanel(1020, 500, 8);
 
 	//背景図の初期化
 	spTableLeft = new UISprite("Data/Sprite/Table.png", 1);
@@ -165,7 +204,7 @@ SceneGameMain::SceneGameMain()
 	plViewMode->AddUI(btFreeMode);
 
 	//--------------------View Panel--------------------
-	plView = new UIPanel(0, 0, 11);
+	plView = new UIPanel(0, 0, 8);
 	plView->SetEnable(false);
 
 	lbTopView = new UILabel("TopView", fontHandle);
@@ -182,10 +221,10 @@ SceneGameMain::SceneGameMain()
 	spRightView = new UISprite(buttonBackgroundHandle);
 	spBackView = new UISprite(buttonBackgroundHandle);
 
-	btTopView = new UIButton(lbTopView, spTopView, 11);
-	btLeftView = new UIButton(lbLeftView, spLeftView, 11);
-	btRightView = new UIButton(lbRightView, spRightView, 11);
-	btBackView = new UIButton(lbBackView, spBackView, 11);
+	btTopView = new UIButton(lbTopView, spTopView, 8);
+	btLeftView = new UIButton(lbLeftView, spLeftView, 8);
+	btRightView = new UIButton(lbRightView, spRightView, 8);
+	btBackView = new UIButton(lbBackView, spBackView, 8);
 
 	btTopView->SetHoverSpriteHandle(buttonBackgroundLightHandle);
 	btLeftView->SetHoverSpriteHandle(buttonBackgroundLightHandle);
@@ -211,9 +250,36 @@ SceneGameMain::SceneGameMain()
 	for (int i = 0; i < BallNum; i++)
 	{
 		sprintf(s, "Data/Sprite/ball%d.png", i + 1);
-		spBallList[i] = new UISprite(s, 12);
+		spBallList[i] = new UISprite(s, 9);
 		spBallList[i]->SetScale(0.3f, 0.3f);
 	}
+	//--------------------Game Over Panel--------------------
+
+	plGameOver = new UIPanel(0, 0, { GAME_SCREEN_WIDTH ,GAME_SCREEN_HEIGHT }, 12);
+	plGameOver->SetEnable(false);
+
+	lbResult = new UILabel("Congratulations!", "ＭＳ ゴシック", 55, 13, DX_FONTTYPE_NORMAL);
+	lbResult->SetPosition(GAME_SCREEN_WIDTH / 2 - 220, 300);
+	lbResult->SetLabelColor(GetColor(255, 0, 0));
+
+	lbBack = new UILabel("Back To Menu", fontHandle);
+	lbBack->SetOffset(24, 13.5);
+
+	spBack = new UISprite(buttonBackgroundHandle, 11);
+	spMenuBackGround = new UISprite("Data/Sprite/MenuBack.png", 6);
+	spMenuBackGround->SetPosition(GAME_SCREEN_WIDTH / 2, GAME_SCREEN_HEIGHT / 2);
+	spMenuBackGround->SetDrawCenterPoint(spMenuBackGround->GetUISize().x / 2, spMenuBackGround->GetUISize().y / 2);
+	spMenuBackGround->SetScale(1.5f, 1.5f);
+	btBack = new UIButton(lbBack, spBack, 11);
+	btBack->SetScale(1.5f, 1.f);
+	btBack->SetClickEvent(BackToMenu);
+	btBack->SetHoverSpriteHandle(buttonBackgroundLightHandle);
+	btBack->SetPosition(GAME_SCREEN_WIDTH / 2 - btBack->GetUISize().x / 2, GAME_SCREEN_HEIGHT - 200);
+
+	plGameOver->AddUI(lbResult);
+	plGameOver->AddUI(spMenuBackGround);
+	plGameOver->AddUI(btBack);
+
 #pragma endregion
 
 	AddToScene(plViewMode);
@@ -225,7 +291,25 @@ SceneGameMain::SceneGameMain()
 	AddToScene(billiardTable);
 	AddToScene(ballWhite);
 	AddToScene(poolStick);
+}
 
+void SceneGameMain::Reset()
+{
+	sceneNowState = ESceneMainState::FadeInWait;
+	DisableGameOverPanel();
+	ballWhite->ResetPosition();
+	SceneGameMain::ChangeCameraModeToFree();
+	nextBallIconPosition = initBallIconPosition;
+	for (int i = 0; i < BallNum; i++)
+	{
+		ballList[i]->ResetPosition();
+		ballList[i]->SetEnable(true);
+	}
+	for (int i = 0; i < BallNum; i++)
+	{
+		spBallList[i]->SetEnable(false);
+		DeleteFromScene(spBallList[i]);
+	}
 }
 
 SceneGameMain::~SceneGameMain()
@@ -252,34 +336,25 @@ SceneGameMain * SceneGameMain::GetSceneInstance()
 	{
 		_instance = new SceneGameMain();
 	}
+
 	return _instance;
 }
-
-
+SceneGameMain * SceneGameMain::GetNewScene()
+{
+	if (_instance == NULL)
+	{
+		_instance = new SceneGameMain();
+	}
+	else
+	{
+		_instance->Reset();
+	}
+	return _instance;
+}
 
 //シーン全体の状態推移処理を行う
 bool SceneGameMain::SceneUpdate(float stepTime)
 {
-	//DrawFormatString(0, 32, GetColor(255, 255, 255), "pressTime   %f",
-	//	pressTime);
-
-	FLOAT2 mousePosition = InputSystem::GetInputSystemInstance()->GetMouseNowPosition();
-
-	// マウスポインタがある画面上の座標に該当する３Ｄ空間上の Near 面の座標を取得
-	VECTOR StartPos = ConvScreenPosToWorldPos(VGet(mousePosition.u, mousePosition.v, 0.0f));
-
-	// マウスポインタがある画面上の座標に該当する３Ｄ空間上の Far 面の座標を取得
-	VECTOR EndPos = ConvScreenPosToWorldPos(VGet(mousePosition.u, mousePosition.v, 1.0f));
-
-	//マウスのポインターとテーブルの面と会う点を計算
-	if ((StartPos.y > TableHight&&EndPos.y < TableHight) || (StartPos.y < TableHight&&EndPos.y > TableHight))
-	{
-		float slope = ((TableHight - StartPos.y) / (EndPos.y - StartPos.y));
-		float hitZ = slope  * (EndPos.z - StartPos.z) + StartPos.z;
-		float hitX = slope  * (EndPos.x - StartPos.x) + StartPos.x;
-		this->hitPosition = VGet(hitX, TableHight, hitZ);
-	}
-
 	if (!Scene::SceneUpdate(stepTime))
 	{
 		return false;
@@ -312,6 +387,7 @@ bool SceneGameMain::SceneUpdate(float stepTime)
 			btLeftView->SetEventEnable(true);
 			btRightView->SetEventEnable(true);
 			btBackView->SetEventEnable(true);
+			btBack->SetEventEnable(true);
 			timer = 0;
 		}
 		else
@@ -326,6 +402,39 @@ bool SceneGameMain::SceneUpdate(float stepTime)
 	}
 	case ESceneMainState::GamePlaying:
 	{
+#pragma region 物理演算
+		// bulletシミュレーションを進める。
+		if (System::GetSystemInstance()->System_GetLowSpecMode())
+		{
+			dynamicsWorld->stepSimulation(stepTime, 1);
+		}
+		else
+		{
+			for (int i = 0; i < 10; i++) {
+				dynamicsWorld->stepSimulation(stepTime / 10, 1);
+			}
+		}
+#pragma endregion
+#pragma region マウスとテーブルの交点を算出
+		// マウスポインタはスクリーン中の位置座標を貰う
+		FLOAT2 mousePosition = InputSystem::GetInputSystemInstance()->GetMouseNowPosition();
+
+		// マウスポインタがある画面上の座標に該当する３Ｄ空間上の Near 面の座標を取得
+		VECTOR StartPos = ConvScreenPosToWorldPos(VGet(mousePosition.u, mousePosition.v, 0.0f));
+
+		// マウスポインタがある画面上の座標に該当する３Ｄ空間上の Far 面の座標を取得
+		VECTOR EndPos = ConvScreenPosToWorldPos(VGet(mousePosition.u, mousePosition.v, 1.0f));
+
+		//マウスのポインターとテーブルの面と会う点を計算
+		if ((StartPos.y > TableHight&&EndPos.y < TableHight) || (StartPos.y < TableHight&&EndPos.y > TableHight))
+		{
+			float slope = ((TableHight - StartPos.y) / (EndPos.y - StartPos.y));
+			float hitZ = slope  * (EndPos.z - StartPos.z) + StartPos.z;
+			float hitX = slope  * (EndPos.x - StartPos.x) + StartPos.x;
+			this->hitPosition = VGet(hitX, TableHight, hitZ);
+		}
+#pragma endregion
+
 		if (poolStick->IsEnable())
 		{
 			this->poolStick->SetPosition(this->ballWhite->GetPosition());
@@ -393,6 +502,7 @@ bool SceneGameMain::SceneUpdate(float stepTime)
 				if (isPressed)
 				{
 					isPressed = false;
+					SoundSystem::GetSoundSystemInstance()->PlaySound3D(ballWhite->GetPosition(), SoundSystem::GetSoundSystemInstance()->AddSound("Clip/shoot", false), DX_PLAYTYPE_BACK);
 					VECTOR dis = poolStick->GetDistance();
 					ballWhite->GetRigidBody()->activate();
 					ballWhite->GetRigidBody()->applyCentralImpulse(btVector3(force*dis.x, -0.5f, force*dis.z));
@@ -411,12 +521,30 @@ bool SceneGameMain::SceneUpdate(float stepTime)
 		}
 		break;
 	}
+	case ESceneMainState::GameOverShow:
+	{
+		ShowGameOverPanel();
+		break;
+	}
 	case ESceneMainState::FadeOut:
 	{
+		btBack->SetEventEnable(false);
+		timer += stepTime;
+		if (timer > FADE_OUT_TIME)
+		{
+			sceneNowState = ESceneMainState::End;
+			timer = 0;
+		}
+		else
+		{
+			System::GetSystemInstance()->System_FadeOut();
+		}
 		break;
 	}
 	case ESceneMainState::End:
 	{
+		SoundSystem::GetSoundSystemInstance()->StopBGM();
+		SceneManager::LoadSceneLevel(EGameScene::StartMenu);
 		break;
 	}
 	case ESceneMainState::MenuFadeInWait:
@@ -433,49 +561,89 @@ bool SceneGameMain::SceneUpdate(float stepTime)
 	return true;
 }
 
+//シーン全体の描画処理を行う
+bool SceneGameMain::SceneDraw(void)
+{
+
+#ifdef _DEBUG
+
+	// 交差した座標を描画
+	//DrawFormatString(0, 16, GetColor(255, 255, 255), "Hit Pos   %f  %f  %f",
+	//	hitPosition.x, hitPosition.y, hitPosition.z);
+	//DrawFormatString(0, 32, GetColor(255, 255, 255), "pressTime   %f",
+	//	pressTime);
+	//debug line mode
+	//ClsDrawScreen();
+	//dynamicsWorld->debugDrawWorld();
+#endif // _DEBUG
+	if (!Scene::SceneDraw())
+	{
+		return false;
+	}
+	return  true;
+}
+
+//ボールの位置を監視する
 void SceneGameMain::CheckBallPosition()
 {
-	VECTOR ballPosition;
 
+	bool gameOver = true;
 	for (int i = 0; i < BallNum; i++)
 	{
 		if (ballList[i]->GetEnable())
 		{
-			ballPosition = ballList[i]->GetPosition();
+			gameOver = false;
 			//外部に飛んだ　OR　穴に入った
-			if (ballPosition.y < 28.5f)
+			if (ballList[i]->GetPosition().y < 28.5f)
 			{
-				for (int j = 0; j < 6; j++)
+				if (CheckBallInGoal(ballList[i]))
 				{
-					//穴に入った 
-					if (ballPosition.x > triggerList[j]->position.x - triggerList[j]->size.x / 2 &&
-						ballPosition.x < triggerList[j]->position.x + triggerList[j]->size.x / 2 &&
-						ballPosition.z > triggerList[j]->position.z - triggerList[j]->size.z / 2 &&
-						ballPosition.z < triggerList[j]->position.z + triggerList[j]->size.z / 2)
-					{
-						ballList[i]->SetEnable(false);
-						ballList[i]->SetPosition({ 0, 100, 0 });
-						DeleteFromScene(ballList[i]);;
-						GoalIn(i);
-						break;
-					}
-					if (j == 5)
-					{
-						//外部に飛んだ
-						ballList[i]->ResetPosition();
-					}
-
+					ballList[i]->SetEnable(false);
+					ballList[i]->SetPosition({ 1000, 0, 0 });
+					SoundSystem::GetSoundSystemInstance()->PlaySound3D(ballList[i]->GetPosition(), SoundSystem::GetSoundSystemInstance()->AddSound("Clip/goal", false), DX_PLAYTYPE_BACK);
+					tempBall = ballList[i];
+					GoalIn(i);
+					break;
+				}
+				else
+				{
+					//外部に飛んだ
+					ballList[i]->ResetPosition();
 				}
 			}
 		}
 	}
-
+	if (gameOver)
+	{
+		sceneNowState = ESceneMainState::GameOverShow;
+	}
 	if (ballWhite->GetPosition().y < 28.5f)
 	{
+		if (CheckBallInGoal(ballWhite))
+		{
+			SoundSystem::GetSoundSystemInstance()->PlaySound3D(ballWhite->GetPosition(), SoundSystem::GetSoundSystemInstance()->AddSound("Clip/goal", false), DX_PLAYTYPE_BACK);
+		}
 		ballWhite->ResetPosition();
 	}
 }
+bool SceneGameMain::CheckBallInGoal(Ball * ball)
+{
+	VECTOR ballPosition;
+	ballPosition = ball->GetPosition();
+	for (int j = 0; j < 6; j++)
+	{
+		if (ballPosition.x > triggerList[j]->position.x - triggerList[j]->size.x / 2 &&
+			ballPosition.x < triggerList[j]->position.x + triggerList[j]->size.x / 2 &&
+			ballPosition.z > triggerList[j]->position.z - triggerList[j]->size.z / 2 &&
+			ballPosition.z < triggerList[j]->position.z + triggerList[j]->size.z / 2)
+		{
+			return true;
+		}
+	}
+	return false;
+}
 
+//穴に入ったUI表示
 void SceneGameMain::GoalIn(int ballNum)
 {
 	if (nextBallIconPosition.x + spBallList[ballNum]->GetUISize().x > spLog->GetPosition().x + spLog->GetUISize().x)
@@ -490,23 +658,14 @@ void SceneGameMain::GoalIn(int ballNum)
 	AddToScene(spBallList[ballNum]);
 }
 
-//シーン全体の描画処理を行う
-bool SceneGameMain::SceneDraw(void)
+
+void SceneGameMain::ShowViewPanel()
 {
-
-#ifdef _DEBUG
-
-	// 交差した座標を描画
-	//DrawFormatString(0, 16, GetColor(255, 255, 255), "Hit Pos   %f  %f  %f",
-	//	hitPosition.x, hitPosition.y, hitPosition.z);
-
-
-#endif // _DEBUG
-	if (!Scene::SceneDraw())
+	if (!plView->IsEnabled())
 	{
-		return false;
+		this->plView->SetEnable(true);
+		this->AddToScene(plView);
 	}
-	return  true;
 }
 
 void SceneGameMain::DisableViewPanel()
@@ -518,12 +677,21 @@ void SceneGameMain::DisableViewPanel()
 	}
 }
 
-void SceneGameMain::ShowViewPanel()
+void SceneGameMain::ShowGameOverPanel()
 {
-	if (!plView->IsEnabled())
+	if (!plGameOver->IsEnabled())
 	{
-		this->plView->SetEnable(true);
-		this->AddToScene(plView);
+		this->plGameOver->SetEnable(true);
+		this->AddToScene(plGameOver);
+	}
+}
+
+void SceneGameMain::DisableGameOverPanel()
+{
+	if (plGameOver->IsEnabled())
+	{
+		this->plGameOver->SetEnable(false);
+		this->DeleteFromScene(plGameOver);
 	}
 }
 
@@ -535,8 +703,8 @@ void SceneGameMain::ChangeCameraModeToFree()
 
 void SceneGameMain::ChangeCameraModeToFollow()
 {
-
-	CameraManager::GetCameraManagerInstance()->ChangeCameraMode(ECameraMode::FollowMode);
+	//SceneGameMain::GetSceneInstance()->ShowGameOverPanel();
+	//CameraManager::GetCameraManagerInstance()->ChangeCameraMode(ECameraMode::FollowMode);
 }
 
 void SceneGameMain::ChangeCameraModeToFixed()
@@ -565,3 +733,57 @@ void SceneGameMain::ChangeCameraViewToRight()
 	CameraManager::GetCameraManagerInstance()->ChangeCameraView(ECameraView::Right);
 }
 
+void SceneGameMain::BackToMenu()
+{
+	SceneGameMain::GetSceneInstance()->sceneNowState = ESceneMainState::FadeOut;
+}
+
+static bool myContactAddedCallback(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap, int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partId1, int index1)
+{
+	if (cp.getDistance() < -0.1f)
+	{
+		//0 : come in object   1 : self
+		void * userPointer0 = colObj0Wrap->getCollisionShape()->getUserPointer();
+		GameObject  * go0 = (GameObject *)userPointer0;
+		void * userPointer1 = colObj1Wrap->getCollisionShape()->getUserPointer();
+		GameObject  * go1 = (GameObject *)userPointer1;
+		if (go0 != nullptr&&go1 != nullptr)
+		{
+			if (go1->objectType != EObjectType::Static)
+			{
+				bool isInList = false;
+				for (vector <GameObject*>::iterator iter = go1->collisionList.begin(); iter != go1->collisionList.end();)
+				{
+					if ((*iter) == go0)
+					{
+						isInList = true;
+						break;
+					}
+					else
+					{
+						iter++;
+					}
+				}
+				if (!isInList)
+				{
+					go1->collisionList.push_back(go0);
+					switch (go0->objectType)
+					{
+					case EObjectType::Dynamic: {
+						//play: ball-ball
+						//サウンド設定
+						SoundSystem::GetSoundSystemInstance()->PlaySound3D(go1->GetPosition(), SoundSystem::GetSoundSystemInstance()->AddSound("Clip/ballToBall", false), DX_PLAYTYPE_BACK);
+						break;
+					}
+					case EObjectType::Static: {
+						//play: ball-table
+						SoundSystem::GetSoundSystemInstance()->PlaySound3D(go1->GetPosition(), SoundSystem::GetSoundSystemInstance()->AddSound("Clip/ballToTable", false), DX_PLAYTYPE_BACK);
+						break;
+					}
+					}
+				}
+			}
+		}
+	}
+	return true;
+}

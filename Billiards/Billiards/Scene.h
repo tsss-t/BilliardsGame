@@ -3,6 +3,7 @@
 #define SCENE_H
 #include "GameObjectBase.h"
 #include "CameraManager.h"
+#include "DxDebugDraw.h"
 
 #pragma region シーンの状態時間数定義
 //フェードインする前に待つ時間
@@ -81,6 +82,9 @@ protected:
 	float timer;
 
 	CameraManager * cameraManager;
+
+	//--------物理世界の構築---------
+	btDiscreteDynamicsWorld* dynamicsWorld;
 
 	bool InitGameObjectList(void);
 

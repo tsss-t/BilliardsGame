@@ -17,9 +17,14 @@ public:
 	void PanelInit();
 	UIPanel();
 	UIPanel(float x, float y ,int drawPriority);
+	UIPanel(float x, float y, VECTOR2DINT panelSize, int drawPriority);
 	UIPanel(float x, float y, int updatePriority, int drawPriority);
 
+	UIPanel(float x, float y, VECTOR2DINT panelSize, int updatePriority, int drawPriority);
+
 	UIPanel(VECTOR2D position, int drawPriority);
+	UIPanel(VECTOR2D position, VECTOR2DINT panelSize, int drawPriority);
+	UIPanel(VECTOR2D position, VECTOR2DINT panelSize, int updatePriority, int drawPriority);
 	UIPanel(VECTOR2D position, int updatePriority, int drawPriority);
 
 	UIPanel(int drawPriority);
@@ -29,6 +34,8 @@ public:
 	bool RefreshUIList();
 	bool Draw();
 	bool Update(float stepTime);
+	bool SetUISize(int x,int y);
+	VECTOR2DINT GetUISize();
 	vector<GameObjectBase*> getObjectList();
 	~UIPanel();
 
@@ -37,6 +44,8 @@ private:
 	bool run;
 
 	vector<GameObjectBase*> uiList;
+
+	VECTOR2DINT panelSize;
 
 	// 状態推移処理のリストの各優先順位の先頭タスクへのポインタ
 	GameObjectBase * updateList[PRIORITY_MAX];

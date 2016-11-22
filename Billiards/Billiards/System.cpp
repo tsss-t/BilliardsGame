@@ -1,6 +1,7 @@
 ﻿#include "System.h"
 #include <iostream>
 
+
 System *System::_instance = NULL;
 SSystemInfo System::systemInfo{};
 //test:
@@ -96,40 +97,14 @@ bool System::SystemInit(void)
 #pragma endregion
 
 #pragma region Camera初期化
-	SetDrawScreen(DX_SCREEN_BACK);
 	CameraManager::GetCameraManagerInstance();
-
 #pragma endregion
 
-#pragma region Bullet物理システム初期化
-
-	// ワールドの広さ
-	worldAabbMin = btVector3(-10000, -10000, -10000);
-	worldAabbMax = btVector3(10000, 10000, 10000);
-
-	// プロキシの最大数（衝突物体のようなもの）
-	maxProxies = 1024;
-
-	// broadphaseの作成
-	btAxisSweep3* broadphase = new btAxisSweep3(worldAabbMin, worldAabbMax, maxProxies);
-
-	// デフォルトの衝突設定とディスパッチャの作成
-	btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
-	btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
-
-	// 衝突解決ソルバ
-	btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
-	// 離散動的世界の作成
-	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
-
-	// 重力の設定
-	dynamicsWorld->setGravity(btVector3(0, -200, 0));
-
-#ifdef _DEBUG
-	dynamicsWorld->setDebugDrawer(&g_debugdraw);
-	dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
-#endif  
+#pragma region 描画処理システムの初期化
+	RenderSystem::GetRenderSystemInstance()->GetRenderSystemInstance();
 #pragma endregion
+
+
 
 #pragma region scence管理システムの初期化
 	//シーン初期化
@@ -175,14 +150,23 @@ bool System::SystemLoop(void)
 {
 	int i;
 	LONGLONG nowTime;
+
+	// 描画先を裏画面にする
+	SetDrawScreen(DX_SCREEN_BACK);
+
 	//初期化フレームの状態推移時間
 	systemInfo.stepTime = MAX_DELTA_TIME;
 	systemInfo.prevTime = GetNowHiPerformanceCount();
 	systemInfo.stepNum = 1;
+
+	// メインループ
 	while (!ProcessMessage())
 	{
+		// 状態推移処理を行う回数分ループ
 		for (i = 0; i < systemInfo.stepNum; i++)
 		{
+			// エスケープキーが押されるか、
+			// ソフトを終了するかどうかのフラグが立っていたらループを抜ける
 			if (CheckHitKey(KEY_INPUT_ESCAPE) == 1 || systemInfo.exitGame)
 			{
 				systemInfo.exitGame = true;
@@ -265,19 +249,6 @@ bool System::SystemLoop(void)
 }
 bool System::SystemUpdate(float stepTime)
 {
-	// bulletシミュレーションを進める。
-	if (systemInfo.lowSpecMode)
-	{
-		dynamicsWorld->stepSimulation(stepTime, 1);
-	}
-	else
-	{
-		for (int i = 0; i < 10; i++) {
-			dynamicsWorld->stepSimulation(stepTime / 10, 1);
-		}
-	}
-
-
 	//入力処理を行う
 	InputSystem::GetInputSystemInstance()->InputSystemUpdate(stepTime);
 
@@ -330,6 +301,7 @@ bool System::SystemDraw(void)
 	//debug line mode
 	//ClsDrawScreen();
 	//dynamicsWorld->debugDrawWorld();
+
 #endif  
 	return false;
 }
@@ -400,6 +372,11 @@ bool System::System_CheckFade(void)
 	return systemInfo.fade;
 }
 #pragma endregion
+
+bool System::System_GetLowSpecMode()
+{
+	return systemInfo.lowSpecMode;
+}
 System::~System()
 {
 	int i;

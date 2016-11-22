@@ -20,7 +20,7 @@ void SceneManager::LoadSceneLevel(EGameScene sence)
 		nowPlayScene = SceneGameStartMenu::GetSceneInstance();
 		break;
 	case GameMain:
-		nowPlayScene = SceneGameMain::GetSceneInstance();
+		nowPlayScene = SceneGameMain::GetNewScene();
 		break;
 	case GameOver:
 		break;

@@ -600,7 +600,7 @@ void UIButton::ChangeSpriteSimple(int spriteHandle)
 //ラベルの色を変更する
 void UIButton::ChangeColorSimple(int color)
 {
-	this->buttonLabel->ChangeLabelColor(color);
+	this->buttonLabel->SetLabelColor(color);
 }
 
 //ボタンのクリック事件を設置

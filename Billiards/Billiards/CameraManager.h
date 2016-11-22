@@ -66,6 +66,9 @@ public:
 	//カメラ状態更新
 	bool CameraUpdate(float stepTime);
 
+	//カメラ状態反映
+	bool CameraDraw();
+
 	//カメラのモードを変更
 	void ChangeCameraMode(ECameraMode mode);
 

@@ -101,7 +101,7 @@ void UILabel::SetOffset(float x, float y)
 }
 
 //ラベルの色を変更
-void UILabel::ChangeLabelColor(int color)
+void UILabel::SetLabelColor(int color)
 {
 	this->fontColor = color;
 }

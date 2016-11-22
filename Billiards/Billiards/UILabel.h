@@ -34,7 +34,7 @@ public:
 	void SetOffset(float x, float y);
 
 	//ラベルの色を変更
-	void ChangeLabelColor(int color);
+	void SetLabelColor(int color);
 
 private:
 

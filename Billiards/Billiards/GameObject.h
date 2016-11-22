@@ -4,6 +4,11 @@
 
 #include "GameObjectBase.h"
 
+typedef enum _EObjectType {
+	Dynamic,
+	Static
+} EObjectType;
+
 typedef struct _STransform3D
 {
 	VECTOR postion;
@@ -70,14 +75,22 @@ public:
 
 	virtual bool GetEnable();
 
+	EObjectType objectType;
+
+	vector<GameObject*> collisionList;
+
 private:
 	//＊要注意＊　　構造方法用
 	void SetPriority(int updatePriority, int drawPriority);
 
 	void GameObjectInit();
 
+
 protected:
+
 	bool enable;
+	btScalar mass;
+	btCollisionShape * collision;
 	int modelHandle;
 	bool isRigidBody = false;
 	bool isStatic = false;

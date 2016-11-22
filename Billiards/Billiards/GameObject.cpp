@@ -22,6 +22,7 @@ void GameObject::SetPriority(int updatePriority, int drawPriority)
 void GameObject::GameObjectInit()
 {
 	enable = true;
+	mass = 0.f;
 	transform = (STransform3D *)calloc(1, sizeof(STransform3D));
 	transform->postion = VGet(0, 0, 0);
 	transform->rotation = VGet(0, 0, 0);
@@ -134,8 +135,16 @@ void GameObject::SetPosition(VECTOR position)
 	{
 		if (!isStatic)
 		{
-			rigidBody->translate(btVector3(position.x, position.y, position.z));
-			//transform->postion = position;
+			btMotionState * motionState = this->rigidBody->getMotionState();
+			btTransform transform;
+			transform.setIdentity();
+			transform.setOrigin(btVector3(position.x, position.y, position.z));
+			this->transform->postion = position;
+			motionState->setWorldTransform(transform);
+			this->rigidBody->setMotionState(motionState);
+			rigidBody->clearForces();
+			rigidBody->setLinearVelocity({ 0,0,0 });
+			rigidBody->setAngularVelocity({ 0,0,0 });
 		}
 	}
 	else
@@ -191,6 +200,8 @@ VECTOR2D GameObject::GetPositionInWindow()
 bool GameObject::SetRigidBody(btScalar mass, btCollisionShape * collision)
 {
 	this->isRigidBody = true;
+	this->mass = mass;
+	this->collision = collision;
 	btVector3 inertia(0, 0, 0);
 	btQuaternion quaternion(-btScalar(transform->rotation.x), -btScalar(transform->rotation.y), btScalar(transform->rotation.z));
 	// MotionStateの設定
@@ -222,6 +233,7 @@ void GameObject::SetDrawPriority(int drawPriority)
 void GameObject::SetEnable(bool enable)
 {
 	this->enable = enable;
+
 }
 
 bool GameObject::GetEnable()
