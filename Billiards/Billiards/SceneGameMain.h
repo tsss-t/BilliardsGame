@@ -12,6 +12,8 @@
 #define TableHight (28.1f)
 #define BallNum (15)
 
+static bool myContactAddedCallback(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap, int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partId1, int index1);
+
 class SceneGameMain :public Scene
 {
 public:
@@ -22,6 +24,7 @@ public:
 		FadeIn,
 		GamePause,
 		GamePlaying,
+		GameOverShow,
 		FadeOut,
 		End,
 		MenuFadeInWait,
@@ -36,15 +39,20 @@ public:
 	}STriggerBox;
 
 	static SceneGameMain *GetSceneInstance();
-
+	static SceneGameMain * GetNewScene();
 	~SceneGameMain();
 	bool SceneUpdate(float stepTime);
 	void CheckBallPosition();
+	bool CheckBallInGoal(Ball * ball);
 	void GoalIn(int ballNum);
 	bool SceneDraw(void);
 
 	void DisableViewPanel();
 	void ShowViewPanel();
+
+	void ShowGameOverPanel();
+
+	void DisableGameOverPanel();
 
 	static void ChangeCameraModeToFree();
 	static void ChangeCameraModeToFollow();
@@ -54,10 +62,24 @@ public:
 	static void ChangeCameraViewToLeft();
 	static void ChangeCameraViewToRight();
 
+	static void BackToMenu();
+
 private:
 	static SceneGameMain * _instance;
+
 	ESceneMainState sceneNowState;
 
+
+	//--------物理世界の構築---------
+
+	// プロキシの最大数
+	int maxProxies;
+
+	// ワールドの広さ
+	btVector3 worldAabbMin;
+	btVector3 worldAabbMax;
+
+	DxDebugDraw g_debugdraw;
 	//--------Trigger---------
 	STriggerBox * triggerList[6];
 
@@ -111,6 +133,15 @@ private:
 	VECTOR2D nextBallIconPosition;
 	UISprite * spBallList[BallNum];
 
+	//GameOverPanel
+	UIPanel * plGameOver;
+	UISprite * spMenuBackGround;
+
+	UILabel * lbResult;
+	UIButton * btBack;
+	UILabel * lbBack;
+	UISprite * spBack;
+
 	//--------3D Model-------
 	Ball * ballWhite;
 	Ball * ballList[BallNum];
@@ -127,6 +158,12 @@ private:
 	float forceRatio;
 	VECTOR hitPosition;
 	SceneGameMain();
-};
+	void Reset();
 
+
+	
+	//test:
+
+};
+static Ball * tempBall;
 #endif // !SceneGameMain_H

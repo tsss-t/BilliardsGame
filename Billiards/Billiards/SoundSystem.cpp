@@ -157,7 +157,7 @@ int SoundSystem::AddSound(const char * filePath, bool is3DSound)
 	return Index;
 }
 
-void SoundSystem::PlaySound(int soundIndex, int playType)
+void SoundSystem::PlaySoundNormal(int soundIndex, int playType)
 {
 	SSoundInfo *Info;
 

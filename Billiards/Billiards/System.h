@@ -8,9 +8,9 @@
 #include "SceneManager.h"
 #include "InputSystem.h"
 #include "btBulletDynamicsCommon.h"
-#include "DxDebugDraw.h"
 #include "SoundSystem.h"
-
+#include "RenderSystem.h"
+extern ContactAddedCallback  gContactAddedCallback;
 #pragma region Define
 
 #define NULL 0
@@ -159,7 +159,7 @@ class System
 {
 public:
 	static System *GetSystemInstance();
-	btDiscreteDynamicsWorld* dynamicsWorld;
+
 	bool SystemMain(void);
 	bool System_CheckFade(void);
 	void System_FadeOut(void);
@@ -167,6 +167,7 @@ public:
 
 	// ゲーム終了
 	void System_Exit();
+	bool System_GetLowSpecMode();
 	~System();
 private:
 
@@ -174,14 +175,6 @@ private:
 	// システムの情報
 	static SSystemInfo systemInfo;
 	System();
-
-	// プロキシの最大数
-	int maxProxies;
-
-	// ワールドの広さ
-	btVector3 worldAabbMin;
-	btVector3 worldAabbMax;
-	DxDebugDraw g_debugdraw;
 
 	bool SystemInit(void);
 	bool SystemLoop(void);

@@ -1,35 +1,6 @@
-﻿  System.cpp
-d:\workspace\billiardsgame\billiards\billiards\scenegamemain.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+﻿  Ball.cpp
 d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\linearmath\btidebugdraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
 d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\linearmath\btidebugdraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
 d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\linearmath\btidebugdraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-d:\workspace\billiardsgame\billiards\billiards\scenegamemain.h(7): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-d:\workspace\billiardsgame\billiards\billiards\scenemanager.h(35): warning C4091: 'static ': ignored on left of 'SceneManager' when no variable is declared
-d:\workspace\billiardsgame\billiards\billiards\system.cpp(17): warning C4316: 'System': object allocated on the heap may not be aligned 16
-d:\workspace\billiardsgame\billiards\billiards\system.cpp(77): warning C4101: 'filePath': unreferenced local variable
-  SceneGameStartMenu.cpp
-d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\linearmath\btidebugdraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\linearmath\btidebugdraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\linearmath\btidebugdraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-d:\workspace\billiardsgame\billiards\billiards\scenegamemain.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-d:\workspace\billiardsgame\billiards\billiards\scenegamemain.h(7): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-d:\workspace\billiardsgame\billiards\billiards\scenemanager.h(35): warning C4091: 'static ': ignored on left of 'SceneManager' when no variable is declared
-  SceneGameMain.cpp
-d:\workspace\billiardsgame\billiards\billiards\scenegamemain.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\linearmath\btidebugdraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\linearmath\btidebugdraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\linearmath\btidebugdraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-d:\workspace\billiardsgame\billiards\billiards\scenegamemain.h(7): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-d:\workspace\billiardsgame\billiards\billiards\scenemanager.h(35): warning C4091: 'static ': ignored on left of 'SceneManager' when no variable is declared
-  BiliardsTable.cpp
-d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\linearmath\btidebugdraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\linearmath\btidebugdraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\linearmath\btidebugdraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-  Ball.cpp
-d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\linearmath\btidebugdraw.h(169): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\linearmath\btidebugdraw.h(170): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-d:\workspace\billiardsgame\billiards\billiards\lib\bullet\src\linearmath\btidebugdraw.h(171): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-  Generating Code...
-d:\workspace\billiardsgame\billiards\billiards\ball.cpp(59): warning C4715: 'Ball::Draw': not all control paths return a value
-d:\workspace\billiardsgame\billiards\billiards\ball.cpp(66): warning C4715: 'Ball::Update': not all control paths return a value
+d:\workspace\billiardsgame\billiards\billiards\ball.cpp(68): warning C4715: 'Ball::Draw': not all control paths return a value
   Billiards.vcxproj -> D:\workspace\BilliardsGame\Billiards\Debug\Billiards.exe

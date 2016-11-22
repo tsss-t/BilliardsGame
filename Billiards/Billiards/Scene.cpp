@@ -17,8 +17,8 @@ bool Scene::InitGameObjectList(void)
 // シーンの状態推移処理
 bool Scene::SceneUpdate(float stepTime)
 {
-	CameraManager::GetCameraManagerInstance()->CameraUpdate(stepTime);
 	GameObjectBase * goBase;
+	CameraManager::GetCameraManagerInstance()->CameraUpdate(stepTime);
 	run = true;
 	for (int i = 0; i < PRIORITY_MAX; i++)
 	{
@@ -39,13 +39,34 @@ bool Scene::SceneDraw(void)
 {
 	GameObjectBase * goBase;
 	run = true;
+	RenderSystem::GetRenderSystemInstance()->Render3D();
+	CameraManager::GetCameraManagerInstance()->CameraDraw();
 	for (int i = 0; i < PRIORITY_MAX; i++)
 	{
 		for (goBase = drawList[i]; goBase != NULL; goBase = goBase->goInfo->drawNext)
 		{
-			if (!goBase->Draw())
+			if (!goBase->IsGUI())
 			{
-				return false;
+				if (!goBase->Draw())
+				{
+					return false;
+				}
+			}
+		}
+	}
+
+	RenderSystem::GetRenderSystemInstance()->Render2D();
+	CameraManager::GetCameraManagerInstance()->CameraDraw();
+	for (int i = 0; i < PRIORITY_MAX; i++)
+	{
+		for (goBase = drawList[i]; goBase != NULL; goBase = goBase->goInfo->drawNext)
+		{
+			if (goBase->IsGUI())
+			{
+				if (!goBase->Draw())
+				{
+					return false;
+				}
 			}
 		}
 	}
@@ -201,7 +222,7 @@ bool Scene::RefreshList(void)
 			goBase->goInfo->addOrDelNext = NULL;
 			if (goBase->IsRigidBody())
 			{
-				System::GetSystemInstance()->dynamicsWorld->addRigidBody(goBase->GetRigidBody());
+				dynamicsWorld->addRigidBody(goBase->GetRigidBody());
 			}
 			//UIを追加する場合、UIの大きさとシーンの画面中でUIが存在する位置情報を保存する
 			if (goBase->IsGUI())
@@ -246,7 +267,8 @@ bool Scene::RefreshList(void)
 				//3D オブジェクトの場合、オブジェクトを物理システムから削除
 				if (goBase->IsRigidBody())
 				{
-					System::GetSystemInstance()->dynamicsWorld->removeRigidBody(goBase->GetRigidBody());
+
+					dynamicsWorld->removeRigidBody(goBase->GetRigidBody());
 				}
 				//2D UIの場合、オブジェクトがスクリーン中の位置情報を削除
 				if (goBase->IsGUI())
@@ -299,10 +321,12 @@ bool Scene::RefreshList(void)
 					// 削除対象のゲームオブジェクトを発見した場合はリストから外してループから抜ける
 					if (tempGo->goInfo->updateNext == goBase)
 					{
+						//3D オブジェクトの場合、オブジェクトを物理システムから削除
 						if (goBase->IsRigidBody())
 						{
-							System::GetSystemInstance()->dynamicsWorld->removeRigidBody(goBase->GetRigidBody());
+							dynamicsWorld->removeRigidBody(goBase->GetRigidBody());
 						}
+						//2D UIの場合、オブジェクトがスクリーン中の位置情報を削除
 						if (goBase->IsGUI())
 						{
 							for (vector <SUIData>::iterator iter = UIPositionData.begin(); iter != UIPositionData.end();)

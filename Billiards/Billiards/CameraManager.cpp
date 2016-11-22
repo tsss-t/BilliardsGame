@@ -143,7 +143,6 @@ bool CameraManager::CameraUpdate(float stepTime)
 		break;
 	}
 
-	SetCameraPositionAndAngle(transform.position, transform.rotation.x, transform.rotation.y, transform.rotation.z);
 
 
 #if _DEBUG
@@ -154,6 +153,13 @@ bool CameraManager::CameraUpdate(float stepTime)
 	//<<<<<<<<<<<<<TestEnd.
 #endif // _DEBUG
 	return result;
+}
+
+bool CameraManager::CameraDraw()
+{
+	SetCameraNearFar(0.1f, 10000.0f);
+	SetCameraPositionAndAngle(transform.position, transform.rotation.x, transform.rotation.y, transform.rotation.z);
+	return true;
 }
 
 //カメラのモードを変更

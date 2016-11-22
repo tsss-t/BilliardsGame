@@ -36,6 +36,9 @@ BilliardsTable::BilliardsTable() :GameObject(MV1LoadModel("Data/Model/tableNorma
 	btBoxShape *tabelSideOutFront = new btBoxShape(btVector3(btScalar(62), btScalar(2), btScalar(1.5f)));
 	btBoxShape *tabelSideOutBack = new btBoxShape(btVector3(btScalar(62), btScalar(2), btScalar(1.5f)));
 
+
+
+
 	btTransform panelShiftH, panelShiftVLeft, panelShiftVRight, panelShiftVMid, sideShiftRight, sideShiftLeft,
 		sideShiftFrontLeft, sideShiftFrontRight, sideShiftBackLeft, sideShiftBackRight,
 		sideOutShiftFront, sideOutShiftBack, sideOutShiftLeft, sideOutShiftRight;
@@ -90,6 +93,19 @@ BilliardsTable::BilliardsTable() :GameObject(MV1LoadModel("Data/Model/tableNorma
 	rigidBody->setRestitution(btScalar(1.0f));
 	rigidBody->setFriction(2.4f);
 	MV1SetupCollInfo(modelHandle, -1, 8, 8, 8);
+
+	objectType = EObjectType::Static;
+
+	tabelSideRight->setUserPointer(this);
+	tabelSideLeft->setUserPointer(this);
+	tabelSideFrontLeft->setUserPointer(this);
+	tabelSideFrontRight->setUserPointer(this);
+	tabelSideBackLeft->setUserPointer(this);
+	tabelSideBackRight->setUserPointer(this);
+
+	rigidBody->getCollisionShape()->setUserPointer(this);
+	rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
+
 }
 
 
@@ -100,7 +116,7 @@ BilliardsTable::~BilliardsTable()
 
 bool BilliardsTable::Draw()
 {
-	MV1SetPosition(this->modelHandle, VGet(transform->postion.x , transform->postion.y, transform->postion.z));
+	MV1SetPosition(this->modelHandle, VGet(transform->postion.x, transform->postion.y, transform->postion.z));
 	MV1SetRotationXYZ(this->modelHandle, transform->rotation);
 	MV1DrawModel(this->modelHandle);
 	return true;

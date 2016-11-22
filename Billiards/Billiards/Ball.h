@@ -7,7 +7,10 @@
 class Ball :public GameObject
 {
 public:
+	int num;
+
 	void InitBall();
+
 	Ball(int modelHandle);
 	Ball(float x, float y, float z, int modelHandel);
 	Ball(VECTOR position, int modelHandel);
@@ -16,9 +19,9 @@ public:
 
 	~Ball();
 
-	void ResetPosition();
+	void SetEnable(bool enable);
 
-	void DisableBall();
+	void ResetPosition();
 
 	bool AddForce(VECTOR force, VECTOR forcePos);
 
@@ -28,6 +31,7 @@ public:
 
 
 private:
+
 	Ball();
 	VECTOR firstPosition;
 

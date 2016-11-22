@@ -1,15 +1,20 @@
 ﻿#include "Ball.h"
 
-
-
 void Ball::InitBall()
 {
-	btCollisionShape* collision = new btSphereShape(btScalar(transform->scale.x*30));
+	btCollisionShape* collision = new btSphereShape(btScalar(transform->scale.x * 30));
 	SetRigidBody(0.4f, collision);
+
 	rigidBody->setRestitution(btScalar(0.6f));
 	rigidBody->setFriction(0.4f);
 	rigidBody->setDamping(0.3f, 0.9f);
+
 	firstPosition = { 0,0,0 };
+
+	objectType = EObjectType::Dynamic;
+
+	rigidBody->getCollisionShape()->setUserPointer(this);
+	rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
 	//rigidBody->setAngularFactor(1.5f);
 }
 
@@ -47,7 +52,11 @@ Ball::Ball(VECTOR position, VECTOR rotation, VECTOR scale, int modelHandle) : Ga
 
 Ball::~Ball()
 {
+}
 
+void Ball::SetEnable(bool enable)
+{
+	this->enable = enable;
 }
 
 
@@ -59,25 +68,46 @@ bool Ball::Draw() {
 }
 bool Ball::Update(float stepTime)
 {
+	for (vector <GameObject*>::iterator iter = collisionList.begin(); iter != collisionList.end();)
+	{
+		if ((*iter)->objectType == EObjectType::Static)
+		{
+			if (transform->postion.x > -52 &&
+				transform->postion.x < 59 &&
+				transform->postion.z> -26.5f&&
+				transform->postion.z < 26.5f)
+			{
+				iter = collisionList.erase(iter);
+			}
+			else
+			{
+				iter++;
+			}
+		}
+		else
+		{
+			VECTOR targetPosition = (*iter)->GetPosition();
+			btVector3 distance = { transform->postion.x - targetPosition.x,transform->postion.x - targetPosition.x,transform->postion.x - targetPosition.x };
+			if (distance.length() > 2.f)
+			{
+				iter = collisionList.erase(iter);
+				break;
+			}
+			else
+			{
+				iter++;
+			}
+		}
+	}
 	if (enable)
 	{
 		return GameObject::Update(stepTime);
 	}
+	return true;
 }
-
 void Ball::ResetPosition()
 {
-	// MotionStateの設定
-	btMotionState * motionState = this->rigidBody->getMotionState();
-	btTransform transform;
-	transform.setIdentity();
-	transform.setOrigin(btVector3(firstPosition.x, firstPosition.y, firstPosition.z));
-	motionState->setWorldTransform(transform);
-	this->rigidBody->setMotionState(motionState);
-	rigidBody->clearForces();
-	rigidBody->setLinearVelocity({ 0,0,0 });
-	rigidBody->setAngularVelocity({ 0,0,0 });
-
+	SetPosition(firstPosition);
 }
 
 

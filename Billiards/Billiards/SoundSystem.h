@@ -103,7 +103,7 @@ public:
 
 	int AddSound(const char * filePath, bool is3DSound);
 
-	void PlaySound(int soundIndex, int playType);
+	void PlaySoundNormal(int soundIndex, int playType);
 
 	void PlaySound3D(VECTOR Position, int soundIndex, int playType);
 

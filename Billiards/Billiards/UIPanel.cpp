@@ -4,7 +4,7 @@ void UIPanel::PanelInit()
 {
 	*updateList = NULL;
 	*drawList = NULL;
-
+	panelSize = {0,0};
 }
 
 UIPanel::UIPanel()
@@ -28,11 +28,25 @@ UIPanel::UIPanel(float x, float y, int drawPriority)
 	this->transform->position = { x,y };
 	this->SetPriority(PRIORITY_MAX / 2, drawPriority);
 }
-
+UIPanel::UIPanel(float x, float y, VECTOR2DINT panelSize, int drawPriority)
+{
+	PanelInit();
+	this->transform->position = { x,y };
+	this->panelSize = panelSize;
+	this->SetPriority(PRIORITY_MAX / 2, drawPriority);
+}
 UIPanel::UIPanel(float x, float y, int updatePriority, int drawPriority)
 {
 	PanelInit();
 	this->transform->position = { x,y };
+	this->SetPriority(updatePriority, drawPriority);
+}
+
+UIPanel::UIPanel(float x, float y,VECTOR2DINT panelSize, int updatePriority, int drawPriority)
+{
+	PanelInit();
+	this->transform->position = { x,y };
+	this->panelSize = panelSize;
 	this->SetPriority(updatePriority, drawPriority);
 }
 
@@ -42,7 +56,20 @@ UIPanel::UIPanel(VECTOR2D position, int drawPriority)
 	this->transform->position = position;
 	this->SetPriority(PRIORITY_MAX / 2, drawPriority);
 }
-
+UIPanel::UIPanel(VECTOR2D position, VECTOR2DINT panelSize, int drawPriority)
+{
+	PanelInit();
+	this->transform->position = position;
+	this->panelSize = panelSize;
+	this->SetPriority(PRIORITY_MAX / 2, drawPriority);
+}
+UIPanel::UIPanel(VECTOR2D position, VECTOR2DINT panelSize, int updatePriority, int drawPriority)
+{
+	PanelInit();
+	this->transform->position = position;
+	this->panelSize = panelSize;
+	this->SetPriority(updatePriority, drawPriority);
+}
 UIPanel::UIPanel(VECTOR2D position, int updatePriority, int drawPriority)
 {
 	PanelInit();
@@ -265,6 +292,18 @@ bool UIPanel::Update(float stepTime)
 	}
 
 	return true;
+}
+
+bool UIPanel::SetUISize(int x, int y)
+{
+	this->panelSize.x = x;
+	this->panelSize.y = y;
+	return true;
+}
+
+VECTOR2DINT UIPanel::GetUISize()
+{
+	return{ panelSize.x,panelSize.y };
 }
 
 vector<GameObjectBase*> UIPanel::getObjectList()

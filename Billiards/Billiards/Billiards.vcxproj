@@ -156,12 +156,12 @@
   <ItemGroup>
     <ClCompile Include="Ball.cpp" />
     <ClCompile Include="BiliardsTable.cpp" />
+    <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="DxDebugDraw.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjectBase.cpp" />
-    <ClCompile Include="HelloWorld.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="UILabel.cpp" />
     <ClCompile Include="Mathematics.cpp" />
@@ -183,6 +183,7 @@
   <ItemGroup>
     <ClInclude Include="Ball.h" />
     <ClInclude Include="BiliardsTable.h" />
+    <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="DxDebugDraw.h" />

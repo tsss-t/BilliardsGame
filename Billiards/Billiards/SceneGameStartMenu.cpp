@@ -74,7 +74,15 @@ SceneGameStartMenu * SceneGameStartMenu::GetSceneInstance()
 	{
 		_instance = new SceneGameStartMenu();
 	}
+	else
+	{
+		_instance->Reset();
+	}
 	return _instance;
+}
+void SceneGameStartMenu::Reset()
+{
+	sceneNowState = EStartSceneMenuState::FadeInWait;
 }
 
 bool SceneGameStartMenu::SceneUpdate(float stepTime)

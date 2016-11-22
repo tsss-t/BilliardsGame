@@ -29,6 +29,8 @@ public:
 
 	static SceneGameStartMenu *GetSceneInstance();
 
+	void Reset();
+
 	_ESceneStartMenuState sceneNowState;
 
 	bool SceneUpdate(float stepTime);
